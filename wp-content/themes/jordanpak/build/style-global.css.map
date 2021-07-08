@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/assets/global/style.css"],"names":[],"mappings":"AAAA;CACC,sBAAsB;AACvB","file":"style-global.css","sourcesContent":["body {\n\tbackground: lightgreen;\n}\n"],"sourceRoot":""}
