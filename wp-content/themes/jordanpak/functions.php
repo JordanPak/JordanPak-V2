@@ -9,8 +9,8 @@
 namespace JordanPak;
 
 // Setup autoloader (via Composer or custom).
-if ( file_exists( get_template_directory() . '/vendor/autoload.php' ) ) {
-	require get_template_directory() . '/vendor/autoload.php';
+if ( file_exists( get_stylesheet_directory() . '/vendor/autoload.php' ) ) {
+	require get_stylesheet_directory() . '/vendor/autoload.php';
 } else {
 	/**
 	 * Custom autoloader function for theme classes.
@@ -29,7 +29,7 @@ if ( file_exists( get_template_directory() . '/vendor/autoload.php' ) ) {
 
 		$parts = explode( '\\', substr( $class_name, strlen( $namespace . '\\' ) ) );
 
-		$path = get_template_directory() . '/src';
+		$path = get_stylesheet_directory() . '/src';
 		foreach ( $parts as $part ) {
 			$path .= '/' . $part;
 		}
