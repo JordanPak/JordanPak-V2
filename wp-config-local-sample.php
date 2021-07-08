@@ -21,3 +21,9 @@ define( 'NONCE_SALT',       'put your unique phrase here' );
 define( 'WP_DEBUG', false );
 define( 'SCRIPT_DEBUG', false );
 define( 'DEBUG_SCRIPTS', false );
+
+// // load kint and stuff
+// require_once __DIR__ . '/vendor/autoload.php';
+
+// // inline kint outputs
+// Kint\Renderer\RichRenderer::$folder = false;
