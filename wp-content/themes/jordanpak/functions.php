@@ -66,12 +66,12 @@ class Theme {
 	protected static $instance;
 
 	/**
-	 * Blocks handler
+	 * Assets handler
 	 *
-	 * @since 1.0.0
-	 * @var   Customizer
+	 * @since 2.0.0
+	 * @var   Assets
 	 */
-	public $blocks;
+	public $assets;
 
 	/**
 	 * Get child theme instance.
@@ -107,8 +107,8 @@ class Theme {
 	 */
 	private function set_constants() {
 		define( 'JORDANPAK_VERSION', '2.0.0' );
-		define( 'JORDANPAK_DIR', plugin_dir_path( __FILE__ ) );
-		define( 'JORDANPAK_URL', plugin_dir_url( __FILE__ ) );
+		define( 'JORDANPAK_DIR', get_stylesheet_directory() );
+		define( 'JORDANPAK_URL', get_stylesheet_directory_uri() );
 	}
 
 	/**
@@ -118,6 +118,7 @@ class Theme {
 	 */
 	public function init() {
 		// $this->base_support = new Base_Support();
+		$this->assets = new Assets();
 
 		// if ( $this->is_request( 'frontend' ) ) {
 		// 	$this->template_loader = new Template_Loader();
