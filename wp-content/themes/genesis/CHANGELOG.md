@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Up until release 2.7.0, this project did _not_ follow semantic versioning. It followed the WordPress policy where updates of x and y in an x.y.z version number means a major release, and updates to z means a patch release.
 
+## [3.3.4] - 2021-07-08
+
+### Added
+* Using the use_widgets_block_editor filter in WordPress 5.8, the pre-5.8 widget screen behavior remains the same. To opt-in to the new WP 5.8 widgets editor, place this code in your theme's functions.php file: `add_filter( 'use_widgets_block_editor', '__return_true' );`
+
 ## [3.3.3] - 2020-08-10
 
 ### Added
@@ -1394,6 +1399,7 @@ _Requires WordPress 3.1.0._
 
 First public release.
 
+[3.3.4]: https://github.com/studiopress/genesis/compare/3.3.3...3.3.4
 [3.3.3]: https://github.com/studiopress/genesis/compare/3.3.2...3.3.3
 [3.3.2]: https://github.com/studiopress/genesis/compare/3.3.1...3.3.2
 [3.3.1]: https://github.com/studiopress/genesis/compare/3.3.0...3.3.1
