@@ -50,12 +50,13 @@ class Assets {
 	public function add_editor_styles() {
 		add_theme_support( 'editor-styles' );
 		add_editor_style( 'build/style-global.css' );
+		add_editor_style( 'build/global.css' );
 	}
 
 	/**
 	 * Register CSS/JS assets
 	 *
-	 * @since 2.0.0
+	 * @since 2.0.0<script src="https://kit.fontawesome.com/36781a6ab4.js" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/36781a6ab4.js" crossorigin="anonymous"></script>
 	 */
 	public function do_asset_registration() {
 		$build_dir = JORDANPAK_DIR . '/build';

@@ -34,8 +34,9 @@
 	--line-height-heading: 1.2;
 
 	// spacing
+	--wrap-max-width: 87.5rem;
 	--content-width: 90%;
-	--content-width-max: 87.5rem;
+	--content-width-max: var(--wrap-max-width);
 
 	// transitions
 	--transition-duration: 200ms;
