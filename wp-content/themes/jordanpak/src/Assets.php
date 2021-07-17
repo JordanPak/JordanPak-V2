@@ -88,6 +88,15 @@ class Assets {
 				] } });
 			"
 		);
+
+		// Icons.
+		wp_register_script(
+			self::HANDLE_PREFIX . 'font-awesome',
+			'https://kit.fontawesome.com/36781a6ab4.js',
+			[],
+			'6.x',
+			false
+		);
 	}
 
 	/**
@@ -98,6 +107,7 @@ class Assets {
 	public function enqueue_assets() {
 		wp_enqueue_style( self::HANDLE_PREFIX . 'global' );
 		wp_enqueue_script( self::HANDLE_PREFIX . 'font-loader' );
+		wp_enqueue_script( self::HANDLE_PREFIX . 'font-awesome' );
 	}
 
 	/**
