@@ -212,4 +212,14 @@ body {
   max-width: var(--wrap-max-width);
 }
 
+/**
+ * Header
+ *
+ * @since 2.0.0
+ */
+.site-title,
+.site-description {
+  margin-top: 0;
+}
+
 /*# sourceMappingURL=style-global.css.map*/
