@@ -10,8 +10,9 @@
 		"start": "wp-scripts start ./src/assets/global",
 		"packages-update": "wp-scripts packages-update"
 	},
-	"dependencies": {},
 	"devDependencies": {
-		"@wordpress/scripts": "^16.1.4"
+		"@wordpress/scripts": "^16.1.4",
+		"postcss-custom-media": "^8.0.0",
+		"postcss-custom-properties": "^11.0.0"
 	}
 }
