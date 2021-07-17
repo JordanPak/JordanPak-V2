@@ -98,6 +98,36 @@ class Assets {
 			'6.x',
 			false
 		);
+
+		/**
+		 * Blocks
+		 */
+		$blocks = require "$build_dir/blocks.asset.php";
+
+		// Editor script.
+		wp_register_script(
+			self::HANDLE_PREFIX . 'blocks',
+			"$build_url/blocks.js",
+			$blocks['dependencies'],
+			$blocks['version'],
+			true
+		);
+
+		// Front end + editor styles.
+		wp_register_style(
+			self::HANDLE_PREFIX . 'blocks',
+			"$build_url/style-blocks.css",
+			[ 'wp-editor', self::HANDLE_PREFIX . 'global' ],
+			filemtime( "$build_dir/style-blocks.css" )
+		);
+
+		// Editor-specific styles.
+		wp_register_style(
+			self::HANDLE_PREFIX . 'blocks-editor',
+			"$build_url/blocks.css",
+			[ 'wp-edit-blocks', self::HANDLE_PREFIX . 'blocks' ],
+			filemtime( "$build_dir/blocks.css" )
+		);
 	}
 
 	/**
@@ -109,6 +139,7 @@ class Assets {
 		wp_enqueue_style( self::HANDLE_PREFIX . 'global' );
 		wp_enqueue_script( self::HANDLE_PREFIX . 'font-loader' );
 		wp_enqueue_script( self::HANDLE_PREFIX . 'font-awesome' );
+		wp_enqueue_style( self::HANDLE_PREFIX . 'blocks' );
 	}
 
 	/**
@@ -118,5 +149,8 @@ class Assets {
 	 */
 	public function enqueue_editor_assets() {
 		wp_enqueue_script( self::HANDLE_PREFIX . 'font-loader' );
+		wp_enqueue_script( self::HANDLE_PREFIX . 'blocks' );
+		wp_enqueue_style( self::HANDLE_PREFIX . 'blocks' );
+		wp_enqueue_style( self::HANDLE_PREFIX . 'blocks-editor' );
 	}
 }
