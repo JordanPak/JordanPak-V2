@@ -34,6 +34,7 @@
 	--line-height-base: 1.6;
 	--line-height-heading: 1.2;
 
+	--letter-spacing-less-wide: 0.5px;
 	--letter-spacing-wide: 1px;
 
 	// spacing
@@ -46,6 +47,9 @@
 	// transitions
 	--transition-duration: 200ms;
 	--transition-timing-function: ease-in-out;
+
+	// border radii
+	--border-radius: 4px;
 }
 
 @media (--content-query) {

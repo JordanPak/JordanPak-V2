@@ -1,5 +1,19 @@
 (window["webpackJsonp_jordanpak"] = window["webpackJsonp_jordanpak"] || []).push([["style-blocks"],{
 
+/***/ "./src/assets/blocks/button/style.scss":
+/*!*********************************************!*\
+  !*** ./src/assets/blocks/button/style.scss ***!
+  \*********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./src/assets/blocks/list/style.scss":
 /*!*******************************************!*\
   !*** ./src/assets/blocks/list/style.scss ***!
@@ -241,6 +255,25 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 /***/ }),
 
+/***/ "./src/assets/blocks/button/index.js":
+/*!*******************************************!*\
+  !*** ./src/assets/blocks/button/index.js ***!
+  \*******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/assets/blocks/button/style.scss");
+/**
+ * Add features to button block
+ *
+ * @since 2.0.0
+ */
+
+
+/***/ }),
+
 /***/ "./src/assets/blocks/index.js":
 /*!************************************!*\
   !*** ./src/assets/blocks/index.js ***!
@@ -250,12 +283,14 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _list__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./list */ "./src/assets/blocks/list/index.js");
+/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./button */ "./src/assets/blocks/button/index.js");
+/* harmony import */ var _list__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./list */ "./src/assets/blocks/list/index.js");
 /**
  * Theme-specific adjustments for blocks
  *
  * @since 2.0.0
  */
+
 
 
 /***/ }),

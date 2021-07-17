@@ -1,4 +1,75 @@
 /**
+ * Button block block styles
+ *
+ * @since 2.0.0
+ */
+/* stylelint-disable selector-class-pattern */
+.wp-block-button__link {
+  position: relative;
+  z-index: 0;
+  padding: 0.75rem 1.75rem 0.7rem;
+  font-family: var(--font-family-heading);
+  font-size: calc(22 / var(--font-size-base) * 1rem);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-wide);
+  background: none;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+.wp-block-button__link::before, .wp-block-button__link::after {
+  transition-timing-function: var(--transition-timing-function);
+  transition-duration: var(--transition-duration);
+}
+.wp-block-button__link, .wp-block-button__link:visited {
+  color: var(--color-black);
+}
+.wp-block-button__link::before, .wp-block-button__link::after {
+  position: absolute;
+  z-index: -1;
+}
+.wp-block-button__link::before {
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--color-white);
+  transition-property: background;
+}
+.wp-block-button__link::after {
+  content: "//";
+  top: 50%;
+  right: -0.5rem;
+  font-size: 100px;
+  line-height: 1;
+  letter-spacing: -6px;
+  color: var(--color-gray-light);
+  transform: translateY(-50%);
+  transition-property: color, transform;
+  text-shadow: none;
+}
+.wp-block-button__link:hover::before, .wp-block-button__link:focus::before {
+  background: var(--color-primary);
+}
+.wp-block-button__link:hover::after, .wp-block-button__link:focus::after {
+  color: var(--color-primary-dark);
+  transform: translateY(-50%) translateX(5px);
+}
+.is-style-outline > .wp-block-button__link {
+  border: none;
+  box-shadow: inset 0 0 0 2px var(--color-gray-dark);
+  transition: box-shadow var(--transition-timing-function) var(--transition-duration);
+}
+.is-style-outline > .wp-block-button__link, .is-style-outline > .wp-block-button__link:not(.has-text-color) {
+  color: var(--color-white);
+}
+.is-style-outline > .wp-block-button__link::before, .is-style-outline > .wp-block-button__link::after {
+  display: none;
+}
+.is-style-outline > .wp-block-button__link:hover, .is-style-outline > .wp-block-button__link:focus {
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+/**
  * List block block styles
  *
  * @since 2.0.0

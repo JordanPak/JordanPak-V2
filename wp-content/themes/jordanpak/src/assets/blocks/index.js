@@ -3,4 +3,5 @@
  *
  * @since 2.0.0
  */
+import './button';
 import './list';

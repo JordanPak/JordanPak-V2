@@ -30,6 +30,7 @@
   --font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
   --line-height-base: 1.6;
   --line-height-heading: 1.2;
+  --letter-spacing-less-wide: 0.5px;
   --letter-spacing-wide: 1px;
   --wrap-max-width: 87.5rem;
   --content-width: 90%;
@@ -38,6 +39,7 @@
   --content-spacing-consolidated: calc(var(--content-spacing) * 0.666);
   --transition-duration: 200ms;
   --transition-timing-function: ease-in-out;
+  --border-radius: 4px;
 }
 
 @media screen and (min-width: 60em) {
