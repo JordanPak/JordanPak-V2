@@ -96,6 +96,7 @@ body {
   background: var(--color-black);
   top: -1000px;
   bottom: -1000px;
+  left: -1000px;
   transform: translateX(-25%) rotate(20deg);
 }
 
