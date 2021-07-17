@@ -55,7 +55,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Bebas Neue";
+  font-family: "Bebas Neue", sans-serif;
+  font-family: var(--font-family-heading);
   font-weight: 400;
 }
 
@@ -97,7 +98,7 @@ body {
   top: -1000px;
   bottom: -1000px;
   left: -1000px;
-  transform: translateX(-25%) rotate(20deg);
+  transform: translateX(-22.5%) rotate(20deg);
 }
 
 .site-container {
