@@ -4,6 +4,11 @@
  * @since 2.0.0
  */
 
+ol,
+.bulleted-list {
+	margin-top: var(--content-spacing);
+}
+
 // numbered list counter
 ol {
 	counter-reset: numbered-counter;
@@ -47,6 +52,11 @@ ul[data-type="core/list"] li::before {
 
 @media (--content-query) {
 
+	ol,
+	.bulleted-list {
+		font-size: calc(18 / var(--font-size-base) * 1rem);
+	}
+
 	ol li,
 	.bulleted-list li,
 	ul[data-type="core/list"] li {
@@ -56,14 +66,14 @@ ul[data-type="core/list"] li::before {
 	}
 
 	ol li::before {
-		top: calc(5 / var(--font-size-base) * 1rem);
+		top: calc(2 / var(--font-size-base) * 1rem);
 		left: calc(12 / var(--font-size-base) * 1rem);
 		font-size: calc(16 / var(--font-size-base) * 1rem);
 	}
 
 	.bulleted-list li::before,
 	ul[data-type="core/list"] li::before {
-		top: calc(12 / var(--font-size-base) * 1rem);
+		top: calc(10 / var(--font-size-base) * 1rem);
 		left: calc(20 / var(--font-size-base) * 1rem);
 	}
 }

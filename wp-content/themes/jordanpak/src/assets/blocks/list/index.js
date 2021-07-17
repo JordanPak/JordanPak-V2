@@ -6,7 +6,19 @@
 
 import classnames from 'classnames';
 
+import { __ } from '@wordpress/i18n';
 import { addFilter } from '@wordpress/hooks';
+import { registerBlockStyle } from '@wordpress/blocks';
+
+import './style.scss';
+
+registerBlockStyle( 'core/list', [
+	{
+		name: 'checklist',
+		label: __( 'Checklist', 'jordanpak' ),
+		isDefault: false,
+	},
+] );
 
 const isList = ( name ) => {
 	return name === 'core/list';

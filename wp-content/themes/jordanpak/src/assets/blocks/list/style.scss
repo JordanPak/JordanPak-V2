@@ -1,0 +1,32 @@
+/**
+ * List block block styles
+ *
+ * @since 2.0.0
+ */
+
+// extra point for editor
+.is-style-checklist.is-style-checklist {
+	font-weight: 700;
+
+	li {
+		padding-left: calc(44 / var(--font-size-base) * 1rem);
+
+		&::before {
+			top: calc(2 / var(--font-size-base) * 1rem);
+			width: calc(20 / var(--font-size-base) * 1rem);
+			height: calc(20 / var(--font-size-base) * 1rem);
+			background: url(../../images/circle-check-primary.svg);
+			border-radius: 0;
+		}
+
+		@media (--content-query) {
+			padding-left: calc(54 / var(--font-size-base) * 1rem);
+
+			&::before {
+				top: calc(3 / var(--font-size-base) * 1rem);
+				width: calc(21 / var(--font-size-base) * 1rem);
+				height: calc(21 / var(--font-size-base) * 1rem);
+			}
+		}
+	}
+}

@@ -34,6 +34,8 @@
   --wrap-max-width: 87.5rem;
   --content-width: 90%;
   --content-width-max: var(--wrap-max-width);
+  --content-spacing: 1.5rem;
+  --content-spacing-consolidated: calc(var(--content-spacing) * 0.666);
   --transition-duration: 200ms;
   --transition-timing-function: ease-in-out;
 }
@@ -41,6 +43,7 @@
 @media screen and (min-width: 60em) {
   :root {
     --font-size-regular: calc(20 / var(--font-size-base) * 1rem);
+    --content-spacing: 2rem;
   }
 }
 /**
@@ -60,7 +63,8 @@ body {
 }
 
 p {
-  margin-top: 1rem;
+  margin-top: calc(1.5rem * 0.666);
+  margin-top: var(--content-spacing-consolidated);
   margin-bottom: 0;
 }
 
@@ -201,6 +205,12 @@ svg {
  *
  * @since 2.0.0
  */
+ol,
+.bulleted-list {
+  margin-top: 1.5rem;
+  margin-top: var(--content-spacing);
+}
+
 ol {
   counter-reset: numbered-counter;
 }
@@ -247,6 +257,12 @@ ul[data-type="core/list"] li::before {
 }
 
 @media screen and (min-width: 60em) {
+  ol,
+.bulleted-list {
+    font-size: calc(18 / 16 * 1rem);
+    font-size: calc(18 / var(--font-size-base) * 1rem);
+  }
+
   ol li,
 .bulleted-list li,
 ul[data-type="core/list"] li {
@@ -257,8 +273,8 @@ ul[data-type="core/list"] li {
   }
 
   ol li::before {
-    top: calc(5 / 16 * 1rem);
-    top: calc(5 / var(--font-size-base) * 1rem);
+    top: calc(2 / 16 * 1rem);
+    top: calc(2 / var(--font-size-base) * 1rem);
     left: calc(12 / 16 * 1rem);
     left: calc(12 / var(--font-size-base) * 1rem);
     font-size: calc(16 / 16 * 1rem);
@@ -267,8 +283,8 @@ ul[data-type="core/list"] li {
 
   .bulleted-list li::before,
 ul[data-type="core/list"] li::before {
-    top: calc(12 / 16 * 1rem);
-    top: calc(12 / var(--font-size-base) * 1rem);
+    top: calc(10 / 16 * 1rem);
+    top: calc(10 / var(--font-size-base) * 1rem);
     left: calc(20 / 16 * 1rem);
     left: calc(20 / var(--font-size-base) * 1rem);
   }
