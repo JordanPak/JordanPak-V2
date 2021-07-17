@@ -51,6 +51,8 @@ class Assets {
 		add_theme_support( 'editor-styles' );
 		add_editor_style( 'build/style-global.css' );
 		add_editor_style( 'build/global.css' );
+		add_editor_style( 'build/style-blocks.css' );
+		add_editor_style( 'build/blocks.css' );
 	}
 
 	/**
@@ -120,14 +122,6 @@ class Assets {
 			[ 'wp-editor', self::HANDLE_PREFIX . 'global' ],
 			filemtime( "$build_dir/style-blocks.css" )
 		);
-
-		// Editor-specific styles.
-		wp_register_style(
-			self::HANDLE_PREFIX . 'blocks-editor',
-			"$build_url/blocks.css",
-			[ 'wp-edit-blocks', self::HANDLE_PREFIX . 'blocks' ],
-			filemtime( "$build_dir/blocks.css" )
-		);
 	}
 
 	/**
@@ -150,7 +144,5 @@ class Assets {
 	public function enqueue_editor_assets() {
 		wp_enqueue_script( self::HANDLE_PREFIX . 'font-loader' );
 		wp_enqueue_script( self::HANDLE_PREFIX . 'blocks' );
-		wp_enqueue_style( self::HANDLE_PREFIX . 'blocks' );
-		wp_enqueue_style( self::HANDLE_PREFIX . 'blocks-editor' );
 	}
 }
