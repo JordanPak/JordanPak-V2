@@ -3,5 +3,7 @@
  *
  * @since 1.0.0
  */
-@import "_custom-properties.scss";
-@import "_typography.scss";
+@import "custom-properties";
+@import "typography";
+@import "elements";
+@import "main";

@@ -1,7 +1,7 @@
 /**
  * CSS custom properties
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 
 :root {
@@ -18,7 +18,7 @@
 	--color-white: #fff;
 
 	// fonts
-	--font-family-global: 'Roboto', sans-serif;
+	--font-family-sans-serif: 'Roboto', sans-serif;
 	--font-family-condensed: 'Roboto Condensed', sans-serif;
 	--font-family-heading: 'Bebas Neue', sans-serif;
 
@@ -26,9 +26,9 @@
 	--font-size-base: 16;
 
 	--font-size-regular: calc(var(--font-size-base) / 16 * 1rem);
-	--font-size-medium: calc(28 / var(--global-font-size) * 1rem);
-	--font-size-large: calc(38 / var(--global-font-size) * 1rem);
-	--font-size-xlarge: calc(60 / var(--global-font-size) * 1rem);
+	--font-size-medium: calc(28 / var(--font-size-base) * 1rem);
+	--font-size-large: calc(38 / var(--font-size-base) * 1rem);
+	--font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
 
 	--line-height-base: 1.6;
 	--line-height-heading: 1.2;
