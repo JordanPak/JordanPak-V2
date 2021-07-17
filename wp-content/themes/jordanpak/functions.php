@@ -74,6 +74,14 @@ class Theme {
 	public $assets;
 
 	/**
+	 * Global templating handler
+	 *
+	 * @since 2.0.0
+	 * @var   Global_Templating
+	 */
+	public $global_templating;
+
+	/**
 	 * Get child theme instance.
 	 *
 	 * @since 2.0.0
@@ -119,6 +127,7 @@ class Theme {
 	public function init() {
 		// $this->base_support = new Base_Support();
 		$this->assets = new Assets();
+		$this->global_templating = new Global_Templating();
 
 		// if ( $this->is_request( 'frontend' ) ) {
 		// 	$this->template_loader = new Template_Loader();
