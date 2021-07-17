@@ -2,5 +2,15 @@ body {
 	background: lightgreen;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'Bebas Neue';
+	font-weight: 400;
+}
+
 
 /*# sourceMappingURL=style-global.css.map*/
