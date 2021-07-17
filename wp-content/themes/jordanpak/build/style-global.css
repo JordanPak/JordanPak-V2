@@ -121,6 +121,11 @@ a, a:visited {
   color: var(--color-white);
 }
 
+address {
+  margin: 0;
+  font-style: normal;
+}
+
 .has-primary-color {
   color: #f9d900;
   color: var(--color-primary);
