@@ -45,3 +45,10 @@
 	--transition-duration: 200ms;
 	--transition-timing-function: ease-in-out;
 }
+
+@media (--content-query) {
+
+	:root {
+		--font-size-regular: calc(20 / var(--font-size-base) * 1rem);
+	}
+}
