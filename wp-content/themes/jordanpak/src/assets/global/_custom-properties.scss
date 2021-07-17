@@ -22,16 +22,19 @@
 	--font-family-condensed: "Roboto Condensed", sans-serif;
 	--font-family-heading: "Bebas Neue", sans-serif;
 
-	// font sizes + line heights
+	// font sizes + line heights + letter spacing
 	--font-size-base: 16;
 
+	--font-size-small: calc(14 / var(--font-size-base) * 1rem);
 	--font-size-regular: calc(var(--font-size-base) / 16 * 1rem);
 	--font-size-medium: calc(28 / var(--font-size-base) * 1rem);
-	--font-size-large: calc(38 / var(--font-size-base) * 1rem);
+	--font-size-large: calc(44 / var(--font-size-base) * 1rem);
 	--font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
 
 	--line-height-base: 1.6;
 	--line-height-heading: 1.2;
+
+	--letter-spacing-wide: 1px;
 
 	// spacing
 	--wrap-max-width: 87.5rem;

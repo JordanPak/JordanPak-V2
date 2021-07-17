@@ -23,12 +23,14 @@
   --font-family-condensed: "Roboto Condensed", sans-serif;
   --font-family-heading: "Bebas Neue", sans-serif;
   --font-size-base: 16;
+  --font-size-small: calc(14 / var(--font-size-base) * 1rem);
   --font-size-regular: calc(var(--font-size-base) / 16 * 1rem);
   --font-size-medium: calc(28 / var(--font-size-base) * 1rem);
-  --font-size-large: calc(38 / var(--font-size-base) * 1rem);
+  --font-size-large: calc(44 / var(--font-size-base) * 1rem);
   --font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
   --line-height-base: 1.6;
   --line-height-heading: 1.2;
+  --letter-spacing-wide: 1px;
   --wrap-max-width: 87.5rem;
   --content-width: 90%;
   --content-width-max: var(--wrap-max-width);
@@ -46,6 +48,8 @@ body {
   font-family: var(--font-family-sans-serif);
   font-size: calc(16 / 16 * 1rem);
   font-size: var(--font-size-regular);
+  line-height: 1.6;
+  line-height: var(--line-height-base);
   color: #fff;
   color: var(--color-white);
 }
@@ -56,12 +60,83 @@ h3,
 h4,
 h5,
 h6 {
+  margin: 0;
+  clear: both;
   font-family: "Bebas Neue", sans-serif;
   font-family: var(--font-family-heading);
   font-weight: 400;
+  line-height: 1.2;
+  line-height: var(--line-height-heading);
+}
+
+h1,
+h2,
+.h1,
+.h2,
+.has-huge-font-size {
+  font-size: calc(60 / 16 * 1rem);
+  font-size: var(--font-size-xlarge);
+}
+
+h3,
+.h3,
+.has-large-font-size {
+  font-size: calc(44 / 16 * 1rem);
+  font-size: var(--font-size-large);
+}
+
+h4,
+h5,
+h6,
+.h4,
+.h5,
+.h6 {
+  letter-spacing: 1px;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+h4,
+.h4,
+.has-medium-font-size {
+  font-size: calc(28 / 16 * 1rem);
+  font-size: var(--font-size-medium);
+}
+
+h5,
+h6,
+.h5,
+.h6,
+.has-normal-font-size {
+  font-size: calc(16 / 16 * 1rem);
+  font-size: var(--font-size-regular);
+}
+
+.has-small-font-size {
+  font-size: calc(14 / 16 * 1rem);
+  font-size: var(--font-size-small);
 }
 
 a, a:visited {
+  color: #fff;
+  color: var(--color-white);
+}
+
+.has-primary-color {
+  color: #f9d900;
+  color: var(--color-primary);
+}
+
+.has-primary-dark-color {
+  color: #f6c800;
+  color: var(--color-primary-dark);
+}
+
+.has-gray-color {
+  color: #928e8f;
+  color: var(--color-gray);
+}
+
+.has-white-color {
   color: #fff;
   color: var(--color-white);
 }
