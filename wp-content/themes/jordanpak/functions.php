@@ -82,6 +82,14 @@ class Theme {
 	public $global_templating;
 
 	/**
+	 * Editor handler
+	 *
+	 * @since 2.0.0
+	 * @var   Editor
+	 */
+	public $editor;
+
+	/**
 	 * Get child theme instance.
 	 *
 	 * @since 2.0.0
@@ -125,9 +133,9 @@ class Theme {
 	 * @since 2.0.0
 	 */
 	public function init() {
-		// $this->base_support = new Base_Support();
-		$this->assets = new Assets();
+		$this->assets            = new Assets();
 		$this->global_templating = new Global_Templating();
+		$this->editor            = new Editor\Editor();
 
 		// if ( $this->is_request( 'frontend' ) ) {
 		// 	$this->template_loader = new Template_Loader();
