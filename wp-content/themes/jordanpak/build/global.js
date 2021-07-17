@@ -1,9 +1,9 @@
 (window["webpackJsonp_jordanpak"] = window["webpackJsonp_jordanpak"] || []).push([["style-global"],{
 
-/***/ "./src/assets/global/style.css":
-/*!*************************************!*\
-  !*** ./src/assets/global/style.css ***!
-  \*************************************/
+/***/ "./src/assets/global/style.scss":
+/*!**************************************!*\
+  !*** ./src/assets/global/style.scss ***!
+  \**************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -182,7 +182,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ "./src/assets/global/style.css");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/assets/global/style.scss");
 /**
  * Global CSS/JS
  *
