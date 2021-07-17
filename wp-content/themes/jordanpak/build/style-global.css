@@ -197,6 +197,83 @@ svg {
 }
 
 /**
+ * Lists
+ *
+ * @since 2.0.0
+ */
+ol {
+  counter-reset: numbered-counter;
+}
+
+ol li,
+.bulleted-list li,
+ul[data-type="core/list"] li {
+  position: relative;
+  margin: 0.5rem 0;
+  padding: 0 calc(34 / 16 * 1rem);
+  padding: 0 calc(34 / var(--font-size-base) * 1rem);
+}
+
+ol li::before {
+  content: counter(numbered-counter, decimal-leading-zero) ".";
+  counter-increment: numbered-counter;
+  display: block;
+  position: absolute;
+  top: calc(3 / 16 * 1rem);
+  top: calc(3 / var(--font-size-base) * 1rem);
+  left: calc(4 / 16 * 1rem);
+  left: calc(4 / var(--font-size-base) * 1rem);
+  font-size: calc(14 / 16 * 1rem);
+  font-size: calc(14 / var(--font-size-base) * 1rem);
+  font-weight: 700;
+  color: #f9d900;
+  color: var(--color-primary);
+}
+
+.bulleted-list li::before,
+ul[data-type="core/list"] li::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(10 / 16 * 1rem);
+  top: calc(10 / var(--font-size-base) * 1rem);
+  left: calc(14 / 16 * 1rem);
+  left: calc(14 / var(--font-size-base) * 1rem);
+  width: 7px;
+  height: 7px;
+  background: #f9d900;
+  background: var(--color-primary);
+  border-radius: 100%;
+}
+
+@media screen and (min-width: 60em) {
+  ol li,
+.bulleted-list li,
+ul[data-type="core/list"] li {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding: 0 calc(42 / 16 * 1rem);
+    padding: 0 calc(42 / var(--font-size-base) * 1rem);
+  }
+
+  ol li::before {
+    top: calc(5 / 16 * 1rem);
+    top: calc(5 / var(--font-size-base) * 1rem);
+    left: calc(12 / 16 * 1rem);
+    left: calc(12 / var(--font-size-base) * 1rem);
+    font-size: calc(16 / 16 * 1rem);
+    font-size: calc(16 / var(--font-size-base) * 1rem);
+  }
+
+  .bulleted-list li::before,
+ul[data-type="core/list"] li::before {
+    top: calc(12 / 16 * 1rem);
+    top: calc(12 / var(--font-size-base) * 1rem);
+    left: calc(20 / 16 * 1rem);
+    left: calc(20 / var(--font-size-base) * 1rem);
+  }
+}
+/**
  * Main layout styling
  *
  * @since 2.0.0
