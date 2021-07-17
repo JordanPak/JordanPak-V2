@@ -4,7 +4,16 @@
  * @since 2.0.0
  */
 /* stylelint-disable selector-class-pattern */
-.wp-block-button__link {
+.has-button > a {
+  border: none;
+  display: inline-block;
+  cursor: pointer;
+  overflow-wrap: break-word;
+  text-decoration: none;
+}
+
+.wp-block-button__link,
+.has-button > a {
   position: relative;
   z-index: 0;
   padding: 0.75rem 1.75rem 0.7rem;
@@ -16,18 +25,25 @@
   border-radius: var(--border-radius);
   overflow: hidden;
 }
-.wp-block-button__link::before, .wp-block-button__link::after {
+.wp-block-button__link::before, .wp-block-button__link::after,
+.has-button > a::before,
+.has-button > a::after {
   transition-timing-function: var(--transition-timing-function);
   transition-duration: var(--transition-duration);
 }
-.wp-block-button__link, .wp-block-button__link:visited {
+.wp-block-button__link, .wp-block-button__link:visited,
+.has-button > a,
+.has-button > a:visited {
   color: var(--color-black);
 }
-.wp-block-button__link::before, .wp-block-button__link::after {
+.wp-block-button__link::before, .wp-block-button__link::after,
+.has-button > a::before,
+.has-button > a::after {
   position: absolute;
   z-index: -1;
 }
-.wp-block-button__link::before {
+.wp-block-button__link::before,
+.has-button > a::before {
   content: "";
   top: 0;
   right: 0;
@@ -36,7 +52,8 @@
   background: var(--color-white);
   transition-property: background;
 }
-.wp-block-button__link::after {
+.wp-block-button__link::after,
+.has-button > a::after {
   content: "//";
   top: 50%;
   right: -0.5rem;
@@ -48,13 +65,27 @@
   transition-property: color, transform;
   text-shadow: none;
 }
-.wp-block-button__link:hover::before, .wp-block-button__link:focus::before {
+.wp-block-button__link:hover::before, .wp-block-button__link:focus::before,
+.has-button > a:hover::before,
+.has-button > a:focus::before {
   background: var(--color-primary);
 }
-.wp-block-button__link:hover::after, .wp-block-button__link:focus::after {
+.wp-block-button__link:hover::after, .wp-block-button__link:focus::after,
+.has-button > a:hover::after,
+.has-button > a:focus::after {
   color: var(--color-primary-dark);
   transform: translateY(-50%) translateX(5px);
 }
+@media screen and (min-width: 60em) {
+  .wp-block-button__link,
+.has-button > a {
+    padding-left: 2.25rem;
+    padding-right: 2.25rem;
+    font-size: calc(30 / var(--font-size-base) * 1rem);
+    letter-spacing: var(--letter-spacing-less-wide);
+  }
+}
+
 .is-style-outline > .wp-block-button__link {
   border: none;
   box-shadow: inset 0 0 0 2px var(--color-gray-dark);
