@@ -27,6 +27,37 @@ class Global_Templating {
 	 */
 	public function __construct() {
 		add_action( 'genesis_before', [ $this, 'do_background_cover' ] );
+		add_filter( 'genesis_seo_title', [ $this, 'set_site_title' ], 10, 3 );
+	}
+
+	/**
+	 * Set site title
+	 *
+	 * We had to re-build the whole tag because the "bloginfo" filter doesn't
+	 * run unless get_bloginfo() is called with "display", which Genesis
+	 * doesn't do.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param  string $title   Existing site title HTML.
+	 * @param  string $inside  Contents of the site title (what we're actually changing).
+	 * @param  string $wrap    HTML to wrap title.
+	 * @return string          Adjusted site title.
+	 */
+	public function set_site_title( $title, $inside, $wrap ) {
+
+		return genesis_markup(
+			[
+				'open'    => sprintf( "<{$wrap} %s>", genesis_attr( 'site-title' ) ),
+				'close'   => "</{$wrap}>",
+				'content' => '<span class="title-first">Jordan</span> <span class="title-last">Pakrosnis</span>',
+				'context' => 'site-title',
+				'echo'    => false,
+				'params'  => [
+					'wrap' => $wrap,
+				],
+			]
+		);
 	}
 
 	/**
