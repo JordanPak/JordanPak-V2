@@ -13,6 +13,7 @@
 	"devDependencies": {
 		"@wordpress/scripts": "^16.1.4",
 		"postcss-custom-media": "^8.0.0",
-		"postcss-custom-properties": "^11.0.0"
+		"postcss-custom-properties": "^11.0.0",
+		"stylelint-config-wordpress": "^17.0.0"
 	}
 }
