@@ -8,3 +8,32 @@ body {
 	margin: 0;
 	padding: 0;
 }
+
+ul,
+ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+img {
+	display: block;
+	height: auto;
+	max-width: 100%;
+	transition: opacity var(--transition-timing-function) var(--transition-duration);
+}
+
+figure {
+	margin: 0;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0 0 1.5rem;
+	width: 100%;
+}
+
+svg {
+	display: block;
+	height: auto;
+}
