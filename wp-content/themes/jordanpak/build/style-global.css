@@ -297,7 +297,6 @@ ul[data-type="core/list"] li::before {
  * @since 2.0.0
  */
 body {
-  position: relative;
   overflow-x: hidden;
   background-color: #f9d900;
   background-color: var(--color-primary);
