@@ -51,7 +51,7 @@ class Global_Templating {
 				'open'    => sprintf( "<{$wrap} %s>", genesis_attr( 'site-title' ) ),
 				'close'   => "</{$wrap}>",
 				'content' => sprintf(
-					'<a href="%s"><span class="title-first">Jordan</span> <span class="title-last">Pakrosnis</span></span>',
+					'<a href="%s"><span class="title-first">Jordan</span> <span class="title-last">Pakrosnis</span></a>',
 					trailingslashit( home_url() )
 				),
 				'context' => 'site-title',
