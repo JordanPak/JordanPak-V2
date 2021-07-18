@@ -1,2 +1,5 @@
 @custom-media --content-query screen and (min-width: 60em);
 @custom-media --wide-menu-query screen and (min-width: 60em);
+@custom-media --admin-bar-fixed-max-query screen and (max-width: 599px);
+@custom-media --admin-bar-fixed-query screen and (min-width: 600px);
+@custom-media --admin-bar-desktop-query screen and (min-width: 782px);
