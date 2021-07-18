@@ -361,10 +361,81 @@ body.admin-bar {
 }
 
 /**
+ * Navigation menus
+ *
+ * @since 2.0.0
+ */
+.menu {
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+}
+
+.menu-item a {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  font-family: "Bebas Neue", sans-serif;
+  font-family: var(--font-family-heading);
+  line-height: 1.2;
+  line-height: var(--line-height-heading);
+  letter-spacing: 0.5px;
+  letter-spacing: var(--letter-spacing-less-wide);
+  font-size: calc(20 / 16 * 1rem);
+  font-size: calc(20 / var(--font-size-base) * 1rem);
+  text-decoration: none;
+}
+.menu-item .svg-inline--fa {
+  margin-right: 0.4rem;
+  color: #f9d900;
+  color: var(--color-primary);
+  font-size: calc(15 / 16 * 1rem);
+  font-size: calc(15 / var(--font-size-base ) * 1rem);
+  transform: translateY(-1px);
+}
+
+#menu-primary {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+}
+@media screen and (max-width: 40.5625em) {
+  #menu-primary .menu-item a {
+    transition: background-color ease-in-out 200ms;
+    transition: background-color var(--transition-timing-function) var(--transition-duration);
+  }
+  #menu-primary .menu-item a:hover, #menu-primary .menu-item a:focus {
+    background-color: #1f1b1c;
+    background-color: var(--color-black);
+  }
+}
+
+/**
  * Header
  *
  * @since 2.0.0
  */
+.site-header .wrap {
+  display: grid;
+}
+
+.header-widget-area,
+.header-widget-area .widget {
+  position: relative;
+}
+
+@media screen and (max-width: 40.5625em) {
+  .header-widget-area {
+    order: -1;
+  }
+  .header-widget-area::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -400px;
+    bottom: 0;
+    left: -400px;
+    background: #313030;
+  }
+}
 .site-title,
 .site-description {
   margin-top: 0;
