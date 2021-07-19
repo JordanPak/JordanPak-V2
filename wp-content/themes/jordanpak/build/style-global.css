@@ -25,9 +25,9 @@
   --font-size-base: 16;
   --font-size-small: calc(14 / var(--font-size-base) * 1rem);
   --font-size-regular: calc(var(--font-size-base) / 16 * 1rem);
-  --font-size-medium: calc(28 / var(--font-size-base) * 1rem);
-  --font-size-large: calc(44 / var(--font-size-base) * 1rem);
-  --font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
+  --font-size-medium: calc(18 / var(--font-size-base) * 1rem);
+  --font-size-large: calc(22 / var(--font-size-base) * 1rem);
+  --font-size-xlarge: calc(30 / var(--font-size-base) * 1rem);
   --line-height-base: 1.6;
   --line-height-heading: 1.2;
   --letter-spacing-less-wide: 0.5px;
@@ -52,6 +52,9 @@
 @media screen and (min-width: 60em) {
   :root {
     --font-size-regular: calc(20 / var(--font-size-base) * 1rem);
+    --font-size-medium: calc(28 / var(--font-size-base) * 1rem)
+    --font-size-large: calc(44 / var(--font-size-base) * 1rem)
+    --font-size-xlarge: calc(60 / var(--font-size-base) * 1rem)
     --content-spacing: 2rem;
   }
 }
@@ -97,17 +100,26 @@ h2,
 .h1,
 .h2,
 .has-huge-font-size {
-  font-size: calc(60 / 16 * 1rem);
+  font-size: calc(30 / 16 * 1rem);
   font-size: var(--font-size-xlarge);
 }
 
 h3,
 .h3,
 .has-large-font-size {
-  font-size: calc(44 / 16 * 1rem);
+  font-size: calc(22 / 16 * 1rem);
   font-size: var(--font-size-large);
 }
 
+@media screen and (max-width: 59.9375em) {
+  h1,
+h2,
+.h1,
+.h2 {
+    letter-spacing: 0.5px;
+    letter-spacing: var(--letter-spacing-less-wide);
+  }
+}
 h4,
 h5,
 h6,
@@ -121,7 +133,7 @@ h6,
 h4,
 .h4,
 .has-medium-font-size {
-  font-size: calc(28 / 16 * 1rem);
+  font-size: calc(18 / 16 * 1rem);
   font-size: var(--font-size-medium);
 }
 

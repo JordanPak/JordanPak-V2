@@ -27,9 +27,9 @@
 
 	--font-size-small: calc(14 / var(--font-size-base) * 1rem);
 	--font-size-regular: calc(var(--font-size-base) / 16 * 1rem);
-	--font-size-medium: calc(28 / var(--font-size-base) * 1rem);
-	--font-size-large: calc(44 / var(--font-size-base) * 1rem);
-	--font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
+	--font-size-medium: calc(18 / var(--font-size-base) * 1rem);
+	--font-size-large: calc(22 / var(--font-size-base) * 1rem);
+	--font-size-xlarge: calc(30 / var(--font-size-base) * 1rem);
 
 	--line-height-base: 1.6;
 	--line-height-heading: 1.2;
@@ -67,6 +67,9 @@
 
 	:root {
 		--font-size-regular: calc(20 / var(--font-size-base) * 1rem);
+		--font-size-medium: calc(28 / var(--font-size-base) * 1rem)
+		--font-size-large: calc(44 / var(--font-size-base) * 1rem)
+		--font-size-xlarge: calc(60 / var(--font-size-base) * 1rem)
 
 		--content-spacing: 2rem;
 	}

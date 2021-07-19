@@ -43,6 +43,16 @@ h3,
 	font-size: var(--font-size-large);
 }
 
+@media (--content-max-query) {
+
+	h1,
+	h2,
+	.h1,
+	.h2 {
+		letter-spacing: var(--letter-spacing-less-wide);
+	}
+}
+
 h4,
 h5,
 h6,
