@@ -368,6 +368,7 @@ body.admin-bar {
   }
   .background-cover .wrap::before {
     top: auto;
+    right: 35px;
     bottom: auto;
     left: auto;
     width: 20000px;
