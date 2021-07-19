@@ -504,6 +504,12 @@ body.admin-bar {
     color: #f9d900;
     color: var(--color-primary);
   }
+  #menu-primary .menu-break-has-button > a,
+#menu-primary .menu-break-has-button > a:hover,
+#menu-primary .menu-break-has-button > a:focus {
+    color: #1f1b1c;
+    color: var(--color-black);
+  }
 }
 @media screen and (min-width: 64em) {
   #menu-primary {

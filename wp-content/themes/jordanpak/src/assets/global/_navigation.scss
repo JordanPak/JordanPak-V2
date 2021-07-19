@@ -95,6 +95,12 @@
 				color: var(--color-primary);
 			}
 		}
+
+		.menu-break-has-button > a,
+		.menu-break-has-button > a:hover,
+		.menu-break-has-button > a:focus {
+			color: var(--color-black);
+		}
 	}
 
 	@media (--wider-menu-query) {
