@@ -89,3 +89,7 @@ body {
 	width: var(--content-width);
 	max-width: var(--wrap-max-width);
 }
+
+.entry-content > * {
+	margin-top: var(--content-spacing);
+}

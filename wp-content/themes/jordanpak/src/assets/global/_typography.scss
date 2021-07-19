@@ -12,8 +12,12 @@ body {
 }
 
 p {
-	margin-top: var(--content-spacing-consolidated);
 	margin-bottom: 0;
+
+	&,
+	.entry-content > & {
+		margin-top: var(--content-spacing-consolidated);
+	}
 }
 
 h1,

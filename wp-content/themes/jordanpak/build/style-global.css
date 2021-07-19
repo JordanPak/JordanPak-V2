@@ -75,9 +75,11 @@ body {
 }
 
 p {
+  margin-bottom: 0;
+}
+p, .entry-content > p {
   margin-top: calc(1.5rem * 0.666);
   margin-top: var(--content-spacing-consolidated);
-  margin-bottom: 0;
 }
 
 h1,
@@ -396,6 +398,11 @@ body.admin-bar {
   width: var(--content-width);
   max-width: 87.5rem;
   max-width: var(--wrap-max-width);
+}
+
+.entry-content > * {
+  margin-top: 1.5rem;
+  margin-top: var(--content-spacing);
 }
 
 /**
