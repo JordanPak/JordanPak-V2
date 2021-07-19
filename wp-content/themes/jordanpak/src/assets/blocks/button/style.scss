@@ -25,7 +25,9 @@
 	}
 
 	&,
-	&:visited {
+	&:visited,
+	&:hover,
+	&:focus {
 		color: var(--color-black);
 	}
 

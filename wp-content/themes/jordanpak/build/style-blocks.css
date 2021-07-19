@@ -20,7 +20,7 @@
   transition-timing-function: var(--transition-timing-function);
   transition-duration: var(--transition-duration);
 }
-.wp-block-button__link, .wp-block-button__link:visited {
+.wp-block-button__link, .wp-block-button__link:visited, .wp-block-button__link:hover, .wp-block-button__link:focus {
   color: var(--color-black);
 }
 .wp-block-button__link::before, .wp-block-button__link::after {
@@ -101,7 +101,7 @@
     transition-timing-function: var(--transition-timing-function);
     transition-duration: var(--transition-duration);
   }
-  .menu-break-has-button > a, .menu-break-has-button > a:visited {
+  .menu-break-has-button > a, .menu-break-has-button > a:visited, .menu-break-has-button > a:hover, .menu-break-has-button > a:focus {
     color: var(--color-black);
   }
   .menu-break-has-button > a::before, .menu-break-has-button > a::after {
