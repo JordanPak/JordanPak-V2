@@ -52,9 +52,9 @@
 @media screen and (min-width: 60em) {
   :root {
     --font-size-regular: calc(20 / var(--font-size-base) * 1rem);
-    --font-size-medium: calc(28 / var(--font-size-base) * 1rem)
-    --font-size-large: calc(44 / var(--font-size-base) * 1rem)
-    --font-size-xlarge: calc(60 / var(--font-size-base) * 1rem)
+    --font-size-medium: calc(28 / var(--font-size-base) * 1rem);
+    --font-size-large: calc(44 / var(--font-size-base) * 1rem);
+    --font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
     --content-spacing: 2rem;
   }
 }
