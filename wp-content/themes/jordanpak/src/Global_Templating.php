@@ -69,6 +69,6 @@ class Global_Templating {
 	 * @since 2.7.0
 	 */
 	public function do_background_cover() {
-		echo '<div class="background-cover"></div>';
+		echo '<div class="background-cover"></div><div class="background-cover-gradient"><div class="wrap"></div></div>';
 	}
 }

@@ -16,13 +16,17 @@ body {
 	}
 }
 
-.background-cover {
+.background-cover,
+.background-cover-gradient {
 	position: absolute;
 	top: 0;
-	right: -100px;
 	bottom: 0;
 	left: 0;
 	overflow: hidden;
+}
+
+.background-cover {
+	right: -100px;
 
 	&::before {
 		content: "";
@@ -33,6 +37,21 @@ body {
 		left: -1000px;
 		background: var(--color-black);
 		transform: rotate(20deg);
+	}
+}
+
+.background-cover-gradient {
+	display: flex;
+	right: 0;
+
+	.wrap::before {
+		content: "";
+		position: absolute;
+		transform: translateX(-50%);
+		width: 140%;
+		padding-bottom: 140%;
+		background: radial-gradient(circle at 50% 100px, #383536, transparent 45%);
+		opacity: 0.2;
 	}
 }
 

@@ -316,13 +316,17 @@ body.admin-bar {
   min-height: calc(100vh - var(--admin-bar-height));
 }
 
-.background-cover {
+.background-cover,
+.background-cover-gradient {
   position: absolute;
   top: 0;
-  right: -100px;
   bottom: 0;
   left: 0;
   overflow: hidden;
+}
+
+.background-cover {
+  right: -100px;
 }
 .background-cover::before {
   content: "";
@@ -334,6 +338,20 @@ body.admin-bar {
   background: #1f1b1c;
   background: var(--color-black);
   transform: rotate(20deg);
+}
+
+.background-cover-gradient {
+  display: flex;
+  right: 0;
+}
+.background-cover-gradient .wrap::before {
+  content: "";
+  position: absolute;
+  transform: translateX(-50%);
+  width: 140%;
+  padding-bottom: 140%;
+  background: radial-gradient(circle at 50% 100px, #383536, transparent 45%);
+  opacity: 0.2;
 }
 
 @media screen and (max-width: 599px) {
