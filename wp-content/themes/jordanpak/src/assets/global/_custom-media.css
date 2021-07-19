@@ -1,3 +1,4 @@
+@custom-media --small-content-query screen and (min-width: 36em);
 @custom-media --content-max-query screen and (max-width: 59.9375em);
 @custom-media --content-query screen and (min-width: 60em);
 @custom-media --wide-menu-max-query screen and (max-width: 40.5625em);

@@ -52,6 +52,10 @@
 	// border radii
 	--border-radius: 4px;
 
+	// background cover
+	--background-cover-bottom-offset: 200px;
+	--background-cover-right-offset: 100px;
+
 	// admin bar
 	--admin-bar-height: 46px;
 }
@@ -60,6 +64,14 @@
 
 	:root {
 		--admin-bar-height: 32px;
+	}
+}
+
+@media (--small-content-query) {
+
+	:root {
+		--background-cover-bottom-offset: 300px;
+		--background-cover-right-offset: 150px;
 	}
 }
 

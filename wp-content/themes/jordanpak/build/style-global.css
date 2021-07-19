@@ -41,12 +41,20 @@
   --transition-duration: 200ms;
   --transition-timing-function: ease-in-out;
   --border-radius: 4px;
+  --background-cover-bottom-offset: 200px;
+  --background-cover-right-offset: 100px;
   --admin-bar-height: 46px;
 }
 
 @media screen and (min-width: 782px) {
   :root {
     --admin-bar-height: 32px;
+  }
+}
+@media screen and (min-width: 36em) {
+  :root {
+    --background-cover-bottom-offset: 300px;
+    --background-cover-right-offset: 150px;
   }
 }
 @media screen and (min-width: 60em) {
@@ -334,29 +342,39 @@ body.admin-bar {
 .background-cover-gradient {
   position: absolute;
   top: 0;
+  right: 0;
   bottom: 0;
   left: 0;
   overflow: hidden;
 }
 
-.background-cover {
-  right: -100px;
-}
 .background-cover::before {
   content: "";
   position: absolute;
-  top: -1000px;
+  top: 0;
   right: 0;
-  bottom: -1000px;
-  left: -1000px;
+  bottom: 0;
+  left: 0;
   background: #1f1b1c;
   background: var(--color-black);
-  transform: rotate(20deg);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 200px), calc(100% - 100px) 100%, 0 100%);
+          clip-path: polygon(0 0, 100% 0, 100% calc(100% - 200px), calc(100% - 100px) 100%, 0 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--background-cover-bottom-offset)), calc(100% - var(--background-cover-right-offset)) 100%, 0 100%);
+          clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--background-cover-bottom-offset)), calc(100% - var(--background-cover-right-offset)) 100%, 0 100%);
+}
+@media screen and (min-width: 60em) {
+  .background-cover::before {
+    top: -1000px;
+    bottom: -1000px;
+    left: -1000px;
+    transform: translateX(-22.5%) rotate(20deg);
+    -webkit-clip-path: none;
+            clip-path: none;
+  }
 }
 
 .background-cover-gradient {
   display: flex;
-  right: 0;
 }
 .background-cover-gradient .wrap::before {
   content: "";
@@ -371,12 +389,6 @@ body.admin-bar {
 @media screen and (max-width: 599px) {
   #wpadminbar {
     transform: translateY(-100%);
-  }
-}
-@media screen and (min-width: 60em) {
-  .background-cover::before {
-    right: 0;
-    transform: translateX(-22.5%) rotate(20deg);
   }
 }
 .site-container {

@@ -20,29 +20,38 @@ body {
 .background-cover-gradient {
 	position: absolute;
 	top: 0;
+	right: 0;
 	bottom: 0;
 	left: 0;
 	overflow: hidden;
 }
 
-.background-cover {
-	right: -100px;
+.background-cover::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: var(--color-black);
+	clip-path: polygon(
+		0 0,
+		100% 0,
+		100% calc(100% - var(--background-cover-bottom-offset)),
+		calc(100% - var(--background-cover-right-offset)) 100%, 0 100%
+	);
 
-	&::before {
-		content: "";
-		position: absolute;
+	@media (--content-query) {
 		top: -1000px;
-		right: 0;
 		bottom: -1000px;
 		left: -1000px;
-		background: var(--color-black);
-		transform: rotate(20deg);
+		transform: translateX(-22.5%) rotate(20deg);
+		clip-path: none;
 	}
 }
 
 .background-cover-gradient {
 	display: flex;
-	right: 0;
 
 	.wrap::before {
 		content: "";
@@ -62,16 +71,6 @@ body {
 		transform: translateY(-100%);
 	}
 }
-
-
-@media (--content-query) {
-
-	.background-cover::before {
-		right: 0;
-		transform: translateX(-22.5%) rotate(20deg);
-	}
-}
-
 
 .site-container {
 	position: relative; // layer over background cover
