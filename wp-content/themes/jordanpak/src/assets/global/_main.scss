@@ -58,6 +58,11 @@ body {
 	position: relative; // layer over background cover
 }
 
+.site-inner {
+	padding-top: var(--site-inner-spacing);
+	padding-bottom: var(--site-inner-spacing);
+}
+
 .wrap,
 .content-sidebar-wrap {
 	margin-left: auto;

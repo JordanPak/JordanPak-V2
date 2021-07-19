@@ -37,6 +37,7 @@
   --content-width-max: var(--wrap-max-width);
   --content-spacing: 1.5rem;
   --content-spacing-consolidated: calc(var(--content-spacing) * 0.666);
+  --site-inner-spacing: 2rem;
   --transition-duration: 200ms;
   --transition-timing-function: ease-in-out;
   --border-radius: 4px;
@@ -350,6 +351,13 @@ body.admin-bar {
   position: relative;
 }
 
+.site-inner {
+  padding-top: 2rem;
+  padding-top: var(--site-inner-spacing);
+  padding-bottom: 2rem;
+  padding-bottom: var(--site-inner-spacing);
+}
+
 .wrap,
 .content-sidebar-wrap {
   margin-left: auto;
@@ -417,6 +425,60 @@ body.admin-bar {
   display: grid;
 }
 
+.title-area {
+  padding-top: 0.666rem;
+  padding-bottom: 0.666rem;
+}
+
+.site-title,
+.site-description {
+  margin-top: 0;
+}
+
+.site-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-family: var(--font-family-heading);
+  font-size: calc(34 / 16 * 1rem);
+  font-size: calc(34 / var(--font-size-base) * 1rem);
+  line-height: 1.2;
+  line-height: var(--line-height-heading);
+}
+.site-title a {
+  text-decoration: none;
+}
+
+.title-first,
+.title-last {
+  display: inline-block;
+}
+
+.title-last {
+  position: relative;
+  margin-left: calc(9 / 16 * 1rem);
+  margin-left: calc(9 / var(--font-size-base) * 1rem);
+}
+.title-last::before {
+  content: "//";
+  position: absolute;
+  top: 50%;
+  transform: translateX(-80%) translateY(-50%);
+  font-size: calc(46 / 16 * 1rem);
+  font-size: calc(46 / var(--font-size-base) * 1rem);
+  letter-spacing: -2px;
+  color: #f9d900;
+  color: var(--color-primary);
+}
+
+.site-description {
+  margin-top: -0.1rem;
+  font-size: calc(14 / 16 * 1rem);
+  font-size: calc(14 / var(--font-size-base) * 1rem);
+  line-height: 1;
+  font-weight: 500;
+  color: #c7c7c7;
+  color: var(--color-gray-mid-light);
+}
+
 .header-widget-area,
 .header-widget-area .widget {
   position: relative;
@@ -435,10 +497,6 @@ body.admin-bar {
     left: -400px;
     background: #313030;
   }
-}
-.site-title,
-.site-description {
-  margin-top: 0;
 }
 
 /*# sourceMappingURL=style-global.css.map*/
