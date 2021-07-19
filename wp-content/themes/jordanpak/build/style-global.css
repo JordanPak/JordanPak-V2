@@ -348,7 +348,7 @@ body.admin-bar {
   overflow: hidden;
 }
 
-.background-cover::before {
+.background-cover .wrap::before {
   content: "";
   position: absolute;
   top: 0;
@@ -357,19 +357,23 @@ body.admin-bar {
   left: 0;
   background: #1f1b1c;
   background: var(--color-black);
-  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 200px), calc(100% - 100px) 100%, 0 100%);
-          clip-path: polygon(0 0, 100% 0, 100% calc(100% - 200px), calc(100% - 100px) 100%, 0 100%);
-  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--background-cover-bottom-offset)), calc(100% - var(--background-cover-right-offset)) 100%, 0 100%);
-          clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--background-cover-bottom-offset)), calc(100% - var(--background-cover-right-offset)) 100%, 0 100%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - 200px), calc(100% - 100px) calc(100% + 1px), 0 calc(100% + 1px));
+          clip-path: polygon(0 0, 100% 0, 100% calc(100% - 200px), calc(100% - 100px) calc(100% + 1px), 0 calc(100% + 1px));
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--background-cover-bottom-offset)), calc(100% - var(--background-cover-right-offset)) calc(100% + 1px), 0 calc(100% + 1px));
+          clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--background-cover-bottom-offset)), calc(100% - var(--background-cover-right-offset)) calc(100% + 1px), 0 calc(100% + 1px));
 }
-@media screen and (min-width: 60em) {
-  .background-cover::before {
-    top: -1000px;
-    bottom: -1000px;
-    left: -1000px;
-    transform: translateX(-22.5%) rotate(20deg);
-    -webkit-clip-path: none;
-            clip-path: none;
+@media screen and (min-width: 64em) {
+  .background-cover .wrap {
+    position: relative;
+  }
+  .background-cover .wrap::before {
+    top: auto;
+    bottom: auto;
+    left: auto;
+    width: 20000px;
+    height: 20000px;
+    transform-origin: top right;
+    transform: rotate(20deg);
   }
 }
 
