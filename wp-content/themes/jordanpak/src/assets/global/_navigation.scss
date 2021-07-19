@@ -29,10 +29,22 @@
 	}
 }
 
+@media (--wide-menu-query) {
+
+	.menu-break-has-button {
+		margin-left: 0.75rem;
+
+		&:last-child {
+			margin-right: 0.75rem;
+		}
+	}
+}
+
 #menu-primary {
 	display: grid;
 	grid-auto-flow: column;
 	justify-content: start;
+	align-items: center;
 
 	@media (--wide-menu-max-query) {
 

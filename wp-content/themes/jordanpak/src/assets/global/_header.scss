@@ -6,6 +6,7 @@
 
 .site-header .wrap {
 	display: grid;
+	align-items: center;
 }
 
 .title-area {
@@ -78,6 +79,19 @@
 			bottom: 0;
 			left: -400px;
 			background: #313030;
+		}
+	}
+}
+
+@media (--wide-menu-query) {
+
+	.site-header {
+		margin-top: 1rem;
+		padding-top: 1rem;
+
+		.wrap {
+			grid-auto-flow: column;
+			justify-content: space-between;
 		}
 	}
 }
