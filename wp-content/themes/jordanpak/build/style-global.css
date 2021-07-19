@@ -508,9 +508,10 @@ body.admin-bar {
     color: #f9d900;
     color: var(--color-primary);
   }
-  #menu-primary .menu-break-has-button > a,
-#menu-primary .menu-break-has-button > a:hover,
-#menu-primary .menu-break-has-button > a:focus {
+  #menu-primary .menu-break-has-button > a {
+    box-shadow: 0 4px 30px rgba(31, 27, 28, 0.1);
+  }
+  #menu-primary .menu-break-has-button > a, #menu-primary .menu-break-has-button > a:hover, #menu-primary .menu-break-has-button > a:focus {
     color: #1f1b1c;
     color: var(--color-black);
   }

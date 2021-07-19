@@ -96,10 +96,14 @@
 			}
 		}
 
-		.menu-break-has-button > a,
-		.menu-break-has-button > a:hover,
-		.menu-break-has-button > a:focus {
-			color: var(--color-black);
+		.menu-break-has-button > a {
+			box-shadow: 0 4px 30px rgba(#1f1b1c, 0.1);
+
+			&,
+			&:hover,
+			&:focus {
+				color: var(--color-black);
+			}
 		}
 	}
 
