@@ -86,7 +86,7 @@ class Assets {
 			"
 				WebFont.load({ google: { families: [
 					'Roboto Condensed:400,700',
-					'Roboto:400,400i,500,700',
+					'Roboto:400,400i,500,600,700',
 					'Bebas Neue',
 				] } });
 			"
