@@ -39,6 +39,10 @@ class Editor {
 	 */
 	public function add_support() {
 
+		// Allow wide block width.
+		add_theme_support( 'align-wide' );
+
+		// Custom color palette.
 		add_theme_support(
 			'editor-color-palette',
 			[

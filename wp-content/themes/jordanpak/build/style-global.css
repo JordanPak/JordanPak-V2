@@ -429,6 +429,9 @@ body.admin-bar {
   max-width: 53.125rem;
   max-width: var(--entry-content-width);
 }
+.entry-content > *.alignwide {
+  max-width: none;
+}
 
 /**
  * Navigation menus
