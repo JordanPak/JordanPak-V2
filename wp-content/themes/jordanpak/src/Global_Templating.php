@@ -28,6 +28,7 @@ class Global_Templating {
 	public function __construct() {
 		add_action( 'genesis_before', [ $this, 'do_background_cover' ] );
 		add_filter( 'genesis_seo_title', [ $this, 'set_site_title' ], 10, 3 );
+		add_filter( 'genesis_edit_post_link', '__return_false' );
 	}
 
 	/**
