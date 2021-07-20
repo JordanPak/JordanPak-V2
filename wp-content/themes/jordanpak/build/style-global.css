@@ -32,12 +32,13 @@
   --line-height-heading: 1.2;
   --letter-spacing-less-wide: 0.5px;
   --letter-spacing-wide: 1px;
+  --site-inner-spacing: 2rem;
   --wrap-max-width: 87.5rem;
   --content-width: 90%;
   --content-width-max: var(--wrap-max-width);
   --content-spacing: 1.5rem;
   --content-spacing-consolidated: calc(var(--content-spacing) * 0.666);
-  --site-inner-spacing: 2rem;
+  --entry-content-width: 53.125rem;
   --transition-duration: 200ms;
   --transition-timing-function: ease-in-out;
   --border-radius: 4px;
@@ -425,6 +426,8 @@ body.admin-bar {
 .entry-content > * {
   margin-top: 1.5rem;
   margin-top: var(--content-spacing);
+  max-width: 53.125rem;
+  max-width: var(--entry-content-width);
 }
 
 /**

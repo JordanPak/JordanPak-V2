@@ -102,4 +102,5 @@ body {
 
 .entry-content > * {
 	margin-top: var(--content-spacing);
+	max-width: var(--entry-content-width);
 }
