@@ -100,7 +100,8 @@ body {
 	max-width: var(--wrap-max-width);
 }
 
-.entry-content > * {
+.entry-content > *,
+.wp-block-column > * {
 	margin-top: var(--content-spacing);
 	max-width: var(--entry-content-width);
 

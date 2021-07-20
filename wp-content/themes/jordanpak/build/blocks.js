@@ -14,6 +14,20 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/assets/blocks/core/heading/style.scss":
+/*!***************************************************!*\
+  !*** ./src/assets/blocks/core/heading/style.scss ***!
+  \***************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./src/assets/blocks/core/list/style.scss":
 /*!************************************************!*\
   !*** ./src/assets/blocks/core/list/style.scss ***!
@@ -287,6 +301,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.scss */ "./src/assets/blocks/core/heading/style.scss");
 /**
  * Add features to heading block
  *
@@ -294,9 +309,14 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
 Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockStyle"])('core/heading', [{
   name: 'condensed-font-family',
   label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])('Condensed font', 'jordanpak'),
+  isDefault: false
+}, {
+  name: 'icon-list-heading',
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])('Icon list', 'jordanpak'),
   isDefault: false
 }]);
 
