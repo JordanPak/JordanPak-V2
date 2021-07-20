@@ -1,9 +1,9 @@
 (window["webpackJsonp_jordanpak"] = window["webpackJsonp_jordanpak"] || []).push([["style-blocks"],{
 
-/***/ "./src/assets/blocks/button/style.scss":
-/*!*********************************************!*\
-  !*** ./src/assets/blocks/button/style.scss ***!
-  \*********************************************/
+/***/ "./src/assets/blocks/core/button/style.scss":
+/*!**************************************************!*\
+  !*** ./src/assets/blocks/core/button/style.scss ***!
+  \**************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14,10 +14,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/assets/blocks/list/style.scss":
-/*!*******************************************!*\
-  !*** ./src/assets/blocks/list/style.scss ***!
-  \*******************************************/
+/***/ "./src/assets/blocks/core/list/style.scss":
+/*!************************************************!*\
+  !*** ./src/assets/blocks/core/list/style.scss ***!
+  \************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -255,16 +255,16 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 /***/ }),
 
-/***/ "./src/assets/blocks/button/index.js":
-/*!*******************************************!*\
-  !*** ./src/assets/blocks/button/index.js ***!
-  \*******************************************/
+/***/ "./src/assets/blocks/core/button/index.js":
+/*!************************************************!*\
+  !*** ./src/assets/blocks/core/button/index.js ***!
+  \************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/assets/blocks/button/style.scss");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/assets/blocks/core/button/style.scss");
 /**
  * Add features to button block
  *
@@ -274,10 +274,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/assets/blocks/heading/index.js":
-/*!********************************************!*\
-  !*** ./src/assets/blocks/heading/index.js ***!
-  \********************************************/
+/***/ "./src/assets/blocks/core/heading/index.js":
+/*!*************************************************!*\
+  !*** ./src/assets/blocks/core/heading/index.js ***!
+  \*************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -302,20 +302,20 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockStyle"])('co
 
 /***/ }),
 
-/***/ "./src/assets/blocks/index.js":
-/*!************************************!*\
-  !*** ./src/assets/blocks/index.js ***!
-  \************************************/
+/***/ "./src/assets/blocks/core/index.js":
+/*!*****************************************!*\
+  !*** ./src/assets/blocks/core/index.js ***!
+  \*****************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _heading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./heading */ "./src/assets/blocks/heading/index.js");
-/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./button */ "./src/assets/blocks/button/index.js");
-/* harmony import */ var _list__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./list */ "./src/assets/blocks/list/index.js");
+/* harmony import */ var _heading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./heading */ "./src/assets/blocks/core/heading/index.js");
+/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./button */ "./src/assets/blocks/core/button/index.js");
+/* harmony import */ var _list__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./list */ "./src/assets/blocks/core/list/index.js");
 /**
- * Theme-specific adjustments for blocks
+ * Theme-specific adjustments for core/* blocks
  *
  * @since 2.0.0
  */
@@ -325,10 +325,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/assets/blocks/list/index.js":
-/*!*****************************************!*\
-  !*** ./src/assets/blocks/list/index.js ***!
-  \*****************************************/
+/***/ "./src/assets/blocks/core/list/index.js":
+/*!**********************************************!*\
+  !*** ./src/assets/blocks/core/list/index.js ***!
+  \**********************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -342,7 +342,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style.scss */ "./src/assets/blocks/list/style.scss");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style.scss */ "./src/assets/blocks/core/list/style.scss");
 /**
  * Add features to list block
  *
@@ -388,6 +388,25 @@ const addClasses = (props, blockType, attributes) => {
 
 
 Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_2__["addFilter"])('blocks.getSaveContent.extraProps', 'jordanpak/list/add-classes', addClasses);
+
+/***/ }),
+
+/***/ "./src/assets/blocks/index.js":
+/*!************************************!*\
+  !*** ./src/assets/blocks/index.js ***!
+  \************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core */ "./src/assets/blocks/core/index.js");
+/**
+ * Custom blocks and core/* block features
+ *
+ * @since 2.0.0
+ */
+
 
 /***/ }),
 
