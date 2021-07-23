@@ -7,10 +7,10 @@
 import { useBlockProps, RichText, InnerBlocks } from '@wordpress/block-editor';
 
 export default function save( { attributes } ) {
-	const { heading, icon, iconFamily } = attributes;
+	const { open, heading, icon, iconFamily } = attributes;
 
 	return (
-		<details { ...useBlockProps.save() }>
+		<details { ...useBlockProps.save( { open } ) }>
 			<summary className="jp-accordion-list-heading">
 				<i
 					className={ `${ iconFamily } fa-${ icon }` }
@@ -24,7 +24,7 @@ export default function save( { attributes } ) {
 			</summary>
 
 			<ul className="jp-accordion-list-items">
-				{ /* <InnerBlocks.Content /> */ }
+				<InnerBlocks.Content />
 			</ul>
 		</details>
 	);

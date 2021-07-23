@@ -13,7 +13,7 @@ import {
 	InnerBlocks,
 	InspectorControls,
 } from '@wordpress/block-editor';
-import { PanelBody } from '@wordpress/components';
+import { PanelBody, ToggleControl } from '@wordpress/components';
 
 import IconNameControl from '../../components/icon-name-control';
 import IconFamilyControl from '../../components/icon-family-control';
@@ -27,11 +27,23 @@ const BLOCKS_TEMPLATE = [
 const ALLOWED_BLOCKS = [ 'jordanpak/accordion-list-item' ];
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { heading, icon, iconFamily } = attributes;
+	const { open, heading, icon, iconFamily } = attributes;
 
 	return (
 		<>
 			<InspectorControls>
+				<PanelBody title={ __( 'Layout', 'jordanpak' ) }>
+					<ToggleControl
+						label={ __( 'Opened by default' ) }
+						checked={ open }
+						onChange={ ( value ) =>
+							setAttributes( {
+								open: value,
+							} )
+						}
+					/>
+				</PanelBody>
+
 				<PanelBody title={ __( 'Icon', 'jordanpak' ) }>
 					<IconNameControl
 						value={ icon }
@@ -48,7 +60,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				</PanelBody>
 			</InspectorControls>
 
-			<details { ...useBlockProps() }>
+			<details { ...useBlockProps( { open } ) }>
 				<summary className="jp-accordion-list-heading">
 					<FontAwesomeIcon icon={ [ iconFamily, icon ] } />
 
@@ -64,12 +76,12 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				</summary>
 
-				<ul className="jp-accordion-list-items">
-					{/* <InnerBlocks
+				<div className="jp-accordion-list-items">
+					<InnerBlocks
 						template={ BLOCKS_TEMPLATE }
 						allowedBlocks={ ALLOWED_BLOCKS }
-					/> */}
-				</ul>
+					/>
+				</div>
 			</details>
 		</>
 	);

@@ -32,6 +32,11 @@ registerBlockType( 'jordanpak/accordion-list', {
 	keywords: [ __( 'list' ), __( 'skills' ), __( 'accordion' ) ],
 
 	attributes: {
+		open: {
+			type: 'boolean',
+			default: false,
+		},
+
 		heading: {
 			type: 'html',
 			source: 'html',
