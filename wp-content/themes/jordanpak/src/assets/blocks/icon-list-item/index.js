@@ -10,7 +10,7 @@ import { heading as icon } from '@wordpress/icons';
 
 import URLWrapper from '../../components/url-wrapper';
 
-// import './style.scss';
+import './style.scss';
 
 import edit from './edit';
 import save from './save';
@@ -26,7 +26,7 @@ const config = {
 		icon: {
 			type: 'string',
 			source: 'attribute',
-			selector: '.fa-solid',
+			selector: '.fa-light',
 			attribute: 'data-icon',
 			default: 'hammer',
 		},

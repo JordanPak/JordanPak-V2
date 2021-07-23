@@ -17,7 +17,7 @@ export default function edit( { attributes, setAttributes } ) {
 
 	return (
 		<>
-			<FontAwesomeIcon icon={ [ 'far', icon ] } />
+			<FontAwesomeIcon icon={ [ 'fal', icon ] } />
 
 			<RichText
 				tagName="span"

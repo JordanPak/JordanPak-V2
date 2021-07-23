@@ -11,7 +11,7 @@ export default function save( { attributes } ) {
 
 	return (
 		<Fragment>
-			<i className={ `far fa-${ icon }` } data-icon={ icon } />
+			<i className={ `fa-light fa-${ icon }` } data-icon={ icon } />
 			<RichText.Content
 				tagName="span"
 				className="jp-icon-list-item-text"
