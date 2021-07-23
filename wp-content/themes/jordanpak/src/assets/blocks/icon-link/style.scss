@@ -1,0 +1,54 @@
+/**
+ * Icon/arrow link block
+ *
+ * @since 2.0.0
+ */
+
+.icon-link {
+	display: inline-flex;
+	align-items: center;
+	margin-left: -0.5rem;
+	margin-right: -0.5rem;
+	padding: 0.5rem;
+	font-size: calc(18 / var(--font-size-base) * 1rem);
+	line-height: var(--line-height-heading);
+	font-weight: 500;
+	text-decoration: none;
+
+	& svg {
+		vertical-align: -0.2em;
+		margin-left: 0.666rem;
+		color: var(--color-primary);
+		transition-property: transform, color;
+		transition-timing-function: ease-in-out;
+		transition-duration: var(--transition-duration);
+	}
+
+	&,
+	&:visited,
+	&:hover,
+	&:focus,
+	&:hover svg,
+	&:focus svg {
+		color: var(--color-white);
+	}
+
+	&:hover svg,
+	&:focus svg {
+		transform: translateX(0.25rem);
+
+		&.icon-position-left {
+			transform: none;
+		}
+	}
+
+	& .icon-position-left {
+		order: -1;
+		margin-left: 0;
+		margin-right: 0.5rem;
+	}
+
+	@media (--content-query) {
+		font-size: calc(22 / var(--font-size-base) * 1rem);
+	}
+}
