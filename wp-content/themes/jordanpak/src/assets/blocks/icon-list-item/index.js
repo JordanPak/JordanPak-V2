@@ -48,7 +48,4 @@ const config = {
 	save,
 };
 
-registerBlockType(
-	'jordanpak/icon-list-item',
-	URLWrapper( config, 'icon-link' )
-);
+registerBlockType( 'jordanpak/icon-list-item', URLWrapper( config ) );
