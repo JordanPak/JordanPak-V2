@@ -1,7 +1,7 @@
 /**
  * Font Awsesome icon name control
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 
 import { __ } from '@wordpress/i18n';

@@ -7,6 +7,8 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far } from '@fortawesome/pro-regular-svg-icons';
 import { fal } from '@fortawesome/pro-light-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 
 library.add( far );
 library.add( fal );
+library.add( fab );
