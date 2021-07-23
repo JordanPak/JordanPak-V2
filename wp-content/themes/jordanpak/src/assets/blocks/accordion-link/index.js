@@ -27,6 +27,8 @@ const config = {
 		__( 'button', 'jordanpak' ),
 	],
 
+	parent: [ 'jordanpak/accordions' ],
+
 	attributes: {
 		text: {
 			type: 'html',

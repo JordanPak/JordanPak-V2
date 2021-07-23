@@ -27,6 +27,7 @@ const URLWrapper = ( blockConfig, addlClasses ) => {
 		icon,
 		category,
 		keywords,
+		parent,
 		edit,
 		save,
 	} = blockConfig;
@@ -38,6 +39,7 @@ const URLWrapper = ( blockConfig, addlClasses ) => {
 		icon,
 		category,
 		keywords,
+		parent,
 
 		// merge in the attributes we want
 		attributes: {

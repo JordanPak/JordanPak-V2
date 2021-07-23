@@ -31,6 +31,8 @@ registerBlockType( 'jordanpak/accordion-list', {
 	category: 'text',
 	keywords: [ __( 'list' ), __( 'skills' ), __( 'accordion' ) ],
 
+	parent: [ 'jordanpak/accordions' ],
+
 	attributes: {
 		open: {
 			type: 'boolean',
