@@ -7,3 +7,4 @@ import '../util';
 import './core';
 import './icon-list-item';
 import './icon-link';
+import './accordion-list';
