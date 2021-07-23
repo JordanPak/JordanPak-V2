@@ -63,32 +63,4 @@ registerBlockType( 'jordanpak/accordion-list', {
 
 	edit,
 	save,
-	// /**
-	//  * Block edit
-	//  *
-	//  * @return {Object}  JSX Component.
-	//  */
-	// edit: () => {
-	// 	return (
-	// 		<div { ...useBlockProps() }>
-	// 			<InnerBlocks
-	// 				template={ BLOCKS_TEMPLATE }
-	// 				allowedBlocks={ ALLOWED_BLOCKS }
-	// 			/>
-	// 		</div>
-	// 	);
-	// },
-
-	// /**
-	//  * Block save
-	//  *
-	//  * @return {Object}  JSX Frontend HTML.
-	//  */
-	// save: () => {
-	// 	return (
-	// 		<ul { ...useBlockProps.save() }>
-	// 			<InnerBlocks.Content />
-	// 		</ul>
-	// 	);
-	// },
 } );

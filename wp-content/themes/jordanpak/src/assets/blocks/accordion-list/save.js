@@ -15,6 +15,7 @@ export default function save( { attributes } ) {
 				<i
 					className={ `${ iconFamily } fa-${ icon }` }
 					data-icon={ icon }
+					data-icon-family={ iconFamily }
 				/>
 				<RichText.Content
 					tagName="h3"

@@ -9,3 +9,4 @@ import './icon-list-item';
 import './icon-link';
 import './accordion-list-item';
 import './accordion-list';
+import './accordion-link';
