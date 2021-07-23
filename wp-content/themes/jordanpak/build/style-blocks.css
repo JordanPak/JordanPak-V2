@@ -339,5 +339,48 @@
     font-size: calc(24 / var(--font-size-base) * 1rem);
   }
 }
+/**
+ * Icon/arrow link block
+ *
+ * @since 2.0.0
+ */
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+  padding: 0.5rem;
+  font-size: calc(18 / var(--font-size-base) * 1rem);
+  line-height: var(--line-height-heading);
+  font-weight: 500;
+  text-decoration: none;
+}
+.icon-link svg {
+  vertical-align: -0.2em;
+  margin-left: 0.666rem;
+  color: var(--color-primary);
+  transition-property: transform, color;
+  transition-timing-function: ease-in-out;
+  transition-duration: var(--transition-duration);
+}
+.icon-link, .icon-link:visited, .icon-link:hover, .icon-link:focus, .icon-link:hover svg, .icon-link:focus svg {
+  color: var(--color-white);
+}
+.icon-link:hover svg, .icon-link:focus svg {
+  transform: translateX(0.25rem);
+}
+.icon-link:hover svg.icon-position-left, .icon-link:focus svg.icon-position-left {
+  transform: none;
+}
+.icon-link .icon-position-left {
+  order: -1;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+@media screen and (min-width: 60em) {
+  .icon-link {
+    font-size: calc(22 / var(--font-size-base) * 1rem);
+  }
+}
 
 /*# sourceMappingURL=style-blocks.css.map*/
