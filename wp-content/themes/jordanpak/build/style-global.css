@@ -37,7 +37,7 @@
   --line-height-heading: 1.2;
   --letter-spacing-less-wide: 0.5px;
   --letter-spacing-wide: 1px;
-  --text-shadow-dark-gray: 0 1px 6px rgba(#292627, 0.47);
+  --text-shadow-dark-gray: 0 1px 5px var(--color-gray-darkest);
   --site-inner-spacing: 2rem;
   --wrap-max-width: 87.5rem;
   --content-width: 90%;
@@ -81,6 +81,26 @@
  *
  * @since 2.0.0
  */
+::-moz-selection {
+  color: #1f1b1c;
+  color: var(--color-black);
+  background: rgba(249, 217, 0, 0.9);
+  text-shadow: none;
+}
+::selection {
+  color: #1f1b1c;
+  color: var(--color-black);
+  background: rgba(249, 217, 0, 0.9);
+  text-shadow: none;
+}
+
+::-moz-selection {
+  color: #1f1b1c;
+  color: var(--color-black);
+  background: rgba(249, 217, 0, 0.9);
+  text-shadow: none;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   font-family: var(--font-family-sans-serif);
