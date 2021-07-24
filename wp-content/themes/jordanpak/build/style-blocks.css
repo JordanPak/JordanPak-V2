@@ -383,18 +383,99 @@
   }
 }
 /**
+ * Accordion list item block
+ *
+ * @since 2.0.0
+ */
+.wp-block-jordanpak-accordion-list-item {
+  position: relative;
+  padding: 0.25rem 0;
+  line-height: var(--line-height-reduced);
+}
+.wp-block-jordanpak-accordion-list-item::before, .wp-block-jordanpak-accordion-list-item::after {
+  content: "";
+  position: absolute;
+  left: -1.4rem;
+  background: #d4d4d4;
+}
+.wp-block-jordanpak-accordion-list-item::before {
+  top: 0;
+  bottom: 0;
+  width: 2px;
+}
+.wp-block-jordanpak-accordion-list-item::after {
+  top: 0.875rem;
+  width: 0.75rem;
+  height: 2px;
+}
+.wp-block-jordanpak-accordion-list-item:first-child::before {
+  top: -0.25rem;
+}
+.wp-block-jordanpak-accordion-list-item:last-child::before {
+  bottom: calc(100% - 1rem);
+}
+@media screen and (min-width: 60em) {
+  .wp-block-jordanpak-accordion-list-item::before, .wp-block-jordanpak-accordion-list-item::after {
+    left: -1.75rem;
+  }
+  .wp-block-jordanpak-accordion-list-item::after {
+    top: 1.0625rem;
+    width: 1.0625rem;
+  }
+  .wp-block-jordanpak-accordion-list-item:last-child::before {
+    bottom: calc(100% - 1.125rem);
+  }
+}
+/**
  * Accordion list block
  *
  * @since 2.0.0
  */
+.wp-block-jordanpak-accordion-list {
+  background: var(--color-white);
+}
+
 .jp-accordion-list-heading {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
   list-style: none;
+  cursor: pointer;
 }
 .jp-accordion-list-heading::marker {
   display: none;
+}
+.jp-accordion-list-heading .svg-inline--fa[data-icon-family=fab] {
+  font-size: calc(23 / var(--font-size-base) * 1rem);
+  top: calc(50% - 2px);
+}
+@media screen and (min-width: 60em) {
+  .jp-accordion-list-heading .svg-inline--fa[data-icon-family=fab] {
+    font-size: calc(28 / var(--font-size-base) * 1rem);
+    top: calc(50% - 2px);
+  }
+}
+
+.jp-accordion-list-items {
+  margin-top: -0.25rem;
+  padding: 0rem 1rem 0.5rem 3rem;
+}
+@media screen and (min-width: 60em) {
+  .jp-accordion-list-items {
+    padding-right: 1.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 4.25rem;
+  }
+}
+/**
+ * Accordion link block
+ *
+ * @since 2.0.0
+ */
+.wp-block-jordanpak-accordion-link {
+  display: block;
+  background: var(--gradient-light-gray);
+  text-decoration: none;
 }
 /**
  * Accordions block
@@ -491,81 +572,6 @@
 .wp-block-jordanpak-accordions > h4 {
     padding: 1.25rem 1.75rem;
   }
-}
-.wp-block-jordanpak-accordion-list {
-  background: var(--color-white);
-}
-
-.jp-accordion-list-heading {
-  cursor: pointer;
-}
-.jp-accordion-list-heading .svg-inline--fa[data-icon-family=fab] {
-  font-size: calc(23 / var(--font-size-base) * 1rem);
-  top: calc(50% - 2px);
-}
-
-@media screen and (min-width: 60em) {
-  .jp-accordion-list-heading .svg-inline--fa[data-icon-family=fab] {
-    font-size: calc(28 / var(--font-size-base) * 1rem);
-    top: calc(50% - 2px);
-  }
-}
-.jp-accordion-list-items {
-  margin-top: -0.25rem;
-  padding: 0rem 1rem 0.5rem 3rem;
-}
-@media screen and (min-width: 60em) {
-  .jp-accordion-list-items {
-    padding-right: 1.5rem;
-    padding-bottom: 1.5rem;
-    padding-left: 4.25rem;
-  }
-}
-
-.wp-block-jordanpak-accordion-list-item {
-  position: relative;
-  padding: 0.25rem 0;
-  line-height: var(--line-height-reduced);
-}
-.wp-block-jordanpak-accordion-list-item::before, .wp-block-jordanpak-accordion-list-item::after {
-  content: "";
-  position: absolute;
-  left: -1.4rem;
-  background: #d4d4d4;
-}
-.wp-block-jordanpak-accordion-list-item::before {
-  top: 0;
-  bottom: 0;
-  width: 2px;
-}
-.wp-block-jordanpak-accordion-list-item::after {
-  top: 0.875rem;
-  width: 0.75rem;
-  height: 2px;
-}
-.wp-block-jordanpak-accordion-list-item:first-child::before {
-  top: -0.25rem;
-}
-.wp-block-jordanpak-accordion-list-item:last-child::before {
-  bottom: calc(100% - 1rem);
-}
-@media screen and (min-width: 60em) {
-  .wp-block-jordanpak-accordion-list-item::before, .wp-block-jordanpak-accordion-list-item::after {
-    left: -1.75rem;
-  }
-  .wp-block-jordanpak-accordion-list-item::after {
-    top: 1.0625rem;
-    width: 1.0625rem;
-  }
-  .wp-block-jordanpak-accordion-list-item:last-child::before {
-    bottom: calc(100% - 1.125rem);
-  }
-}
-
-.wp-block-jordanpak-accordion-link {
-  display: block;
-  background: var(--gradient-light-gray);
-  text-decoration: none;
 }
 
 /*# sourceMappingURL=style-blocks.css.map*/

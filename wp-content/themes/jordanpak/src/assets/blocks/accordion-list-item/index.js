@@ -9,8 +9,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { formatListNumbered as icon } from '@wordpress/icons';
 import { useBlockProps, RichText } from '@wordpress/block-editor';
 
-// import './style.css';
-// import './editor.css';
+import './style.scss';
 
 /**
  * Register accordion list item block

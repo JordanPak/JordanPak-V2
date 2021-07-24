@@ -13,6 +13,8 @@ import URLWrapper from '../../components/url-wrapper';
 import edit from './edit';
 import save from './save';
 
+import './style.scss';
+
 const config = {
 	apiVersion: 2,
 	title: __( 'Accordion Link', 'jordanpak' ),

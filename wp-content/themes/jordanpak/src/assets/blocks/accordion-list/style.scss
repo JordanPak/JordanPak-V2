@@ -4,11 +4,37 @@
  * @since 2.0.0
  */
 
+.wp-block-jordanpak-accordion-list {
+	background: var(--color-white);
+}
+
 .jp-accordion-list-heading {
 	appearance: none;
 	list-style: none;
+	cursor: pointer;
 
 	&::marker {
 		display: none;
+	}
+
+	.svg-inline--fa[data-icon-family="fab"] {
+		font-size: calc(23 / var(--font-size-base) * 1rem);
+		top: calc(50% - 2px);
+
+		@media (--content-query) {
+			font-size: calc(28 / var(--font-size-base) * 1rem);
+			top: calc(50% - 2px);
+		}
+	}
+}
+
+.jp-accordion-list-items {
+	margin-top: -0.25rem;
+	padding: 0rem 1rem 0.5rem 3rem;
+
+	@media (--content-query) {
+		padding-right: 1.5rem;
+		padding-bottom: 1.5rem;
+		padding-left: 4.25rem;
 	}
 }
