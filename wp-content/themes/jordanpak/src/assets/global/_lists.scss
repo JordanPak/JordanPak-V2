@@ -1,0 +1,79 @@
+/**
+ * Lists
+ *
+ * @since 2.0.0
+ */
+
+ol,
+.bulleted-list {
+	margin-top: var(--content-spacing);
+}
+
+// numbered list counter
+ol {
+	counter-reset: numbered-counter;
+}
+
+// space for bullets/markers
+ol li,
+.bulleted-list li,
+ul[data-type="core/list"] li {
+	position: relative;
+	margin: 0.5rem 0;
+	padding: 0 calc(34 / var(--font-size-base) * 1rem);
+}
+
+// custom counter
+ol li::before {
+	content: counter(numbered-counter, decimal-leading-zero) ".";
+	counter-increment: numbered-counter;
+	display: block;
+	position: absolute;
+	top: calc(3 / var(--font-size-base) * 1rem);
+	left: calc(4 / var(--font-size-base) * 1rem);
+	font-size: calc(14 / var(--font-size-base) * 1rem);
+	font-weight: 700;
+	color: var(--color-primary);
+}
+
+// custom bullet
+.bulleted-list li::before,
+ul[data-type="core/list"] li::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: calc(10 / var(--font-size-base) * 1rem);
+	left: calc(14 / var(--font-size-base) * 1rem);
+	width: 7px;
+	height: 7px;
+	background: var(--color-primary);
+	border-radius: 100%;
+}
+
+@media (--content-query) {
+
+	ol,
+	.bulleted-list {
+		font-size: calc(18 / var(--font-size-base) * 1rem);
+	}
+
+	ol li,
+	.bulleted-list li,
+	ul[data-type="core/list"] li {
+		margin-top: 0.75rem;
+		margin-bottom: 0.75rem;
+		padding: 0 calc(42 / var(--font-size-base) * 1rem);
+	}
+
+	ol li::before {
+		top: calc(2 / var(--font-size-base) * 1rem);
+		left: calc(12 / var(--font-size-base) * 1rem);
+		font-size: calc(16 / var(--font-size-base) * 1rem);
+	}
+
+	.bulleted-list li::before,
+	ul[data-type="core/list"] li::before {
+		top: calc(10 / var(--font-size-base) * 1rem);
+		left: calc(20 / var(--font-size-base) * 1rem);
+	}
+}

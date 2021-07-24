@@ -1,0 +1,106 @@
+/**
+ * CSS custom properties
+ *
+ * @since 2.0.0
+ */
+
+:root {
+	// colors
+	--color-primary-dark: #f6c800;
+	--color-primary: #f9d900;
+	--color-black: #1f1b1c;
+	--color-gray-darkest: #272425;
+	--color-gray-darker: #292929;
+	--color-gray-dark: #3c3a3b;
+	--color-gray-mid: #5e5e5e;
+	--color-gray: #928e8f;
+	--color-gray-mid-light: #c7c7c7;
+	--color-gray-light: #e5e5e5;
+	--color-gray-lighter: #ececec;
+	--color-white: #fff;
+
+	// gradients
+	--gradient-dark-gray: linear-gradient(to right, var(--color-gray-dark), var(--color-gray-darkest));
+	--gradient-light-gray: linear-gradient(to right, var(--color-gray-lighter), #dfdfdf);
+
+	// fonts
+	--font-family-sans-serif: "Roboto", sans-serif;
+	--font-family-condensed: "Roboto Condensed", sans-serif;
+	--font-family-heading: "Bebas Neue", sans-serif;
+
+	// font sizes + line heights + letter spacing
+	--font-size-base: 16;
+
+	--font-size-small: calc(14 / var(--font-size-base) * 1rem);
+	--font-size-regular: calc(var(--font-size-base) / 16 * 1rem);
+	--font-size-medium: calc(18 / var(--font-size-base) * 1rem);
+	--font-size-large: calc(22 / var(--font-size-base) * 1rem);
+	--font-size-xlarge: calc(30 / var(--font-size-base) * 1rem);
+
+	--line-height-base: 1.6;
+	--line-height-reduced: 1.4;
+	--line-height-heading: 1.2;
+
+	--letter-spacing-less-wide: 0.5px;
+	--letter-spacing-wide: 1px;
+
+	// text shadows
+	--text-shadow-dark-gray: 0 1px 5px var(--color-gray-darkest);
+
+	// spacing
+	--site-inner-spacing: 2rem;
+	--wrap-max-width: 87.5rem;
+	--content-width: 90%;
+	--content-width-max: var(--wrap-max-width);
+	--content-spacing: 1.5rem;
+	--content-spacing-consolidated: calc(var(--content-spacing) * 0.666);
+	--entry-content-width: 53.125rem; // 850px
+
+	// transitions
+	--transition-duration: 200ms;
+	--transition-timing-function: ease-in-out;
+
+	// border radii
+	--border-radius: 4px;
+
+	// background cover
+	--background-cover-bottom-offset: 200px;
+	--background-cover-right-offset: 100px;
+
+	// admin bar
+	--admin-bar-height: 46px;
+
+	// icon list item
+	--icon-list-item-text-offset: 2px;
+	--icon-list-item-small-text-offset: 3px;
+}
+
+@media (--admin-bar-desktop-query) {
+
+	:root {
+		--admin-bar-height: 32px;
+	}
+}
+
+@media (--small-content-query) {
+
+	:root {
+		--background-cover-bottom-offset: 300px;
+		--background-cover-right-offset: 150px;
+	}
+}
+
+@media (--content-query) {
+
+	:root {
+		--font-size-regular: calc(20 / var(--font-size-base) * 1rem);
+		--font-size-medium: calc(28 / var(--font-size-base) * 1rem);
+		--font-size-large: calc(44 / var(--font-size-base) * 1rem);
+		--font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
+
+		--site-inner-spacing: 4.5rem;
+		--content-spacing: 2rem;
+
+		--icon-list-item-small-text-offset: 6px;
+	}
+}

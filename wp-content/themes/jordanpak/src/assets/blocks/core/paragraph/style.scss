@@ -1,0 +1,23 @@
+/**
+ * Paragraph block feature styles
+ *
+ * @since 2.0.0
+ */
+
+.is-style-footnote {
+	margin-top: 1rem;
+
+	strong {
+		font-family: var(--font-family-heading);
+		font-weight: 400;
+		color: var(--color-white);
+	}
+
+	@media (--content-query) {
+		font-size: calc(18 / var(--font-size-base) * 1rem);
+
+		strong {
+			font-size: calc(20 / var(--font-size-base) * 1rem);
+		}
+	}
+}

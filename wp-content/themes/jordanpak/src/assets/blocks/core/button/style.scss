@@ -1,0 +1,128 @@
+/**
+ * Button block block styles
+ *
+ * @since 2.0.0
+ */
+
+/* stylelint-disable selector-class-pattern */
+
+@mixin button() {
+	position: relative;
+	z-index: 0; // establish for layering
+	padding: 0.75rem 1.75rem 0.7rem;
+	font-family: var(--font-family-heading);
+	font-size: calc(22 / var(--font-size-base) * 1rem);
+	line-height: var(--line-height-heading);
+	letter-spacing: var(--letter-spacing-wide);
+	background: none;
+	border-radius: var(--border-radius);
+	overflow: hidden; // hide ::before
+
+	&::before,
+	&::after {
+		transition-timing-function: var(--transition-timing-function);
+		transition-duration: var(--transition-duration);
+	}
+
+	&,
+	&:visited,
+	&:hover,
+	&:focus {
+		color: var(--color-black);
+	}
+
+	&::before,
+	&::after {
+		position: absolute;
+		z-index: -1;
+	}
+
+	// background
+	&::before {
+		content: "";
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background: var(--color-white);
+		transition-property: background;
+	}
+
+	// // accent
+	&::after {
+		content: "//";
+		top: 50%;
+		right: -0.5rem;
+		font-size: 100px;
+		line-height: 1;
+		letter-spacing: -6px;
+		color: var(--color-gray-light);
+		transform: translateY(-50%);
+		transition-property: color, transform;
+		text-shadow: none;
+	}
+
+	&:hover,
+	&:focus {
+
+		&::before {
+			background: var(--color-primary);
+		}
+
+		&::after {
+			color: var(--color-primary-dark);
+			transform: translateY(-50%) translateX(5px);
+		}
+	}
+
+	@media (--content-query) {
+		padding-left: 2.25rem;
+		padding-right: 2.25rem;
+		font-size: calc(30 / var(--font-size-base) * 1rem);
+		letter-spacing: var(--letter-spacing-less-wide);
+	}
+}
+
+.wp-block-button__link {
+	@include button();
+}
+
+.is-style-outline > .wp-block-button__link {
+	border: none;
+	box-shadow: inset 0 0 0 2px var(--color-gray-dark);
+	transition: box-shadow var(--transition-timing-function) var(--transition-duration);
+
+	&,
+	&:not(.has-text-color) {
+		color: var(--color-white);
+	}
+
+	&::before,
+	&::after {
+		display: none;
+	}
+
+	&:hover,
+	&:focus {
+		box-shadow: inset 0 0 0 2px var(--color-primary);
+	}
+}
+
+
+@media (--wide-menu-query) {
+
+	// replicate default block button styles
+	.menu-break-has-button > a {
+		border: none;
+		display: block;
+		cursor: pointer;
+		overflow-wrap: break-word;
+		text-decoration: none;
+
+		@include button();
+
+		.svg-inline--fa {
+			display: none;
+		}
+	}
+}

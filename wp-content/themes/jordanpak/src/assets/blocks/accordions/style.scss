@@ -1,0 +1,100 @@
+/**
+ * Accordions block
+ *
+ * @since 2.0.0
+ */
+
+.wp-block-jordanpak-accordions,
+.wp-block-jordanpak-accordion-link {
+	color: var(--color-black);
+}
+
+.wp-block-jordanpak-accordions {
+	border-radius: var(--border-radius);
+	overflow: hidden;
+
+	> * + * {
+		border-top: 1px solid #d4d4d4;
+	}
+}
+
+.wp-block-jordanpak-accordions,
+.wp-block-jordanpak-accordions h2,
+.wp-block-jordanpak-accordions h3,
+.wp-block-jordanpak-accordions h4 {
+	font-family: var(--font-family-condensed);
+	-webkit-font-smoothing: antialiased;
+}
+
+.wp-block-jordanpak-accordions h2,
+.wp-block-jordanpak-accordions h3,
+.wp-block-jordanpak-accordions h4,
+.jp-accordion-list-heading,
+.wp-block-jordanpak-accordion-link {
+	line-height: var(--line-height-heading);
+}
+
+.wp-block-jordanpak-accordions h2,
+.wp-block-jordanpak-accordions h3,
+.wp-block-jordanpak-accordions h4,
+.wp-block-jordanpak-accordion-link {
+	font-weight: 700;
+	letter-spacing: normal;
+}
+
+.jp-accordion-list-heading,
+.wp-block-jordanpak-accordion-link {
+	position: relative;
+	padding: 1rem 1rem 1rem 3rem;
+}
+
+.wp-block-jordanpak-accordions > h2,
+.wp-block-jordanpak-accordions > h3,
+.wp-block-jordanpak-accordions > h4 {
+	padding: 1rem;
+	text-transform: uppercase;
+	font-size: calc(22 / var(--font-size-base) * 1rem);
+	letter-spacing: var(--letter-spacing-wide);
+	color: var(--color-white);
+	text-shadow: var(--text-shadow-dark-gray);
+	background: var(--gradient-dark-gray);
+}
+
+.jp-accordion-list-heading-text,
+.wp-block-jordanpak-accordion-link {
+	font-size: calc(20 / var(--font-size-base) * 1rem);
+}
+
+.jp-accordion-list-heading .svg-inline--fa,
+.wp-block-jordanpak-accordion-link .svg-inline--fa {
+	position: absolute;
+	left: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	font-size: calc(20 / var(--global-font-size) * 1rem);
+}
+
+.jp-accordion-list-heading-text {
+	display: inline-block;
+}
+
+@media (--content-query) {
+
+	.jp-accordion-list-heading,
+	.wp-block-jordanpak-accordion-link {
+		padding: 1.125rem 1.5rem 1.125rem 4.25rem;
+	}
+
+	.jp-accordion-list-heading .svg-inline--fa,
+	.wp-block-jordanpak-accordion-link .svg-inline--fa {
+		left: 1.75rem;
+		font-size: calc(22 / var(--global-font-size) * 1rem);
+	}
+
+
+	.wp-block-jordanpak-accordions > h2,
+	.wp-block-jordanpak-accordions > h3,
+	.wp-block-jordanpak-accordions > h4 {
+		padding: 1.25rem 1.75rem;
+	}
+}
