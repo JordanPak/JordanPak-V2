@@ -19,16 +19,24 @@
 	}
 }
 
+.wp-block-jordanpak-accordions,
+.wp-block-jordanpak-accordions h2,
+.wp-block-jordanpak-accordions h3,
+.wp-block-jordanpak-accordions h4 {
+	font-family: var(--font-family-condensed);
+	-webkit-font-smoothing: antialiased;
+}
+
 .wp-block-jordanpak-accordions h2,
 .wp-block-jordanpak-accordions h3,
 .wp-block-jordanpak-accordions h4,
 .wp-block-jordanpak-accordion-link {
-	font-family: var(--font-family-condensed);
 	font-weight: 700;
+	line-height: var(--line-height-heading);
 	letter-spacing: normal;
 }
 
-.wp-block-jordanpak-accordion-list,
+.jp-accordion-list-heading,
 .wp-block-jordanpak-accordion-link {
 	position: relative;
 	padding: 1rem 1rem 1rem 3rem;
@@ -40,6 +48,7 @@
 	padding: 1rem;
 	text-transform: uppercase;
 	font-size: calc(22 / var(--font-size-base) * 1rem);
+	letter-spacing: var(--letter-spacing-wide);
 	color: var(--color-white);
 	text-shadow: var(--text-shadow-dark-gray);
 	background: var(--gradient-dark-gray);
@@ -54,7 +63,8 @@
 .wp-block-jordanpak-accordion-link .svg-inline--fa {
 	position: absolute;
 	left: 1rem;
-	top: 1.25rem;
+	top: 50%;
+	transform: translateY(-50%);
 	font-size: calc(20 / var(--global-font-size) * 1rem);
 }
 
@@ -73,7 +83,49 @@
 
 	.svg-inline--fa[data-icon-family="fab"] {
 		font-size: calc(23 / var(--font-size-base) * 1rem);
-		top: 1rem;
+		top: calc(50% - 2px);
+	}
+}
+
+
+// PUT IN LIST ITEMS??
+.jp-accordion-list-items {
+	margin-top: -0.25rem;
+	padding: 0rem 1rem 0.5rem 3rem;
+}
+
+// PUT IN LIST ITEM???
+.wp-block-jordanpak-accordion-list-item {
+	position: relative;
+	padding: 0.25rem 0;
+	line-height: var(--line-height-reduced);
+
+	&::before,
+	&::after {
+		content: "";
+		position: absolute;
+		left: -1.4rem;
+		background: #d4d4d4;
+	}
+
+	&::before {
+		top: 0;
+		bottom: 0;
+		width: 2px;
+	}
+
+	&::after {
+		top: 0.875rem;
+		width: 0.75rem;
+		height: 2px;
+	}
+
+	&:first-child::before {
+		top: -0.25rem;
+	}
+
+	&:last-child::before {
+		bottom: calc(100% - 1rem);
 	}
 }
 
