@@ -72,6 +72,7 @@
     --font-size-medium: calc(28 / var(--font-size-base) * 1rem);
     --font-size-large: calc(44 / var(--font-size-base) * 1rem);
     --font-size-xlarge: calc(60 / var(--font-size-base) * 1rem);
+    --site-inner-spacing: 4.5rem;
     --content-spacing: 2rem;
     --icon-list-item-small-text-offset: 6px;
   }
@@ -114,6 +115,9 @@ body {
 
 p {
   margin-bottom: 0;
+}
+p:empty {
+  display: none;
 }
 p, .entry-content > p {
   margin-top: calc(1.5rem * 0.666);
@@ -459,6 +463,17 @@ body.admin-bar {
   max-width: none;
 }
 
+.entry-content > *:first-child,
+.wp-block-column > *:first-child {
+  margin-top: 0;
+}
+
+@media screen and (max-width: 599px) {
+  .wp-block-column + .wp-block-column {
+    margin-top: 1.5rem;
+    margin-top: var(--content-spacing);
+  }
+}
 /**
  * Navigation menus
  *

@@ -109,3 +109,15 @@ body {
 		max-width: none;
 	}
 }
+
+.entry-content > *:first-child,
+.wp-block-column > *:first-child {
+	margin-top: 0;
+}
+
+@media (--column-break-max-query) {
+
+	.wp-block-column + .wp-block-column {
+		margin-top: var(--content-spacing);
+	}
+}

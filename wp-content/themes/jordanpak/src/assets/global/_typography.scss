@@ -26,6 +26,10 @@ body {
 p {
 	margin-bottom: 0;
 
+	&:empty {
+		display: none;
+	}
+
 	&,
 	.entry-content > & {
 		margin-top: var(--content-spacing-consolidated);
