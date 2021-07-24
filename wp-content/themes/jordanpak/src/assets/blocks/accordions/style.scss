@@ -1,0 +1,86 @@
+/**
+ * Accordions block
+ *
+ * @since 2.0.0
+ */
+
+.wp-block-jordanpak-accordions,
+.wp-block-jordanpak-accordion-link {
+	color: var(--color-black);
+}
+
+.wp-block-jordanpak-accordions {
+	color: var(--color-black);
+	border-radius: var(--border-radius);
+	overflow: hidden;
+
+	> * + * {
+		border-top: 1px solid #d4d4d4;
+	}
+}
+
+.wp-block-jordanpak-accordions h2,
+.wp-block-jordanpak-accordions h3,
+.wp-block-jordanpak-accordions h4,
+.wp-block-jordanpak-accordion-link {
+	font-family: var(--font-family-condensed);
+	font-weight: 700;
+	letter-spacing: normal;
+}
+
+.wp-block-jordanpak-accordion-list,
+.wp-block-jordanpak-accordion-link {
+	position: relative;
+	padding: 1rem 1rem 1rem 3rem;
+}
+
+.wp-block-jordanpak-accordions > h2,
+.wp-block-jordanpak-accordions > h3,
+.wp-block-jordanpak-accordions > h4 {
+	padding: 1rem;
+	text-transform: uppercase;
+	font-size: calc(22 / var(--font-size-base) * 1rem);
+	color: var(--color-white);
+	text-shadow: var(--text-shadow-dark-gray);
+	background: var(--gradient-dark-gray);
+}
+
+.jp-accordion-list-heading-text,
+.wp-block-jordanpak-accordion-link {
+	font-size: calc(20 / var(--font-size-base) * 1rem);
+}
+
+.jp-accordion-list-heading .svg-inline--fa,
+.wp-block-jordanpak-accordion-link .svg-inline--fa {
+	position: absolute;
+	left: 1rem;
+	top: 1.25rem;
+	font-size: calc(20 / var(--global-font-size) * 1rem);
+}
+
+.jp-accordion-list-heading-text {
+	display: inline-block;
+}
+
+
+// PUT IN ACC LIST??
+.wp-block-jordanpak-accordion-list {
+	background: var(--color-white);
+}
+
+.jp-accordion-list-heading {
+	cursor: pointer;
+
+	.svg-inline--fa[data-icon-family="fab"] {
+		font-size: calc(23 / var(--font-size-base) * 1rem);
+		top: 1rem;
+	}
+}
+
+
+// PUT IN LINK???
+.wp-block-jordanpak-accordion-link {
+	display: block;
+	background: var(--gradient-light-gray);
+	text-decoration: none;
+}

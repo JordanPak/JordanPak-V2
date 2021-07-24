@@ -19,7 +19,10 @@
   --color-gray: #928e8f;
   --color-gray-mid-light: #c7c7c7;
   --color-gray-light: #e5e5e5;
+  --color-gray-lighter: #ececec;
   --color-white: #fff;
+  --gradient-dark-gray: linear-gradient(to right, var(--color-gray-dark), var(--color-gray-darkest));
+  --gradient-light-gray: linear-gradient(to right, var(--color-gray-lighter), #dfdfdf);
   --font-family-sans-serif: "Roboto", sans-serif;
   --font-family-condensed: "Roboto Condensed", sans-serif;
   --font-family-heading: "Bebas Neue", sans-serif;
@@ -33,6 +36,7 @@
   --line-height-heading: 1.2;
   --letter-spacing-less-wide: 0.5px;
   --letter-spacing-wide: 1px;
+  --text-shadow-dark-gray: 0 1px 6px rgba(#292627, 0.47);
   --site-inner-spacing: 2rem;
   --wrap-max-width: 87.5rem;
   --content-width: 90%;

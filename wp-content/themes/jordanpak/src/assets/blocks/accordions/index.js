@@ -22,8 +22,7 @@ const ALLOWED_BLOCKS = [
 	'jordanpak/accordion-link',
 ];
 
-// import './style.css';
-// import './editor.css';
+import './style.scss';
 
 /**
  * Register accordions block.

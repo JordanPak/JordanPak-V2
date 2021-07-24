@@ -1,0 +1,14 @@
+/**
+ * Accordion list block
+ *
+ * @since 2.0.0
+ */
+
+.jp-accordion-list-heading {
+	appearance: none;
+	list-style: none;
+
+	&::marker {
+		display: none;
+	}
+}

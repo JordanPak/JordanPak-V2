@@ -16,7 +16,12 @@
 	--color-gray: #928e8f;
 	--color-gray-mid-light: #c7c7c7;
 	--color-gray-light: #e5e5e5;
+	--color-gray-lighter: #ececec;
 	--color-white: #fff;
+
+	// gradients
+	--gradient-dark-gray: linear-gradient(to right, var(--color-gray-dark), var(--color-gray-darkest));
+	--gradient-light-gray: linear-gradient(to right, var(--color-gray-lighter), #dfdfdf);
 
 	// fonts
 	--font-family-sans-serif: "Roboto", sans-serif;
@@ -37,6 +42,9 @@
 
 	--letter-spacing-less-wide: 0.5px;
 	--letter-spacing-wide: 1px;
+
+	// text shadows
+	--text-shadow-dark-gray: 0 1px 6px rgba(#292627, 0.47);
 
 	// spacing
 	--site-inner-spacing: 2rem;

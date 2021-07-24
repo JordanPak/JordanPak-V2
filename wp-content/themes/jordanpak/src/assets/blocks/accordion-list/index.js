@@ -11,8 +11,7 @@ import { formatListNumbered as icon } from '@wordpress/icons';
 import edit from './edit';
 import save from './save';
 
-// import './style.css';
-// import './editor.css';
+import './style.scss';
 
 /**
  * Register accordion list block.
