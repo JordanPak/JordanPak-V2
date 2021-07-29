@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./src/assets/global/index.scss"],"names":[],"mappings":"AAAA;;;;EAAA;AAMA;EACC;AAAD,C","file":"global.css","sourcesContent":["/**\n * Editor-specific global style adjustments\n *\n * @since 2.0.0\n */\n\nbody {\n\tbackground: var(--color-black);\n}\n"],"sourceRoot":""}
