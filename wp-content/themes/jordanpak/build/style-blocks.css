@@ -483,7 +483,8 @@
  * @since 2.0.0
  */
 .wp-block-jordanpak-accordions,
-.wp-block-jordanpak-accordion-link {
+.wp-block-jordanpak-accordion-link,
+.wp-block-jordanpak-accordion-link:visited {
   color: var(--color-black);
 }
 
