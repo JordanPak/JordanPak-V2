@@ -67,6 +67,31 @@ class Projects extends Post_Type {
 	}
 
 	/**
+	 * Register project meta
+	 *
+	 * @since 1.0.0
+	 */
+	public function do_meta_registration() {
+
+		foreach ( [
+			'screenshot_mobile' => [ 'integer', 0 ],
+			'link'              => [ 'string', '' ],
+		] as $key => $args ) {
+			register_post_meta(
+				self::CPT_KEY,
+				$key,
+				[
+					'show_in_rest'  => true,
+					'single'        => true,
+					'type'          => $args[0],
+					'default'       => $args[1],
+					'auth_callback' => 'JordanPak_Fn\get_can_user_edit_posts',
+				]
+			);
+		}
+	}
+
+	/**
 	 * Get non-default post type args
 	 *
 	 * @since 2.0.0
