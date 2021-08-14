@@ -5,3 +5,4 @@
  */
 
 import './screenshots';
+import './demo-link';
