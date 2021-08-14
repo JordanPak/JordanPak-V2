@@ -1,0 +1,18 @@
+/**
+ * FileControl editor fixes
+ *
+ * @since 2.0.0
+ */
+
+.jordanpak-screenshots .components-base-control__label {
+	display: inline-block;
+	margin-bottom: 8px;
+}
+
+.jordanpak-attachment-description .attachment {
+	float: none;
+	width: 100%;
+	margin-top: 1rem;
+	padding: 0;
+	text-align: left;
+}
