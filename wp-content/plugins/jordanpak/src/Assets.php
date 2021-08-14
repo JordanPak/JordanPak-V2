@@ -74,7 +74,7 @@ class Assets {
 		wp_register_style(
 			self::HANDLE_PREFIX . 'editor',
 			"$build_url/editor.css",
-			[ 'wp-editor' ],
+			[ 'wp-editor', 'wp-block-editor' ],
 			filemtime( "$build_dir/editor.css" )
 		);
 
