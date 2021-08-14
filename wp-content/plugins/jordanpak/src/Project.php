@@ -16,14 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Individual project handler
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 class Project extends Post {
 
 	// /**
 	//  * Is the event featured?
 	//  *
-	//  * @since 1.0.0
+	//  * @since 2.0.0
 	//  *
 	//  * @return boolean
 	//  */

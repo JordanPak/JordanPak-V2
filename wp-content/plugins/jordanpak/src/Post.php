@@ -16,14 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Base class for setting post's basic things and getting cached meta
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 class Post {
 
 	/**
 	 * Associated post object
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   WP_Post
 	 */
 	private $post;
@@ -31,7 +31,7 @@ class Post {
 	/**
 	 * Associated post ID
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   integer
 	 */
 	private $id;
@@ -39,7 +39,7 @@ class Post {
 	/**
 	 * Meta cache
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   array
 	 */
 	private $meta = [];
@@ -47,7 +47,7 @@ class Post {
 	/**
 	 * Set everything up
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param WP_Post|integer $post  Associated post ID.
 	 */
@@ -80,7 +80,7 @@ class Post {
 	/**
 	 * Get post ID
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return integer
 	 */
@@ -91,7 +91,7 @@ class Post {
 	/**
 	 * Check and retrive something from the post's meta
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param  string $key  Meta key/field.
 	 * @return mixed
@@ -109,7 +109,7 @@ class Post {
 	/**
 	 * Get post title
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -120,7 +120,7 @@ class Post {
 	/**
 	 * Output post title
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function do_title() {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

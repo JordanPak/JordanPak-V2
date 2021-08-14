@@ -16,14 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * CPT registration and general "projects" stuff
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 class Projects extends Post_Type {
 
 	/**
 	 * Post type key
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   string
 	 */
 	const CPT_KEY = 'jpk_project';
@@ -31,7 +31,7 @@ class Projects extends Post_Type {
 	/**
 	 * Object class to be used for indivudal instances of the post type
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   string
 	 */
 	protected $singular_class = 'Project';
@@ -39,7 +39,7 @@ class Projects extends Post_Type {
 	/**
 	 * Flag for global post variable in look
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   boolean
 	 */
 	protected $loop_global_name = 'project';
@@ -47,7 +47,7 @@ class Projects extends Post_Type {
 	/**
 	 * Get general post type label
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -58,7 +58,7 @@ class Projects extends Post_Type {
 	/**
 	 * Get plural post type label
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -69,7 +69,7 @@ class Projects extends Post_Type {
 	/**
 	 * Get non-default post type args
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -115,7 +115,7 @@ class Projects extends Post_Type {
 	/**
 	 * Get editor title field placeholder
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */

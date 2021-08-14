@@ -5,7 +5,7 @@
  * Description: Projects and other functionality handling
  * Author: JordanPak
  * Author URI: https://jordanpak.com/
- * Version: 1.0.0
+ * Version: 2.0.0
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: jordanpak
@@ -28,14 +28,14 @@ require_once __DIR__ . '/src/functions.php';
 /**
  * Plugin wrapper
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 class Plugin {
 
 	/**
 	 * The single instance of this class
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   Plugin
 	 */
 	protected static $instance;
@@ -43,7 +43,7 @@ class Plugin {
 	/**
 	 * Projects handler
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   Projects
 	 */
 	public $projects;
@@ -51,7 +51,7 @@ class Plugin {
 	// /**
 	//  * Customizer handler
 	//  *
-	//  * @since 1.0.0
+	//  * @since 2.0.0
 	//  * @var   Customizer
 	//  */
 	// public $customizer;
@@ -61,7 +61,7 @@ class Plugin {
 	//  *
 	//  * False if not a front end request.
 	//  *
-	//  * @since 1.0.0
+	//  * @since 2.0.0
 	//  * @var   Template_Loader|boolean
 	//  */
 	// public $template_loader = false;
@@ -69,7 +69,7 @@ class Plugin {
 	/**
 	 * Get main plugin instance.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @see   instance()
 	 *
 	 * @return Plugin
@@ -86,7 +86,7 @@ class Plugin {
 	/**
 	 * Spin up plugin
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function __construct() {
 		$this->set_constants();
@@ -99,10 +99,10 @@ class Plugin {
 	/**
 	 * Set constants
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	private function set_constants() {
-		define( 'JORDANPAK_FN_VERSION', '1.0.0' );
+		define( 'JORDANPAK_FN_VERSION', '2.0.0' );
 		define( 'JORDANPAK_FN_DIR', plugin_dir_path( __FILE__ ) );
 		define( 'JORDANPAK_FN_URL', plugin_dir_url( __FILE__ ) );
 	}
@@ -110,7 +110,7 @@ class Plugin {
 	/**
 	 * Do block and asset registration
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function init() {
 		$this->projects = new Projects();
@@ -126,7 +126,7 @@ class Plugin {
 	/**
 	 * What type of request is this?
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @see   WooCommerce's WooCommerce->is_request()
 	 *
 	 * @todo BOUNCE THIS?
@@ -153,7 +153,7 @@ class Plugin {
 	/**
 	 * Handle activation tasks
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function do_activate() {
 		do_action( 'jordanpak_fn_activate' );
@@ -162,7 +162,7 @@ class Plugin {
 	/**
 	 * Handle deactivation tasks
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function do_deactivate() {
 		do_action( 'jordanpak_fn_deactivate' );
@@ -172,7 +172,7 @@ class Plugin {
 /**
  * Get instance of main plugin class
  *
- * @since 1.0.0
+ * @since 2.0.0
  *
  * @return Plugin
  */

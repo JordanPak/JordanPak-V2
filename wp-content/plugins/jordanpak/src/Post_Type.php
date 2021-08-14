@@ -18,14 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @todo BOUNCE STUFF THAT ISN'T NEEDED HERE
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 abstract class Post_Type {
 
 	/**
 	 * Post type key
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   string
 	 */
 	const CPT_KEY = 'jpk_post_type';
@@ -33,7 +33,7 @@ abstract class Post_Type {
 	/**
 	 * Registration args
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   array
 	 */
 	protected $cpt_args = [];
@@ -45,7 +45,7 @@ abstract class Post_Type {
 	 * CPT handler (the class extending this class), the "singular class" would
 	 * probably be "Schedule" since each item in a loop would be a schedule.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   string
 	 */
 	protected $singular_class = 'Post';
@@ -53,7 +53,7 @@ abstract class Post_Type {
 	/**
 	 * Flag for global post variable in look
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   boolean
 	 */
 	protected $loop_global_name = false;
@@ -62,7 +62,7 @@ abstract class Post_Type {
 	/**
 	 * Singular view redirect flag
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var   boolean
 	 */
 	protected $singular_redirect = false;
@@ -70,7 +70,7 @@ abstract class Post_Type {
 	/**
 	 * Spin everything up
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function __construct() {
 		$key = $this::CPT_KEY;
@@ -90,7 +90,7 @@ abstract class Post_Type {
 	/**
 	 * Get main post type label
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -101,7 +101,7 @@ abstract class Post_Type {
 	/**
 	 * Get plural post type label
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -112,7 +112,7 @@ abstract class Post_Type {
 	/**
 	 * Do CPT registration
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function do_registration() {
 		register_post_type( $this::CPT_KEY, $this->get_args() );
@@ -121,7 +121,7 @@ abstract class Post_Type {
 	/**
 	 * Register post type's meta
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function do_meta_registration() {
 	}
@@ -163,7 +163,7 @@ abstract class Post_Type {
 	/**
 	 * Get non-default post type args
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	protected function get_cpt_args() {
 		return [];
@@ -172,7 +172,7 @@ abstract class Post_Type {
 	/**
 	 * Do query setter if we're on the main archive query for this post type.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param WP_Query $query  Current query.
 	 */
@@ -191,7 +191,7 @@ abstract class Post_Type {
 	 *
 	 * It should already be a main query for the current post type's archive.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param WP_Query $query  Main query object.
 	 */
@@ -201,7 +201,7 @@ abstract class Post_Type {
 	/**
 	 * Get editor title field placeholder
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return boolean|string
 	 */
@@ -212,7 +212,7 @@ abstract class Post_Type {
 	/**
 	 * Set admin "title" field placeholder
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param  string $title  Existing placeholder.
 	 * @return string $title  New placeholder, if applicable.
@@ -231,7 +231,7 @@ abstract class Post_Type {
 	 *
 	 * Inspired by WooCommerce's wc_setup_product_data
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param  WP_Post $post  Post object that is being set up in loop.
 	 * @return Product
@@ -268,7 +268,7 @@ abstract class Post_Type {
 	/**
 	 * Redirect singular view?
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function do_singular_redirect() {
 
@@ -283,7 +283,7 @@ abstract class Post_Type {
 	/**
 	 * Manage admin columns
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param  array $columns  Column headings.
 	 * @return array $columns
@@ -295,7 +295,7 @@ abstract class Post_Type {
 	/**
 	 * Manage sortable admin columns
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param  array $columns  Sortable columns.
 	 * @return array $columns
@@ -307,7 +307,7 @@ abstract class Post_Type {
 	/**
 	 * Output custom admin column contents
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $name  Column name.
 	 */
@@ -318,7 +318,7 @@ abstract class Post_Type {
 	/**
 	 * Get the post's main content with any needed adjustments
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param  string $content  Post content.
 	 * @return string $content  Post content.
@@ -330,7 +330,7 @@ abstract class Post_Type {
 	/**
 	 * Adjust the post's main content
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param  string $content  Post content.
 	 * @return string $content  Post content.
@@ -342,7 +342,7 @@ abstract class Post_Type {
 	/**
 	 * Get post type's archive URL
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string  Post type archive link/URL.
 	 */
