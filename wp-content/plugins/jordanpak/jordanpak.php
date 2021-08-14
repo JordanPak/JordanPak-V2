@@ -41,6 +41,14 @@ class Plugin {
 	protected static $instance;
 
 	/**
+	 * Assets management
+	 *
+	 * @since 2.0.0
+	 * @var   Assets
+	 */
+	public $assets;
+
+	/**
 	 * Projects handler
 	 *
 	 * @since 2.0.0
@@ -113,6 +121,7 @@ class Plugin {
 	 * @since 2.0.0
 	 */
 	public function init() {
+		$this->assets   = new Assets();
 		$this->projects = new Projects();
 		// // $this->customizer   = new Customizer();
 
