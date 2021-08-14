@@ -34,24 +34,9 @@ class Assets {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
-		add_action( 'after_setup_theme', [ $this, 'add_editor_styles' ] );
 		add_action( 'init', [ $this, 'do_asset_registration' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_assets' ], 5000 );
-	}
-
-	/**
-	 * Add editor styles
-	 *
-	 * Required for proper editor canvas scoping.
-	 *
-	 * @since 2.0.0
-	 */
-	public function add_editor_styles() {
-		// add_editor_style( 'build/style-global.css' );
-		// add_editor_style( 'build/global.css' );
-		// add_editor_style( 'build/style-editor.css' );
-		// add_editor_style( 'build/editor.css' );
 	}
 
 	/**
@@ -60,8 +45,8 @@ class Assets {
 	 * @since 2.0.0
 	 */
 	public function do_asset_registration() {
-		$build_dir = JORDANPAK_FN_DIR . '/build';
-		$build_url = JORDANPAK_FN_URL . '/build';
+		$build_dir = JORDANPAK_FN_DIR . 'build';
+		$build_url = JORDANPAK_FN_URL . 'build';
 
 		// // Global styles.
 		// wp_register_style(
@@ -83,6 +68,14 @@ class Assets {
 			$editor['dependencies'],
 			$editor['version'],
 			true
+		);
+
+		// Editor styles.
+		wp_register_style(
+			self::HANDLE_PREFIX . 'editor',
+			"$build_url/editor.css",
+			[ 'wp-editor' ],
+			filemtime( "$build_dir/editor.css" )
 		);
 
 		// // Front end + editor styles.
@@ -112,5 +105,6 @@ class Assets {
 	 */
 	public function enqueue_editor_assets() {
 		wp_enqueue_script( self::HANDLE_PREFIX . 'editor' );
+		wp_enqueue_style( self::HANDLE_PREFIX . 'editor' );
 	}
 }
