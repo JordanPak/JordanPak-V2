@@ -349,4 +349,26 @@ abstract class Post_Type {
 	public static function get_archive_url() {
 		return get_post_type_archive_link( static::CPT_KEY );
 	}
+
+	/**
+	 * Are we currently handling this post type?
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return boolean
+	 */
+	public function is_post_type() {
+		return get_post_type() === $this::CPT_KEY;
+	}
+
+	/**
+	 * Are we currently on this post type's archive?
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return boolean
+	 */
+	public function is_archive() {
+		return is_post_type_archive( $this::CPT_KEY );
+	}
 }
