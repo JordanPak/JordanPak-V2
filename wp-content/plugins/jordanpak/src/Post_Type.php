@@ -28,7 +28,7 @@ abstract class Post_Type {
 	 * @since 1.0.0
 	 * @var   string
 	 */
-	const CPT_KEY = 'jp_post_type';
+	const CPT_KEY = 'jpk_post_type';
 
 	/**
 	 * Registration args
