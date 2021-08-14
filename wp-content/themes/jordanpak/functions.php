@@ -90,6 +90,14 @@ class Theme {
 	public $editor;
 
 	/**
+	 * Projects handler
+	 *
+	 * @since 2.0.0
+	 * @var   Projects
+	 */
+	public $projects;
+
+	/**
 	 * Get child theme instance.
 	 *
 	 * @since 2.0.0
@@ -141,6 +149,10 @@ class Theme {
 		// 	$this->template_loader = new Template_Loader();
 		// 	$this->template_hooks  = new Template_Hooks();
 		// }
+
+		if ( class_exists( 'JordanPak_Fn\Plugin' ) ) {
+			$this->projects = new Projects();
+		}
 
 		do_action( 'jordanpak_loaded' );
 	}
