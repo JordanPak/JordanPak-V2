@@ -243,7 +243,7 @@ abstract class Post_Type {
 		}
 
 		// Reset prior loop item's global.
-		unset( $GLOBALS[ "fse_{$this->loop_global_name}" ] );
+		unset( $GLOBALS[ "jordanpak_{$this->loop_global_name}" ] );
 
 		// Make sure it's an actual WP_Post object if it isn't already.
 		if ( is_int( $post ) ) {
@@ -258,11 +258,11 @@ abstract class Post_Type {
 		// Put together the actual class for the object to be created.
 		$post_class = 'JordanPak_Fn\\' . $this->singular_class;
 
-		// Assign global loop object. Ex: global $fse_schedule will be an
+		// Assign global loop object. Ex: global $jordanpak_schedule will be an
 		// instance of JordanPak_Fn\Schedule.
-		$GLOBALS[ "fse_{$this->loop_global_name}" ] = new $post_class( $post );
+		$GLOBALS[ "jordanpak_{$this->loop_global_name}" ] = new $post_class( $post );
 
-		return $GLOBALS[ "fse_{$this->loop_global_name}" ];
+		return $GLOBALS[ "jordanpak_{$this->loop_global_name}" ];
 	}
 
 	/**
