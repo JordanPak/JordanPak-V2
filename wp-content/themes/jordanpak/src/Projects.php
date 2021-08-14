@@ -74,9 +74,23 @@ class Projects {
 	 * @since 2.0.0
 	 */
 	public function do_entry_link_open() {
-		?>
-		<a href="<?php the_permalink(); ?>" class="loop-entry-link project-loop-entry-link">
-		<?php
+
+		global $jordanpak_project;
+
+		echo '<a ';
+		do_attrs(
+			[
+				'href'  => get_the_permalink(),
+				'class' => [
+					'loop-entry-link',
+					'project-loop-entry-link',
+				],
+				'data' => [
+					'screenshot' => $jordanpak_project->get_desktop_screenshot(),
+				],
+			]
+		);
+		echo '>';
 	}
 
 	/**
