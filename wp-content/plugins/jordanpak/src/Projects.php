@@ -75,7 +75,8 @@ class Projects extends Post_Type {
 
 		foreach ( [
 			'screenshot_mobile' => [ 'integer', 0 ],
-			'link'              => [ 'string', '' ],
+			'demo_url'          => [ 'string', '' ],
+			'demo_link_text'    => [ 'string', '' ],
 		] as $key => $args ) {
 			register_post_meta(
 				self::CPT_KEY,
