@@ -126,4 +126,20 @@ class Post {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $this->get_title();
 	}
+
+	/**
+	 * Get a comma-separated list of terms for the post.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param  string|array $taxonomy Taxonomy(s).
+	 * @return string
+	 */
+	public function get_terms_list( $taxonomy = 'category' ) {
+		$names = wp_list_pluck( get_the_terms( $this->post, $taxonomy ), 'name' );
+
+		return $names
+			? '<span class="terms-list"><span class="screen-reader-text">' . __( 'Filed Under:', 'jordanpak' ) . ' </span>' . implode( ', ', $names ) . '</span>'
+			: '';
+	}
 }
