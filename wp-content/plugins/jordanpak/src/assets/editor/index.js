@@ -5,3 +5,5 @@
  */
 
 import './plugins';
+
+import './index.css';
