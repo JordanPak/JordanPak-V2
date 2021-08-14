@@ -1,0 +1,10 @@
+{
+	"phpcs.enable": true,
+	"phpcs.standard": "WordPress",
+	"phpcs.executablePath": "/var/www/jordanpak/wp-content/plugins/jordanpak/vendor/squizlabs/php_codesniffer/bin/phpcs",
+	"files.exclude": {
+		"**/node_modules": true
+	},
+	"editor.renderWhitespace": "all",
+	"intelephense.environment.includePaths": [ "/var/www/jordanpak" ]
+}
