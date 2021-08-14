@@ -113,7 +113,7 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	public function init() {
-		// $this->projects = new Projects();
+		$this->projects = new Projects();
 		// // $this->customizer   = new Customizer();
 
 		// if ( $this->is_request( 'frontend' ) ) {
