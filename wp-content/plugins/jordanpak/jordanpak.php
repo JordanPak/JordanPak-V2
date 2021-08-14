@@ -3,7 +3,7 @@
  * Plugin Name: JordanPak
  * Plugin URI: https://jordanpak.com
  * Description: Projects and other functionality handling
- * Author: JordanPak_Fn
+ * Author: JordanPak
  * Author URI: https://jordanpak.com/
  * Version: 1.0.0
  * License: GPL2+
