@@ -16,7 +16,7 @@ const render = pluginMetaHandler( {
 		key: 'screenshot_mobile',
 	},
 } )( ( { postType, mobile, setMobile } ) => {
-	// sanity check for event
+	// sanity check for project
 	if ( postType !== 'jpk_project' ) {
 		return null;
 	}
