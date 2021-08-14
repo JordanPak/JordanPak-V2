@@ -347,11 +347,16 @@ __webpack_require__.r(__webpack_exports__);
 const render = Object(_util_plugin_meta_handler__WEBPACK_IMPORTED_MODULE_4__["default"])({
   mobile: {
     key: 'screenshot_mobile'
+  },
+  desktop: {
+    key: 'screenshot_desktop'
   }
 })(({
   postType,
   mobile,
-  setMobile
+  desktop,
+  setMobile,
+  setDesktop
 }) => {
   // sanity check for project
   if (postType !== 'jpk_project') {
@@ -366,6 +371,11 @@ const render = Object(_util_plugin_meta_handler__WEBPACK_IMPORTED_MODULE_4__["de
     attachmentID: mobile,
     onSelect: media => setMobile(Number(media.id)),
     onClear: () => setMobile(0)
+  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_components_file_control__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Desktop', 'jordanpak'),
+    attachmentID: desktop,
+    onSelect: media => setDesktop(Number(media.id)),
+    onClear: () => setDesktop(0)
   }));
 }); // register the sidebar plugin
 

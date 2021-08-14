@@ -15,7 +15,10 @@ const render = pluginMetaHandler( {
 	mobile: {
 		key: 'screenshot_mobile',
 	},
-} )( ( { postType, mobile, setMobile } ) => {
+	desktop: {
+		key: 'screenshot_desktop',
+	},
+} )( ( { postType, mobile, desktop, setMobile, setDesktop } ) => {
 	// sanity check for project
 	if ( postType !== 'jpk_project' ) {
 		return null;
@@ -31,6 +34,13 @@ const render = pluginMetaHandler( {
 				attachmentID={ mobile }
 				onSelect={ ( media ) => setMobile( Number( media.id ) ) }
 				onClear={ () => setMobile( 0 ) }
+			/>
+
+			<FileControl
+				label={ __( 'Desktop', 'jordanpak' ) }
+				attachmentID={ desktop }
+				onSelect={ ( media ) => setDesktop( Number( media.id ) ) }
+				onClear={ () => setDesktop( 0 ) }
 			/>
 		</PluginDocumentSettingPanel>
 	);

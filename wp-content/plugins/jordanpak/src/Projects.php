@@ -74,9 +74,10 @@ class Projects extends Post_Type {
 	public function do_meta_registration() {
 
 		foreach ( [
-			'screenshot_mobile' => [ 'integer', 0 ],
-			'demo_url'          => [ 'string', '' ],
-			'demo_link_text'    => [ 'string', '' ],
+			'screenshot_desktop' => [ 'integer', 0 ],
+			'screenshot_mobile'  => [ 'integer', 0 ],
+			'demo_url'           => [ 'string', '' ],
+			'demo_link_text'     => [ 'string', '' ],
 		] as $key => $args ) {
 			register_post_meta(
 				self::CPT_KEY,
