@@ -108,6 +108,7 @@ class Projects extends Post_Type {
 				'pages'      => true,
 				'feeds'      => true,
 			],
+			'taxonomies'          => [ 'category' ],
 		];
 	}
 
