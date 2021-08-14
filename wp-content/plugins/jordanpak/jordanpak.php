@@ -3,17 +3,17 @@
  * Plugin Name: JordanPak
  * Plugin URI: https://jordanpak.com
  * Description: Projects and other functionality handling
- * Author: JordanPak
+ * Author: JordanPak_Fn
  * Author URI: https://jordanpak.com/
  * Version: 1.0.0
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: jordanpak
  *
- * @package JordanPak
+ * @package JordanPak_Fn
  */
 
-namespace JordanPak;
+namespace JordanPak_Fn;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Get autoloader and helper + template functions.
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/functions.php';
-require_once __DIR__ . '/src/template-functions.php';
+// require_once __DIR__ . '/src/template-functions.php';
 
 /**
  * Plugin wrapper
@@ -91,9 +91,9 @@ class Plugin {
 	public function __construct() {
 		$this->set_constants();
 		add_action( 'plugins_loaded', [ $this, 'init' ] );
-		add_action( 'jordanpak_activate', [ $this, 'init' ], 5 );
-		add_action( 'jordanpak_activate', 'flush_rewrite_rules' );
-		add_action( 'jordanpak_deactivate', 'flush_rewrite_rules' );
+		add_action( 'jordanpak_fn_activate', [ $this, 'init' ], 5 );
+		add_action( 'jordanpak_fn_activate', 'flush_rewrite_rules' );
+		add_action( 'jordanpak_fn_deactivate', 'flush_rewrite_rules' );
 	}
 
 	/**
@@ -102,9 +102,9 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	private function set_constants() {
-		define( 'JORDANPAK_VERSION', '1.0.0' );
-		define( 'JORDANPAK_DIR', plugin_dir_path( __FILE__ ) );
-		define( 'JORDANPAK_URL', plugin_dir_url( __FILE__ ) );
+		define( 'JORDANPAK_FN_VERSION', '1.0.0' );
+		define( 'JORDANPAK_FN_DIR', plugin_dir_path( __FILE__ ) );
+		define( 'JORDANPAK_FN_URL', plugin_dir_url( __FILE__ ) );
 	}
 
 	/**
@@ -113,14 +113,14 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	public function init() {
-		$this->projects = new Projects();
-		// $this->customizer   = new Customizer();
+		// $this->projects = new Projects();
+		// // $this->customizer   = new Customizer();
 
-		if ( $this->is_request( 'frontend' ) ) {
-			$this->template_loader = new Template_Loader();
-		}
+		// if ( $this->is_request( 'frontend' ) ) {
+		// 	$this->template_loader = new Template_Loader();
+		// }
 
-		do_action( 'jordanpak_loaded' );
+		do_action( 'jordanpak_fn_loaded' );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	public function do_activate() {
-		do_action( 'jordanpak_activate' );
+		do_action( 'jordanpak_fn_activate' );
 	}
 
 	/**
@@ -165,7 +165,7 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	public function do_deactivate() {
-		do_action( 'jordanpak_deactivate' );
+		do_action( 'jordanpak_fn_deactivate' );
 	}
 }
 
@@ -181,8 +181,8 @@ function instance() {
 }
 
 // Instantiate plugin wrapper class.
-$jordanpak_plugin = instance();
+$jordanpak_fn_plugin = instance();
 
 // Register activation/deactivation stuff.
-register_activation_hook( __FILE__, [ $jordanpak_plugin, 'do_activate' ] );
-register_deactivation_hook( __FILE__, [ $jordanpak_plugin, 'do_deactivate' ] );
+register_activation_hook( __FILE__, [ $jordanpak_fn_plugin, 'do_activate' ] );
+register_deactivation_hook( __FILE__, [ $jordanpak_fn_plugin, 'do_deactivate' ] );

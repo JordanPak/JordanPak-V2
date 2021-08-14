@@ -119,9 +119,9 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="JordanPak" />
+				<element value="JordanPak_Fn" />
 				<element value="jordanpak" />
-				<element value="JORDANPAK" />
+				<element value="JORDANPAK_FN" />
 				<element value="jp" />
 			</property>
 		</properties>

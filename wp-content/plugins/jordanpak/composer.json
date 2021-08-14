@@ -1,6 +1,6 @@
 {
 	"name": "jordanpak/jordanpak",
-	"description": "JordanPak's post types and other functionality",
+	"description": "JordanPak_Fn's post types and other functionality",
 	"type": "project",
 	"authors": [
 		{
@@ -15,7 +15,7 @@
 		"roave/security-advisories": "dev-master"
 	},
 	"autoload": {
-		"psr-4": { "JordanPak\\": "./src" }
+		"psr-4": { "JordanPak_Fn\\": "./src" }
 	},
 	"scripts": {
 		"install-codestandards": [

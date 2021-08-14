@@ -9,7 +9,7 @@ class ComposerStaticInitaa62dd78e86dec07f9c4644d132f4825
     public static $prefixLengthsPsr4 = array (
         'J' => 
         array (
-            'JordanPak\\' => 10,
+            'JordanPak_Fn\\' => 13,
         ),
         'D' => 
         array (
@@ -18,7 +18,7 @@ class ComposerStaticInitaa62dd78e86dec07f9c4644d132f4825
     );
 
     public static $prefixDirsPsr4 = array (
-        'JordanPak\\' => 
+        'JordanPak_Fn\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

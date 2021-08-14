@@ -3,10 +3,10 @@
  * Custom post type handling
  *
  * @since   1.0.0
- * @package JordanPak
+ * @package JordanPak_Fn
  */
 
-namespace JordanPak;
+namespace JordanPak_Fn;
 
 // exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -75,7 +75,7 @@ abstract class Post_Type {
 	public function __construct() {
 		$key = $this::CPT_KEY;
 		add_action( 'init', [ $this, 'do_registration' ] );
-		add_action( 'jordanpak_activate', [ $this, 'do_registration' ] );
+		add_action( 'jordanpak_fn_activate', [ $this, 'do_registration' ] );
 		add_action( 'init', [ $this, 'do_meta_registration' ] );
 		add_action( 'pre_get_posts', [ $this, 'maybe_set_query' ] );
 		add_filter( 'enter_title_here', [ $this, 'set_title_placeholder' ] );
@@ -256,10 +256,10 @@ abstract class Post_Type {
 		}
 
 		// Put together the actual class for the object to be created.
-		$post_class = 'JordanPak\\' . $this->singular_class;
+		$post_class = 'JordanPak_Fn\\' . $this->singular_class;
 
 		// Assign global loop object. Ex: global $fse_schedule will be an
-		// instance of JordanPak\Schedule.
+		// instance of JordanPak_Fn\Schedule.
 		$GLOBALS[ "fse_{$this->loop_global_name}" ] = new $post_class( $post );
 
 		return $GLOBALS[ "fse_{$this->loop_global_name}" ];

@@ -3,10 +3,10 @@
  * Abstraction of a post
  *
  * @since   1.0.0
- * @package JordanPak
+ * @package JordanPak_Fn
  */
 
-namespace JordanPak;
+namespace JordanPak_Fn;
 
 // exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {

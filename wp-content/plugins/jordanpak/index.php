@@ -2,7 +2,7 @@
 /**
  * Directory protection
  *
- * @package JordanPak
+ * @package JordanPak_Fn
  */
 
 // Silence is @krik.
