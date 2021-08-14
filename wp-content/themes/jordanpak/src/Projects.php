@@ -54,6 +54,9 @@ class Projects {
 		add_action( 'genesis_entry_header', [ $this, 'do_entry_link_open' ], 6 );
 		add_action( 'genesis_entry_header', [ $this, 'do_entry_link_arrow' ], 13 );
 		add_action( 'genesis_entry_header', [ $this, 'do_entry_link_close' ], 14 );
+
+		// Add screenshot flipper.
+		add_action( 'genesis_after_content', [ $this, 'do_screenshot_flipper' ] );
 	}
 
 	/**
@@ -109,5 +112,14 @@ class Projects {
 	 */
 	public function do_entry_link_arrow() {
 		echo '<span class="loop-entry-link-arrow"><i class="far fa-long-arrow-alt-right"></i></span>';
+	}
+
+	/**
+	 * Output screenshot flipper
+	 *
+	 * @since 1.0.0
+	 */
+	public function do_screenshot_flipper() {
+		do_screenshot( 'screenshot-flipper', '', 'project-screenshot-flipper' );
 	}
 }

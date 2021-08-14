@@ -53,3 +53,34 @@ function get_attrs( $attrs, $prefix = '' ) {
 function do_attrs( $attrs, $prefix = '' ) {
 	echo get_attrs( $attrs, $prefix ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
+
+/**
+ * Output screenshot markup
+ *
+ * @since 2.0.0
+ *
+ * @param string $class Additional classname.
+ * @param string $img   <img> tag/contents.
+ * @param string $id    ID attribute.
+ */
+function do_screenshot( $class = '', $img = '', $id = '' ) {
+
+	$attrs = [
+		'class' => [
+			'screenshot',
+			$class,
+		],
+		'id'    => $id,
+	];
+	?>
+	<figure <?php do_attrs( $attrs ); ?>>
+
+		<div class="screenshot-header">
+			<div class="screenshot-window-controls"></div>
+			<div class="screenshot-tab"></div>
+		</div>
+
+		<?php echo $img; // phpcs:ignore xss ?>
+	</figure>
+	<?php
+}
