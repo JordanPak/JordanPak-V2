@@ -17,5 +17,17 @@
 	text-align: left;
 }
 
+/**
+ * General shared editor adjustments
+ *
+ * @since 2.0.0
+ */
+
+.components-panel .block-editor-url-input__input.block-editor-url-input__input {
+	width: 100%;
+	padding: 6px 8px;
+	border: 1px solid #757575;
+}
+
 
 /*# sourceMappingURL=editor.css.map*/
