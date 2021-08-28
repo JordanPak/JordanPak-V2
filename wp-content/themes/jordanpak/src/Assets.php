@@ -52,6 +52,7 @@ class Assets {
 	public function __construct() {
 		add_action( 'after_setup_theme', [ $this, 'add_editor_styles' ] );
 		add_action( 'init', [ $this, 'do_asset_registration' ] );
+		add_action( 'wp', [ $this, 'do_archive_asset_registration' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_assets' ], 5000 );
 	}
@@ -74,7 +75,7 @@ class Assets {
 	/**
 	 * Register CSS/JS assets
 	 *
-	 * @since 2.0.0<script src="https://kit.fontawesome.com/36781a6ab4.js" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/36781a6ab4.js" crossorigin="anonymous"></script>
+	 * @since 2.0.0
 	 */
 	public function do_asset_registration() {
 
@@ -137,6 +138,30 @@ class Assets {
 			filemtime( "$this->build_dir/style-blocks.css" )
 		);
 
+	}
+
+	/**
+	 * Register post view-specific CSS/JS assets
+	 *
+	 * @since 2.0.0
+	 */
+	public function do_archive_asset_registration() {
+
+		$jordanpak_active = jordanpak_plugin_is_active();
+
+		// Projects.
+		if ( $jordanpak_active && \JordanPak_Fn\instance()->projects->is_archive() ) {
+			$projects = require "$this->build_dir/projects.asset.php";
+
+			// Front end script.
+			wp_enqueue_script(
+				self::HANDLE_PREFIX . 'projects',
+				"$this->build_url/projects.js",
+				$projects['dependencies'],
+				$projects['version'],
+				true
+			);
+		}
 	}
 
 	/**
