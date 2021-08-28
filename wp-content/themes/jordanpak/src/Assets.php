@@ -29,6 +29,22 @@ class Assets {
 	const HANDLE_PREFIX = 'jordanpak-';
 
 	/**
+	 * Asset build directory
+	 *
+	 * @since 2.0.0
+	 * @var   string
+	 */
+	private $build_dir = JORDANPAK_DIR . '/build';
+
+	/**
+	 * Asset build URL
+	 *
+	 * @since 2.0.0
+	 * @var   string
+	 */
+	private $build_url = JORDANPAK_URL . '/build';
+
+	/**
 	 * Hook everything in
 	 *
 	 * @since 2.0.0
@@ -61,15 +77,13 @@ class Assets {
 	 * @since 2.0.0<script src="https://kit.fontawesome.com/36781a6ab4.js" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/36781a6ab4.js" crossorigin="anonymous"></script>
 	 */
 	public function do_asset_registration() {
-		$build_dir = JORDANPAK_DIR . '/build';
-		$build_url = JORDANPAK_URL . '/build';
 
 		// Global styles.
 		wp_register_style(
 			self::HANDLE_PREFIX . 'global',
-			"$build_url/style-global.css",
+			"$this->build_url/style-global.css",
 			[],
-			filemtime( "$build_dir/style-global.css" )
+			filemtime( "$this->build_dir/style-global.css" )
 		);
 
 		// Font loader.
@@ -104,12 +118,12 @@ class Assets {
 		/**
 		 * Blocks
 		 */
-		$blocks = require "$build_dir/blocks.asset.php";
+		$blocks = require "$this->build_dir/blocks.asset.php";
 
 		// Editor script.
 		wp_register_script(
 			self::HANDLE_PREFIX . 'blocks',
-			"$build_url/blocks.js",
+			"$this->build_url/blocks.js",
 			$blocks['dependencies'],
 			$blocks['version'],
 			true
@@ -118,10 +132,11 @@ class Assets {
 		// Front end + editor styles.
 		wp_register_style(
 			self::HANDLE_PREFIX . 'blocks',
-			"$build_url/style-blocks.css",
+			"$this->build_url/style-blocks.css",
 			[ 'wp-editor', self::HANDLE_PREFIX . 'global' ],
-			filemtime( "$build_dir/style-blocks.css" )
+			filemtime( "$this->build_dir/style-blocks.css" )
 		);
+
 	}
 
 	/**
