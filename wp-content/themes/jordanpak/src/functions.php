@@ -84,3 +84,13 @@ function do_screenshot( $class = '', $img = '', $id = '' ) {
 	</figure>
 	<?php
 }
+
+/**
+ * Is the JordanPak companion plugin active?
+ *
+ * @since  2.0.0
+ * @return boolean
+ */
+function jordanpak_plugin_is_active() {
+	return class_exists( 'JordanPak_Fn\Plugin' );
+}

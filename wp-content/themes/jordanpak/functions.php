@@ -150,7 +150,7 @@ class Theme {
 		// 	$this->template_hooks  = new Template_Hooks();
 		// }
 
-		if ( class_exists( 'JordanPak_Fn\Plugin' ) ) {
+		if ( jordanpak_plugin_is_active() ) {
 			$this->projects = new Projects();
 		}
 
