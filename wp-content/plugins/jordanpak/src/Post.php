@@ -136,7 +136,7 @@ class Post {
 	 * @return string
 	 */
 	public function get_terms_list( $taxonomy = 'category' ) {
-		$names = wp_list_pluck( get_the_terms( $this->post, $taxonomy ), 'name' );
+		$names = wp_list_pluck( get_the_terms( $this->post, $taxonomy ) ?: [], 'name' );
 
 		return $names
 			? '<span class="terms-list"><span class="screen-reader-text">' . __( 'Filed Under:', 'jordanpak' ) . ' </span>' . implode( ', ', $names ) . '</span>'
