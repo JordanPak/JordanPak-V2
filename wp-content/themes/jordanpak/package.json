@@ -3,11 +3,11 @@
 	"version": "2.0.0",
 	"private": true,
 	"scripts": {
-		"build": "wp-scripts build ./src/assets/global ./src/assets/blocks",
+		"build": "wp-scripts build ./src/assets/global ./src/assets/blocks ./src/assets/projects",
 		"format:js": "wp-scripts format-js",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
-		"start": "wp-scripts start ./src/assets/global ./src/assets/blocks",
+		"start": "wp-scripts start ./src/assets/global ./src/assets/blocks ./src/assets/projects",
 		"packages-update": "wp-scripts packages-update"
 	},
 	"devDependencies": {
