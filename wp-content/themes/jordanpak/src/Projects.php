@@ -88,7 +88,7 @@ class Projects {
 					'loop-entry-link',
 					'project-loop-entry-link',
 				],
-				'data' => [
+				'data'  => [
 					'screenshot' => $jordanpak_project->get_desktop_screenshot(),
 				],
 			]
