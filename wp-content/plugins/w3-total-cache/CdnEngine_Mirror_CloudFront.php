@@ -29,9 +29,13 @@ class CdnEngine_Mirror_CloudFront extends CdnEngine_Mirror {
 			return;
 		}
 
-		$credentials = new \Aws\Credentials\Credentials(
-			$this->_config['key'],
-			$this->_config['secret'] );
+		if ( empty( $this->_config['key'] ) && empty( $this->_config['secret'] ) ) {
+			$credentials = \Aws\Credentials\CredentialProvider::defaultProvider();
+		} else {
+			$credentials = new \Aws\Credentials\Credentials(
+				$this->_config['key'],
+				$this->_config['secret'] );
+		}
 
 		$this->api = new \Aws\CloudFront\CloudFrontClient( array(
 				'credentials' => $credentials,
@@ -106,7 +110,7 @@ class CdnEngine_Mirror_CloudFront extends CdnEngine_Mirror {
 	 * @return bool
 	 */
 	function purge_all( &$results ) {
-		return $this->purge( array( 'remote_path' => '*' ), $results );
+		return $this->purge( array( array( 'remote_path' => '*' ) ), $results );
 	}
 
 	/**

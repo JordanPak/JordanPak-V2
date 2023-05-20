@@ -46,7 +46,7 @@ class Area {
 	 *
 	 * @var array
 	 */
-	public static $pages_registered = [ 'general', 'logs', 'about', 'tools' ];
+	public static $pages_registered = [ 'general', 'logs', 'about', 'tools', 'reports', 'alerts' ];
 
 	/**
 	 * Area constructor.
@@ -70,6 +70,9 @@ class Area {
 
 		// Add the options page.
 		add_action( 'admin_menu', [ $this, 'add_admin_options_page' ] );
+
+		// Add inline styles for "Upgrade to Pro" left sidebar menu item.
+		add_action( 'admin_head', [ $this, 'style_upgrade_pro_link' ] );
 
 		// Add WPMS network-wide setting page for product education.
 		add_action( 'network_admin_menu', [ $this, 'add_wpms_network_wide_setting_product_education_page' ] );
@@ -104,9 +107,15 @@ class Area {
 		// Maybe redirect to "Tools -> Email Test" page if old direct URL to "Settings -> Email Test" is accessed.
 		add_action( 'admin_init', [ $this, 'maybe_redirect_test_tab' ] );
 
+		// Init parent admin pages.
+		if ( WP::in_wp_admin() || WP::is_doing_self_ajax() ) {
+			add_action( 'init', [ $this, 'get_parent_pages' ] );
+		}
+
 		( new Review() )->hooks();
 		( new Education() )->hooks();
 		( new SetupWizard() )->hooks();
+		( new FlyoutMenu() )->hooks();
 	}
 
 	/**
@@ -116,8 +125,8 @@ class Area {
 	 */
 	public function display_custom_auth_notices() {
 
-		$error   = isset( $_GET['error'] ) ? sanitize_key( $_GET['error'] ) : ''; // phpcs:ignore
-		$success = isset( $_GET['success'] ) ? sanitize_key( $_GET['success'] ) : '';  // phpcs:ignore
+		$error   = isset( $_GET['error'] ) ? sanitize_key( $_GET['error'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$success = isset( $_GET['success'] ) ? sanitize_key( $_GET['success'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if ( empty( $error ) && empty( $success ) ) {
 			return;
@@ -128,6 +137,20 @@ class Area {
 		}
 
 		switch ( $error ) {
+			case 'oauth_invalid_state':
+				WP::add_admin_notice(
+					esc_html__( 'There was an error while processing the authentication request. The state key is invalid. Please try again.', 'wp-mail-smtp' ),
+					WP::ADMIN_NOTICE_ERROR
+				);
+				break;
+
+			case 'google_invalid_nonce':
+				WP::add_admin_notice(
+					esc_html__( 'There was an error while processing the authentication request. The nonce is invalid. Please try again.', 'wp-mail-smtp' ),
+					WP::ADMIN_NOTICE_ERROR
+				);
+				break;
+
 			case 'google_access_denied':
 				WP::add_admin_notice( /* translators: %s - error code, returned by Google API. */
 					sprintf( esc_html__( 'There was an error while processing the authentication request: %s. Please try again.', 'wp-mail-smtp' ), '<code>' . $error . '</code>' ),
@@ -266,6 +289,17 @@ class Area {
 				[ $this, 'display' ]
 			);
 		}
+
+		if ( ! wp_mail_smtp()->is_pro() ) {
+			add_submenu_page(
+				self::SLUG,
+				esc_html__( 'Upgrade to Pro', 'wp-mail-smtp' ),
+				esc_html__( 'Upgrade to Pro', 'wp-mail-smtp' ),
+				$access_capability,
+				// phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
+				esc_url( wp_mail_smtp()->get_upgrade_link( [ 'medium' => 'admin-menu', 'content' => 'Upgrade to Pro' ] ) )
+			);
+		}
 	}
 
 	/**
@@ -399,6 +433,13 @@ class Area {
 			'admin_body_class',
 			function ( $classes ) {
 				$classes .= ' wp-mail-smtp-admin-page-body';
+
+				if ( wp_mail_smtp()->is_pro() ) {
+					$classes .= ' wp-mail-smtp-pro';
+				} else {
+					$classes .= ' wp-mail-smtp-lite';
+				}
+
 				return $classes;
 			}
 		);
@@ -411,10 +452,12 @@ class Area {
 			WPMS_PLUGIN_VER
 		);
 
+		wp_enqueue_script( 'underscore' );
+
 		wp_enqueue_script(
 			'wp-mail-smtp-admin',
 			wp_mail_smtp()->assets_url . '/js/smtp-admin' . WP::asset_min() . '.js',
-			[ 'jquery' ],
+			[ 'jquery', 'underscore' ],
 			WPMS_PLUGIN_VER,
 			false
 		);
@@ -436,6 +479,7 @@ class Area {
 			'education'               => [
 				'upgrade_icon_lock' => '<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock" class="svg-inline--fa fa-lock fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"></path></svg>',
 				'upgrade_title'     => esc_html__( '%name% is a PRO Feature', 'wp-mail-smtp' ),
+				'upgrade_content'   => esc_html__( 'We\'re sorry, the %name% mailer is not available on your plan. Please upgrade to the PRO plan to unlock all these awesome features.', 'wp-mail-smtp' ),
 				'upgrade_button'    => esc_html__( 'Upgrade to Pro', 'wp-mail-smtp' ),
 				'upgrade_url'       => add_query_arg( 'discount', 'SMTPLITEUPGRADE', wp_mail_smtp()->get_upgrade_link( '' ) ),
 				'upgrade_bonus'     => '<p>' .
@@ -451,14 +495,18 @@ class Area {
 												'$50'
 											)
 											. '</p>',
-				'upgrade_doc'       => '<a href="https://wpmailsmtp.com/docs/how-to-upgrade-wp-mail-smtp-to-pro-version/?utm_source=WordPress&amp;utm_medium=link&amp;utm_campaign=liteplugin" target="_blank" rel="noopener noreferrer" class="already-purchased">
-												' . esc_html__( 'Already purchased?', 'wp-mail-smtp' ) . '
-											</a>',
+				'upgrade_doc'       => sprintf(
+					'<a href="%1$s" target="_blank" rel="noopener noreferrer" class="already-purchased">%2$s</a>',
+					// phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
+					esc_url( wp_mail_smtp()->get_utm_url( 'https://wpmailsmtp.com/docs/how-to-upgrade-wp-mail-smtp-to-pro-version/', [ 'medium' => 'plugin-settings', 'content' => 'Pro Mailer Popup - Already purchased' ] ) ),
+					esc_html__( 'Already purchased?', 'wp-mail-smtp' )
+				),
 			],
 			'all_mailers_supports'    => wp_mail_smtp()->get_providers()->get_supports_all(),
 			'nonce'                   => wp_create_nonce( 'wp-mail-smtp-admin' ),
 			'is_network_admin'        => is_network_admin(),
 			'ajax_url'                => admin_url( 'admin-ajax.php' ),
+			'lang_code'               => sanitize_key( WP::get_language_code() ),
 		];
 
 		/**
@@ -539,6 +587,7 @@ class Area {
 				'plugin_active'               => esc_html__( 'Active', 'wp-mail-smtp' ),
 				'plugin_inactive'             => esc_html__( 'Inactive', 'wp-mail-smtp' ),
 				'plugin_processing'           => esc_html__( 'Processing...', 'wp-mail-smtp' ),
+				'plugin_visit'                => esc_html__( 'Visit Site', 'wp-mail-smtp' ),
 				'plugin_install_error'        => esc_html__( 'Could not install a plugin. Please download from WordPress.org and install manually.', 'wp-mail-smtp' ),
 				'plugin_install_activate_btn' => esc_html__( 'Install and Activate', 'wp-mail-smtp' ),
 				'plugin_activate_btn'         => esc_html__( 'Activate', 'wp-mail-smtp' ),
@@ -599,7 +648,7 @@ class Area {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $text
+	 * @param string $text The default text to display in admin plugin page footer.
 	 *
 	 * @return string
 	 */
@@ -635,14 +684,15 @@ class Area {
 	 * @since 1.0.0
 	 * @since 1.5.0 Rewrite to distinguish between General tabs and separate pages.
 	 */
-	public function display() {
+	public function display() { // phpcs:ignore Generic.Metrics.NestingLevel.MaxExceeded
 
 		// Bail if we're not on a plugin page.
 		if ( ! $this->is_admin_page() ) {
 			return;
 		}
 
-		$page = ! empty( $_GET['page'] ) ? \sanitize_key( $_GET['page'] ) : ''; // phpcs:ignore
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = ! empty( $_GET['page'] ) ? \sanitize_key( $_GET['page'] ) : '';
 		?>
 
 		<div class="wrap" id="wp-mail-smtp">
@@ -796,12 +846,12 @@ class Area {
 	 *
 	 * @return string
 	 */
-	protected function get_current_tab() {
+	public function get_current_tab() {
 
 		$current = '';
 
 		if ( $this->is_admin_page( 'general' ) ) {
-			$current = ! empty( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'settings'; // phpcs:ignore
+			$current = ! empty( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'settings'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 
 		return $current;
@@ -820,11 +870,17 @@ class Area {
 
 		if ( $pages === null ) {
 			$pages = [
-				'tools' => new Pages\Tools(
+				'reports' => new Pages\EmailReports(
+					[
+						'reports' => Pages\EmailReportsTab::class,
+					]
+				),
+				'tools'   => new Pages\Tools(
 					[
 						'test'             => Pages\TestTab::class,
 						'export'           => Pages\ExportTab::class,
 						'action-scheduler' => Pages\ActionSchedulerTab::class,
+						'debug-events'     => Pages\DebugEventsTab::class,
 					]
 				),
 			];
@@ -857,19 +913,22 @@ class Area {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return \WPMailSMTP\Admin\PageAbstract[]
+	 * @return PageAbstract[]
 	 */
 	public function get_pages() {
 
 		if ( empty( $this->pages ) ) {
-			$this->pages = array(
-				'settings' => new Pages\SettingsTab(),
-				'test'     => new Pages\TestTab( new Pages\Tools() ),
-				'logs'     => new Pages\LogsTab(),
-				'control'  => new Pages\ControlTab(),
-				'misc'     => new Pages\MiscTab(),
-				'auth'     => new Pages\AuthTab(),
-			);
+			$this->pages = [
+				'settings'    => new Pages\SettingsTab(),
+				'test'        => new Pages\TestTab( new Pages\Tools() ),
+				'logs'        => new Pages\LogsTab(),
+				'alerts'      => new Pages\AlertsTab(),
+				'connections' => new Pages\AdditionalConnectionsTab(),
+				'routing'     => new Pages\SmartRoutingTab(),
+				'control'     => new Pages\ControlTab(),
+				'misc'        => new Pages\MiscTab(),
+				'auth'        => new Pages\AuthTab(),
+			];
 		}
 
 		return apply_filters( 'wp_mail_smtp_admin_get_pages', $this->pages );
@@ -903,9 +962,10 @@ class Area {
 	 *
 	 * @return bool
 	 */
-	public function is_admin_page( $slug = array() ) {
+	public function is_admin_page( $slug = array() ) { // phpcs:ignore Generic.Metrics.NestingLevel.MaxExceeded
 
-		$cur_page    = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : ''; // phpcs:ignore
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$cur_page    = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : '';
 		$check       = self::SLUG;
 		$pages_equal = false;
 
@@ -922,19 +982,25 @@ class Area {
 			$pages_equal = $cur_page === $check;
 		} elseif ( is_array( $slug ) ) {
 			if ( empty( $slug ) ) {
-				$slug = array_map( function ( $v ) {
-					if ( $v === 'general' ) {
-						return Area::SLUG;
-					}
-					return Area::SLUG . '-' . $v;
-				}, self::$pages_registered );
+				$slug = array_map(
+					function ( $v ) {
+						if ( $v === 'general' ) {
+							return Area::SLUG;
+						}
+						return Area::SLUG . '-' . $v;
+					},
+					self::$pages_registered
+				);
 			} else {
-				$slug = array_map( function ( $v ) {
-					if ( $v === 'general' ) {
-						return Area::SLUG;
-					}
-					return Area::SLUG . '-' . sanitize_key( $v );
-				}, $slug );
+				$slug = array_map(
+					function ( $v ) {
+						if ( $v === 'general' ) {
+							return Area::SLUG;
+						}
+						return Area::SLUG . '-' . sanitize_key( $v );
+					},
+					$slug
+				);
 			}
 
 			$pages_equal = in_array( $cur_page, $slug, true );
@@ -991,9 +1057,23 @@ class Area {
 				$post = [];
 			}
 
+			/**
+			 * Before process post.
+			 *
+			 * @since 3.3.0
+			 *
+			 * @param array  $post      POST data.
+			 * @param string $page_slug Current page slug.
+			 */
+			do_action(
+				'wp_mail_smtp_admin_area_process_actions_process_post_before',
+				$post,
+				$pages[ $this->get_current_tab() ]->get_slug()
+			);
+
 			$pages[ $this->get_current_tab() ]->process_post( $post );
 		}
-		// phpcs:enable WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		// phpcs:enable
 
 		// This won't do anything for most pages.
 		// Works for plugin page only, when GET params are allowed.
@@ -1008,21 +1088,27 @@ class Area {
 	 */
 	public function process_ajax() {
 
-		$data = array();
+		$data = [];
 
 		// Only admins can fire these ajax requests.
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( $data );
 		}
 
-		if ( empty( $_POST['task'] ) ) { // phpcs:ignore
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( empty( $_POST['task'] ) ) {
 			wp_send_json_error( $data );
 		}
 
-		$task = sanitize_key( $_POST['task'] ); // phpcs:ignore
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$task = sanitize_key( $_POST['task'] );
 
 		switch ( $task ) {
 			case 'pro_banner_dismiss':
+				if ( ! check_ajax_referer( 'wp-mail-smtp-admin', 'nonce', false ) ) {
+					break;
+				}
+
 				update_user_meta( get_current_user_id(), 'wp_mail_smtp_pro_banner_dismissed', true );
 				$data['message'] = esc_html__( 'WP Mail SMTP Pro related message was successfully dismissed.', 'wp-mail-smtp' );
 				break;
@@ -1036,14 +1122,13 @@ class Area {
 				break;
 
 			case 'notice_dismiss':
-				$notice = sanitize_key( $_POST['notice'] ); // phpcs:ignore
-				$mailer = sanitize_key( $_POST['mailer'] ); // phpcs:ignore
-				if ( empty( $notice ) || empty( $mailer ) ) {
+				$dismissal_response = $this->dismiss_notice_via_ajax();
+
+				if ( empty( $dismissal_response ) ) {
 					break;
 				}
 
-				update_user_meta( get_current_user_id(), "wp_mail_smtp_notice_{$notice}_for_{$mailer}_dismissed", true );
-				$data['message'] = esc_html__( 'Educational notice for this mailer was successfully dismissed.', 'wp-mail-smtp' );
+				$data['message'] = $dismissal_response;
 				break;
 
 			default:
@@ -1059,6 +1144,31 @@ class Area {
 		}
 
 		wp_send_json_success( $data );
+	}
+
+	/**
+	 * Process the notice dismissal via AJAX call (Post request).
+	 *
+	 * @since 3.3.0
+	 *
+	 * @return false|string
+	 */
+	private function dismiss_notice_via_ajax() {
+
+		if ( ! check_ajax_referer( 'wp-mail-smtp-admin', 'nonce', false ) ) {
+			return false;
+		}
+
+		if ( empty( $_POST['notice'] ) || empty( $_POST['mailer'] ) ) {
+			return false;
+		}
+
+		$notice = sanitize_key( $_POST['notice'] );
+		$mailer = sanitize_key( $_POST['mailer'] );
+
+		update_user_meta( get_current_user_id(), "wp_mail_smtp_notice_{$notice}_for_{$mailer}_dismissed", true );
+
+		return esc_html__( 'Educational notice for this mailer was successfully dismissed.', 'wp-mail-smtp' );
 	}
 
 	/**
@@ -1079,6 +1189,18 @@ class Area {
 			return $links;
 		}
 
+		$custom['pro'] = sprintf(
+			'<a href="%1$s" aria-label="%2$s" target="_blank" rel="noopener noreferrer" 
+				style="color: #00a32a; font-weight: 700;" 
+				onmouseover="this.style.color=\'#008a20\';" 
+				onmouseout="this.style.color=\'#00a32a\';"
+				>%3$s</a>',
+			// phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
+			esc_url( wp_mail_smtp()->get_upgrade_link( [ 'medium' => 'all-plugins', 'content' => 'Get WP Mail SMTP Pro' ] ) ),
+			esc_attr__( 'Upgrade to WP Mail SMTP Pro', 'wp-mail-smtp' ),
+			esc_html__( 'Get WP Mail SMTP Pro', 'wp-mail-smtp' )
+		);
+
 		$custom['settings'] = sprintf(
 			'<a href="%s" aria-label="%s">%s</a>',
 			esc_url( $this->get_admin_page_url() ),
@@ -1086,11 +1208,12 @@ class Area {
 			esc_html__( 'Settings', 'wp-mail-smtp' )
 		);
 
-		$custom['support'] = sprintf(
-			'<a href="%1$s" aria-label="%2$s" style="font-weight:bold;">%3$s</a>',
-			esc_url( add_query_arg( 'tab','versus', $this->get_admin_page_url( Area::SLUG . '-about' ) ) ),
-			esc_attr__( 'Go to WP Mail SMTP Lite vs Pro comparison page', 'wp-mail-smtp' ),
-			esc_html__( 'Premium Support', 'wp-mail-smtp' )
+		$custom['docs'] = sprintf(
+			'<a href="%1$s" target="_blank" aria-label="%2$s" rel="noopener noreferrer">%3$s</a>',
+			// phpcs:ignore WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
+			esc_url( wp_mail_smtp()->get_utm_url( 'https://wpmailsmtp.com/docs/', [ 'medium' => 'all-plugins', 'content' => 'Documentation' ] ) ),
+			esc_attr__( 'Go to WPMailSMTP.com documentation page', 'wp-mail-smtp' ),
+			esc_html__( 'Docs', 'wp-mail-smtp' )
 		);
 
 		return array_merge( $custom, (array) $links );
@@ -1102,7 +1225,7 @@ class Area {
 	 * @since 1.0.0
 	 * @since 1.5.0 URL is changed to support the top level position of the plugin admin area.
 	 *
-	 * @param string $page
+	 * @param string $page The page slug to add as the page query parameter.
 	 *
 	 * @return string
 	 */
@@ -1120,67 +1243,56 @@ class Area {
 	}
 
 	/**
-	 * Remove all non-WP Mail SMTP plugin notices from plugin pages.
+	 * Remove all non-WP Mail SMTP plugin notices from our plugin pages.
 	 *
 	 * @since 1.0.0
 	 */
 	public function hide_unrelated_notices() {
 
 		// Bail if we're not on our screen or page.
-		if ( empty( $_REQUEST['page'] ) || strpos( $_REQUEST['page'], self::SLUG ) === false ) {
+		if ( ! $this->is_admin_page() ) {
 			return;
 		}
 
+		$this->remove_unrelated_actions( 'user_admin_notices' );
+		$this->remove_unrelated_actions( 'admin_notices' );
+		$this->remove_unrelated_actions( 'all_admin_notices' );
+		$this->remove_unrelated_actions( 'network_admin_notices' );
+	}
+
+	/**
+	 * Remove all non-WP Mail SMTP notices from the our plugin pages based on the provided action hook.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $action The name of the action.
+	 */
+	private function remove_unrelated_actions( $action ) {
+
 		global $wp_filter;
 
-		if ( ! empty( $wp_filter['user_admin_notices']->callbacks ) && is_array( $wp_filter['user_admin_notices']->callbacks ) ) {
-			foreach ( $wp_filter['user_admin_notices']->callbacks as $priority => $hooks ) {
-				foreach ( $hooks as $name => $arr ) {
-					if ( is_object( $arr['function'] ) && $arr['function'] instanceof \Closure ) {
-						unset( $wp_filter['user_admin_notices']->callbacks[ $priority ][ $name ] );
-						continue;
-					}
-					if ( ! empty( $arr['function'][0] ) && is_object( $arr['function'][0] ) && strpos( strtolower( get_class( $arr['function'][0] ) ), 'wpmailsmtp' ) !== false ) {
-						continue;
-					}
-					if ( ! empty( $name ) && strpos( strtolower( $name ), 'wpmailsmtp' ) === false ) {
-						unset( $wp_filter['user_admin_notices']->callbacks[ $priority ][ $name ] );
-					}
-				}
-			}
+		if ( empty( $wp_filter[ $action ]->callbacks ) || ! is_array( $wp_filter[ $action ]->callbacks ) ) {
+			return;
 		}
 
-		if ( ! empty( $wp_filter['admin_notices']->callbacks ) && is_array( $wp_filter['admin_notices']->callbacks ) ) {
-			foreach ( $wp_filter['admin_notices']->callbacks as $priority => $hooks ) {
-				foreach ( $hooks as $name => $arr ) {
-					if ( is_object( $arr['function'] ) && $arr['function'] instanceof \Closure ) {
-						unset( $wp_filter['admin_notices']->callbacks[ $priority ][ $name ] );
-						continue;
-					}
-					if ( ! empty( $arr['function'][0] ) && is_object( $arr['function'][0] ) && strpos( strtolower( get_class( $arr['function'][0] ) ), 'wpmailsmtp' ) !== false ) {
-						continue;
-					}
-					if ( ! empty( $name ) && strpos( strtolower( $name ), 'wpmailsmtp' ) === false ) {
-						unset( $wp_filter['admin_notices']->callbacks[ $priority ][ $name ] );
-					}
+		foreach ( $wp_filter[ $action ]->callbacks as $priority => $hooks ) {
+			foreach ( $hooks as $name => $arr ) {
+				if (
+					( // Cover object method callback case.
+						is_array( $arr['function'] ) &&
+						isset( $arr['function'][0] ) &&
+						is_object( $arr['function'][0] ) &&
+						strpos( strtolower( get_class( $arr['function'][0] ) ), 'wpmailsmtp' ) !== false
+					) ||
+					( // Cover class static method callback case.
+						! empty( $name ) &&
+						strpos( strtolower( $name ), 'wpmailsmtp' ) !== false
+					)
+				) {
+					continue;
 				}
-			}
-		}
 
-		if ( ! empty( $wp_filter['all_admin_notices']->callbacks ) && is_array( $wp_filter['all_admin_notices']->callbacks ) ) {
-			foreach ( $wp_filter['all_admin_notices']->callbacks as $priority => $hooks ) {
-				foreach ( $hooks as $name => $arr ) {
-					if ( is_object( $arr['function'] ) && $arr['function'] instanceof \Closure ) {
-						unset( $wp_filter['all_admin_notices']->callbacks[ $priority ][ $name ] );
-						continue;
-					}
-					if ( ! empty( $arr['function'][0] ) && is_object( $arr['function'][0] ) && strpos( strtolower( get_class( $arr['function'][0] ) ), 'wpmailsmtp' ) !== false ) {
-						continue;
-					}
-					if ( ! empty( $name ) && strpos( strtolower( $name ), 'wpmailsmtp' ) === false ) {
-						unset( $wp_filter['all_admin_notices']->callbacks[ $priority ][ $name ] );
-					}
-				}
+				unset( $wp_filter[ $action ]->callbacks[ $priority ][ $name ] );
 			}
 		}
 	}
@@ -1195,5 +1307,46 @@ class Area {
 		if ( $this->is_admin_page( 'general' ) && $this->get_current_tab() === 'test' ) {
 			wp_safe_redirect( add_query_arg( 'tab', 'test', $this->get_admin_page_url( self::SLUG . '-tools' ) ) );
 		}
+	}
+
+	/**
+	 * Define inline styles for "Upgrade to Pro" left sidebar menu item.
+	 *
+	 * @since 3.4.0
+	 */
+	public function style_upgrade_pro_link() {
+
+		global $submenu;
+
+		// Bail if plugin menu is not registered.
+		if ( ! isset( $submenu[ self::SLUG ] ) ) {
+			return;
+		}
+
+		$upgrade_link_position = key(
+			array_filter(
+				$submenu[ self::SLUG ],
+				function ( $item ) {
+					return strpos( $item[2], 'https://wpmailsmtp.com/lite-upgrade' ) !== false;
+				}
+			)
+		);
+
+		// Bail if "Upgrade to Pro" menu item is not registered.
+		if ( is_null( $upgrade_link_position ) ) {
+			return;
+		}
+
+		// Prepare a HTML class.
+		// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited
+		if ( isset( $submenu[ self::SLUG ][ $upgrade_link_position ][4] ) ) {
+			$submenu[ self::SLUG ][ $upgrade_link_position ][4] .= ' wp-mail-smtp-sidebar-upgrade-pro';
+		} else {
+			$submenu[ self::SLUG ][ $upgrade_link_position ][] = 'wp-mail-smtp-sidebar-upgrade-pro';
+		}
+		// phpcs:enable WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		// Output inline styles.
+		echo '<style>a.wp-mail-smtp-sidebar-upgrade-pro { background-color: #00a32a !important; color: #fff !important; font-weight: 600 !important; }</style>';
 	}
 }

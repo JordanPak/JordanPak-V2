@@ -6,11 +6,14 @@ wp-content/uploads
 wp-content/blogs.dir/
 wp-content/upgrade/
 wp-content/backup-db/
+wp-content/w3tc-config/
 wp-content/updraft/
 wp-content/backupwordpress-*/
 wp-content/managewp/backups/
 wp-content/advanced-cache.php
 wp-content/wp-cache-config.php
+wp-content/db.php
+wp-content/object-cache.php
 sitemap.xml
 sitemap.xml.gz
 /vendor/
