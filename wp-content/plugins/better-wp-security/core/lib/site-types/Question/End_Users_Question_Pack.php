@@ -34,15 +34,15 @@ final class End_Users_Question_Pack implements Questions_Provider {
 					return [
 						'type'        => 'array',
 						'items'       => [
-							'type'      => 'string',
-							'enum'      => array_keys( wp_roles()->get_names() ),
-							'enumNames' => array_values( wp_roles()->get_names() ),
+							'type'  => 'string',
+							'oneOf' => \ITSEC_Lib::build_one_of_schema( wp_roles()->get_names() ),
 						],
 						'minItems'    => 1,
 						'uniqueItems' => true,
 						'default'     => [],
 						'uiSchema'    => [
 							'ui:widget' => 'checkboxes',
+							'ui:style'  => 'chicklet',
 						]
 					];
 				}
@@ -52,7 +52,7 @@ final class End_Users_Question_Pack implements Questions_Provider {
 				}
 
 				protected function get_description_fallback(): string {
-					return __( 'Select the WordPress user roles they are assigned to', 'better-wp-security' );
+					return __( 'Select the WordPress user roles they are assigned to.', 'better-wp-security' );
 				}
 
 				public function respond( Answer_Handler $handler ) {

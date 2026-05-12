@@ -159,7 +159,9 @@ module.exports = function makeConfig( directory, pro ) {
 						{
 							loader: 'postcss-loader',
 							options: {
-								plugins: [ autoprefixer ],
+								postcssOptions: {
+									plugins: [ autoprefixer ],
+								},
 							},
 						},
 						{
@@ -183,16 +185,32 @@ module.exports = function makeConfig( directory, pro ) {
 				{
 					test: /\.svg$/,
 					exclude: /node_modules/,
+					resourceQuery: { not: [ /inline/ ] },
 					use: [
 						{
-							loader: 'svg-react-loader',
+							loader: '@svgr/webpack',
 							options: {
-								query: {
-									classIdPrefix: 'itsec-icon-[name]-[hash:5]__',
+								svgoConfig: {
+									plugins: [
+										{
+											name: 'prefixIds',
+											params: {
+												prefix: 'itsec-icon-[name]-[hash:5]__',
+											},
+										},
+									],
 								},
 							},
 						},
 					],
+				},
+				{
+					resourceQuery: /inline/,
+					type: 'asset/inline',
+				},
+				{
+					test: /\.png/,
+					type: 'asset/resource',
 				},
 			],
 		},
@@ -269,6 +287,10 @@ module.exports = function makeConfig( directory, pro ) {
 			alias: {
 				// Always load the same copy of @emotion/react to prevent issues with npm linking our UI library.
 				'@emotion/react': path.resolve( directory, './node_modules/@emotion/react' ),
+				'@ithemes/security-ui': path.resolve(
+					directory,
+					'./core/packages/ui/src/index.js'
+				),
 				'@ithemes/security-utils': path.resolve(
 					directory,
 					'./core/packages/utils/src/index.js'
@@ -292,6 +314,10 @@ module.exports = function makeConfig( directory, pro ) {
 				'@ithemes/security-rjsf-theme': path.resolve(
 					directory,
 					'./core/packages/rjsf-theme/src/index.js'
+				),
+				'@ithemes/security-schema-form': path.resolve(
+					directory,
+					'./core/packages/schema-form/src/index.js'
 				),
 				'@ithemes/security-search': path.resolve(
 					directory,

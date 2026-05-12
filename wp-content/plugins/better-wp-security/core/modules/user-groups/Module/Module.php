@@ -8,8 +8,10 @@ use iThemesSecurity\Import_Export\Export\Export;
 use iThemesSecurity\Import_Export\Import\Import_Context;
 use iThemesSecurity\Import_Export\Import\Transformation;
 use iThemesSecurity\Lib\Result;
+use iThemesSecurity\Lib\Stringable_Json;
 use iThemesSecurity\Module_Config;
 use iThemesSecurity\User_Groups\Everybody_Else;
+use iThemesSecurity\User_Groups\Match_Target;
 use iThemesSecurity\User_Groups\Repository\Repository;
 use iThemesSecurity\User_Groups\Settings_Proxy;
 use iThemesSecurity\User_Groups\Settings_Registration;
@@ -45,6 +47,9 @@ class Module implements Runnable, Import_Export_Source {
 		add_filter( 'map_meta_cap', [ $this, 'map_meta_cap' ], 10, 4 );
 		add_action( 'itsec_create_user_group', [ $this, 'initialize_settings' ], 10, 2 );
 		add_action( 'itsec_change_admin_user_id', [ $this, 'on_change_admin_user_id' ], 10, 3 );
+		add_filter( 'itsec_rest_user_actions_schema', [ $this, 'add_user_actions' ] );
+		add_action( 'itsec_user_action_add-user-groups', [ $this, 'apply_add_user_groups_action' ], 10, 3 );
+		add_filter( 'debug_information', [ $this, 'add_site_health_info' ], 11 );
 	}
 
 	public function trigger_setting_registration() {
@@ -145,6 +150,79 @@ class Module implements Runnable, Import_Export_Source {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Registers the "Add User Groups" action.
+	 *
+	 * @param array $schema
+	 *
+	 * @return array
+	 */
+	public function add_user_actions( $schema ) {
+		$schema['properties']['actions']['properties']['add-user-groups'] = [
+			'type'  => 'array',
+			'items' => [
+				'type'   => 'string',
+				'format' => 'uuid',
+			],
+		];
+
+		return $schema;
+	}
+
+	/**
+	 * Applies the "Add User Groups" action to the selected user.
+	 *
+	 * @param \WP_User $user
+	 * @param \WP_User $requested_by
+	 * @param array    $uuids
+	 *
+	 * @return void
+	 */
+	public function apply_add_user_groups_action( \WP_User $user, \WP_User $requested_by, array $uuids ) {
+		foreach ( $uuids as $uuid ) {
+			try {
+				$user_group = $this->repository->get( $uuid );
+				if ( ! $user_group->matches( Match_Target::for_user( $user ) ) ) {
+					$user_group->add_user( $user );
+					$this->repository->persist( $user_group );
+				}
+			} catch ( \Throwable $e ) {
+				// There isn't any way for the user to action this. For now we'll swallow it.
+			}
+		}
+	}
+
+	public function add_site_health_info( $info ) {
+		$settings    = $this->settings_registry->get_settings();
+		$user_groups = array_map(
+			function ( User_Group $group ) use ( $settings ) {
+				$enabled = array_filter( $settings, function ( Settings_Registration $setting ) use ( $group ) {
+					$groups = \ITSEC_Modules::get_setting( $setting->get_module(), $setting->get_setting() );
+
+					return is_array( $groups ) && in_array( $group->get_id(), $groups, true );
+				} );
+
+				return [
+					'roles'     => $group->get_roles(),
+					'canonical' => $group->get_canonical_roles(),
+					'users'     => count( $group->get_users() ),
+					'settings'  => array_map( function ( Settings_Registration $setting ) {
+						return $setting->get_module() . '.' . $setting->get_setting();
+					}, array_values( $enabled ) ),
+				];
+			},
+			$this->repository->all()
+		);
+
+		$info['solid-security']['fields']['user_groups'] = [
+			'label' => __( 'User Groups', 'better-wp-security' ),
+			'value' => count( $user_groups ),
+			'debug' => new Stringable_Json( array_values( $user_groups ) ),
+		];
+
+		return $info;
 	}
 
 	public function get_export_slug(): string {

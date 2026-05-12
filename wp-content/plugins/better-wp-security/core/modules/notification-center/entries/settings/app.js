@@ -35,6 +35,7 @@ export default function App() {
 		select( MODULES_STORE_NAME ).getActiveModules()
 	);
 	const asyncNotifications = useAsync(
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		useCallback( fetchNotifications(), [ modules ] )
 	);
 	const asyncUsersAndRoles = useAsync( fetchUsersAndRoles );
@@ -46,7 +47,7 @@ export default function App() {
 			title={ __( 'Notifications', 'better-wp-security' ) }
 			icon="email-alt"
 			priority={ 20 }
-			roots={ [ 'onboard', 'import', 'settings' ] }
+			roots={ [ 'import', 'settings' ] }
 			key={ asyncNotifications.status + asyncUsersAndRoles.status }
 		>
 			{ () => (
@@ -92,5 +93,5 @@ function useSearchProviders( notifications ) {
 				);
 			}
 		);
-	}, [ notifications ] );
+	}, [ notifications, registerProvider ] );
 }

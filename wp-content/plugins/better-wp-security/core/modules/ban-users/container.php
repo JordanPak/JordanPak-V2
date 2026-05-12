@@ -42,14 +42,14 @@ return static function ( Container $c ) {
 			],
 			[
 				'events' => 'blacklist-recaptcha',
-				'label'  => __( 'Recaptcha', 'better-wp-security' ),
+				'label'  => __( 'CAPTCHA', 'better-wp-security' ),
 			],
 		], [
 			'circle_label'    => _x( 'Banned', 'Total Banned IPs', 'better-wp-security' ),
 			'circle_callback' => function () use ( $c ) {
 				return $c[ Database_Repository::class ]->count_bans( new Filters() );
 			},
-		] );
+		], 'ban-users' );
 
 		return $cards;
 	} );

@@ -18,6 +18,15 @@ final class Tools_Runner implements Runnable {
 	public function __construct( Tools_Registry $registry ) { $this->registry = $registry; }
 
 	public function run() {
+		add_action( 'after_setup_theme', \Closure::fromCallable( [ $this, 'register_tools' ] ) );
+	}
+
+	/**
+	 * Registers tools after most of WP has loaded.
+	 *
+	 * @return void
+	 */
+	protected function register_tools(): void {
 		/**
 		 * Fires when tools should be registered.
 		 *
@@ -57,7 +66,7 @@ final class Tools_Runner implements Runnable {
 		if ( ! $this->is_condition_valid( $tool ) ) {
 			return Result::error( new \WP_Error(
 				'itsec.tools.run.condition-invalid',
-				__( 'This tool cannot run because it‘s condition is not valid.', 'better-wp-security' )
+				__( 'This tool cannot run because its condition is not valid.', 'better-wp-security' )
 			) );
 		}
 

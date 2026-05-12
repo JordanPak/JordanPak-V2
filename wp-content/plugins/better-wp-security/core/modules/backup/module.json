@@ -22,15 +22,25 @@
       },
       "method": {
         "type": "string",
-        "enum": [
-          "both",
-          "email",
-          "local"
-        ],
-        "enumNames": [
-          "Save Locally and Email",
-          "Email Only",
-          "Save Locally Only"
+        "oneOf": [
+          {
+            "enum": [
+              "both"
+            ],
+            "title": "Save Locally and Email"
+          },
+          {
+            "enum": [
+              "email"
+            ],
+            "title": "Email Only"
+          },
+          {
+            "enum": [
+              "local"
+            ],
+            "title": "Save Locally Only"
+          }
         ],
         "default": "email",
         "title": "Backup Method",
@@ -54,7 +64,7 @@
         "type": "boolean",
         "default": true,
         "title": "Compress Backup Files",
-        "description": "By default, iThemes Security will zip backup files to reduce file size. You may need to turn this off if you are having problems with backups."
+        "description": "By default, Solid Security will zip backup files to reduce file size. You may need to turn this off if you are having problems with backups."
       },
       "exclude": {
         "type": "array",
@@ -174,6 +184,14 @@
   "removed-settings": [
     "all_sites"
   ],
+  "telemetry-settings": {
+    "enabled": true,
+    "interval": true,
+    "method": true,
+    "retain": true,
+    "zip": true,
+    "exclude": "count"
+  },
   "scheduling": {
     "backup": {
       "schedule": "backup",
