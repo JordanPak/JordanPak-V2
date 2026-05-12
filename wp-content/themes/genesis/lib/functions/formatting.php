@@ -438,3 +438,77 @@ function genesis_strip_p_tags( $content ) {
 	return preg_replace( '/<p\b[^>]*>(.*?)<\/p>/i', '$1', $content );
 
 }
+
+/**
+ * Sanitize HTML content for shortcode attributes.
+ *
+ * Uses WordPress core's wp_kses() function with the 'post' context allowlist,
+ * always excluding script tags unless explicitly overridden via the
+ * 'genesis_shortcode_attribute_allowed_html' filter.
+ *
+ * @since 3.6.1
+ *
+ * @param string $content Content to sanitize.
+ * @return string Sanitized content with disallowed HTML removed.
+ */
+function genesis_sanitize_shortcode_attribute_html( $content ) {
+
+	if ( '' === $content || null === $content ) {
+		return $content;
+	}
+
+	$allowed_html = wp_kses_allowed_html( 'post' );
+
+	// Defensively remove script tags to ensure they're never allowed, even if
+	// WordPress core changes the 'post' context allowlist.
+	unset( $allowed_html['script'] );
+
+	/**
+	 * Filters the allowed HTML tags for shortcode attribute sanitization.
+	 *
+	 * To customize which HTML tags are allowed in shortcode attributes.
+	 * Uses the same allowlist as post content by default. Excludes script tags.
+	 *
+	 * @since 3.6.1
+	 *
+	 * @param array $allowed_html Array of allowed HTML tags and attributes.
+	 */
+	$allowed_html = apply_filters( 'genesis_shortcode_attribute_allowed_html', $allowed_html );
+
+	return wp_kses( $content, $allowed_html );
+
+}
+
+/**
+ * Sanitize an array of shortcode attributes by removing disallowed HTML.
+ *
+ * @since 3.6.1
+ *
+ * @param array $atts   Shortcode attributes array.
+ * @param array $keys   Array of attribute keys to sanitize.
+ * @return array Sanitized attributes array.
+ *
+ * @example
+ * $atts = [
+ *     'before' => '<script>alert("xss")</script><strong>Bold</strong>',
+ *     'after'  => '<em>Italic</em>',
+ *     'other'   => 'unchanged'
+ * ];
+ * $sanitized = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
+ * // Result: [
+ * //     'before' => '<strong>Bold</strong>',
+ * //     'after'  => '<em>Italic</em>',
+ * //     'other'   => 'unchanged'
+ * // ];
+ */
+function genesis_sanitize_shortcode_attributes( $atts, $keys ) {
+
+	foreach ( $keys as $key ) {
+		if ( isset( $atts[ $key ] ) ) {
+			$atts[ $key ] = genesis_sanitize_shortcode_attribute_html( $atts[ $key ] );
+		}
+	}
+
+	return $atts;
+
+}

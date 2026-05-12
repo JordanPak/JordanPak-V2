@@ -11,7 +11,7 @@
  * @link    https://my.studiopress.com/themes/genesis/
  */
 
-add_action( 'admin_init', 'genesis_handle_block_widget_editor' );
+add_action( 'widgets_init', 'genesis_handle_block_widget_editor' );
 /**
  * Default the block-based widget editor to be disabled, which is defaulted to be enabled in WP 5.8.
  *
@@ -30,7 +30,7 @@ add_action( 'admin_init', 'genesis_handle_dismissing_block_widget_editor_notice'
  */
 function genesis_handle_dismissing_block_widget_editor_notice() {
 	// Only handle dismissing the block widget editor notice if "?genesis_widget_block_editor_dismiss=1" is in the URL.
-	if ( filter_input( INPUT_GET, 'genesis_widget_block_editor_dismiss', FILTER_SANITIZE_STRING ) !== '1' ) {
+	if ( filter_input( INPUT_GET, 'genesis_widget_block_editor_dismiss' ) !== '1' ) {
 		// Exit early.
 		return;
 	}
@@ -41,7 +41,7 @@ function genesis_handle_dismissing_block_widget_editor_notice() {
 	}
 
 	// If the nonce fails, do nothing.
-	if ( ! wp_verify_nonce( filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING ), 'genesis-widget-block-editor-dismiss' ) ) {
+	if ( ! wp_verify_nonce( filter_input( INPUT_GET, '_wpnonce' ), 'genesis-widget-block-editor-dismiss' ) ) {
 		return;
 	}
 
@@ -93,13 +93,13 @@ function genesis_block_widgets_optin_notification() {
 	<div class="notice notice-success">
 		<p>
 			<?php
-			// Translators: The link html around the help link for the widget block editor opt-in.
 			echo wp_kses_post(
 				sprintf(
-					__( 'Note from Genesis: To maintain the best site editing experience for you, we\'ve disabled the widget screen introduced in WordPress 5.8. To learn more about the 5.8 widget experience and how to activate it, click the following link: %1$sLearn more%2$s %3$sDismiss%4$s', 'sample-text-domain' ),
+					// Translators: The link html around the help and dismiss links for the widget block editor opt-in.
+					__( 'Note from Genesis: To maintain the best site editing experience for you, we\'ve disabled the widget screen introduced in WordPress 5.8. To learn more about the 5.8 widget experience and how to activate it, click the following link: %1$sLearn more%2$s %3$sDismiss%4$s', 'genesis' ),
 					'<p><a href="https://my.studiopress.com/documentation/snippets/block-editor/enable-block-based-widget-editor" target="_blank" rel="noopener noreferrer" class="button">',
 					'</a>',
-					'<a href="' . wp_nonce_url( add_query_arg( array( 'genesis_widget_block_editor_dismiss' => 1 ), admin_url( 'widgets.php' ) ), 'genesis-widget-block-editor-dismiss' ) . '" rel="noopener noreferrer" class="button">',
+					'<a href="' . wp_nonce_url( add_query_arg( [ 'genesis_widget_block_editor_dismiss' => 1 ], admin_url( 'widgets.php' ) ), 'genesis-widget-block-editor-dismiss' ) . '" rel="noopener noreferrer" class="button">',
 					'</a></p>'
 				)
 			);

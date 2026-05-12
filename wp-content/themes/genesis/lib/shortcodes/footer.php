@@ -41,6 +41,7 @@ function genesis_footer_copyright_shortcode( $atts ) {
 		'first'     => '',
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'footer_copyright' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'copyright', 'first' ] );
 
 	$output = $atts['before'] . $atts['copyright'] . '&nbsp;';
 
@@ -92,6 +93,7 @@ function genesis_footer_childtheme_link_shortcode( $atts ) {
 		'before' => '&#x000B7;',
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'footer_childtheme_link' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	$output = sprintf( '%s<a href="%s">%s</a>%s', $atts['before'], esc_url( $url ), esc_html( $name ), $atts['after'] );
 
@@ -122,6 +124,7 @@ function genesis_footer_genesis_link_shortcode( $atts ) {
 		'url'    => 'https://my.studiopress.com/themes/genesis/',
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'footer_genesis_link' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	$output = $atts['before'] . '<a href="' . esc_url( $atts['url'] ) . '">Genesis Framework</a>' . $atts['after'];
 
@@ -151,6 +154,7 @@ function genesis_footer_studiopress_link_shortcode( $atts ) {
 		'before' => __( 'by', 'genesis' ),
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'footer_studiopress_link' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	$output = $atts['before'] . ' <a href="https://www.studiopress.com/">StudioPress</a>' . $atts['after'];
 
@@ -180,6 +184,7 @@ function genesis_footer_wordpress_link_shortcode( $atts ) {
 		'before' => '',
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'footer_wordpress_link' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	$output = sprintf( '%s<a href="%s">%s</a>%s', $atts['before'], 'https://wordpress.org/', 'WordPress', $atts['after'] );
 
@@ -209,6 +214,7 @@ function genesis_footer_site_title_shortcode( $atts ) {
 		'before' => '',
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'footer_site_title' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	$output = $atts['before'] . get_bloginfo( 'name' ) . $atts['after'];
 
@@ -240,6 +246,7 @@ function genesis_footer_home_link_shortcode( $atts ) {
 		'text'   => get_bloginfo( 'name' ),
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'footer_home_link' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'text' ] );
 
 	$output = sprintf( '%s<a href="%s">%s</a>%s', $atts['before'], home_url(), $atts['text'], $atts['after'] );
 
@@ -271,6 +278,7 @@ function genesis_footer_loginout_shortcode( $atts ) {
 		'redirect' => '',
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'footer_loginout' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	if ( ! is_user_logged_in() ) {
 		$link = '<a href="' . esc_url( wp_login_url( $atts['redirect'] ) ) . '">' . __( 'Log in', 'genesis' ) . '</a>';
