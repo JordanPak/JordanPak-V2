@@ -8,11 +8,6 @@ add_action( 'admin_enqueue_scripts', function () {
 			'route' => '/ithemes-security/v1/user-matchables',
 			'embed' => true,
 		],
-		'/ithemes-security/v1/modules?context=edit&_embed=1' => [
-			'route' => '/ithemes-security/v1/modules',
-			'query' => [ 'context' => 'edit' ],
-			'embed' => true,
-		],
 		'/ithemes-security/v1/tools'                         => [
 			'route' => '/ithemes-security/v1/tools',
 		],
@@ -36,17 +31,6 @@ add_action( 'admin_enqueue_scripts', function () {
 		}
 	}
 
-	$request = new WP_REST_Request( 'GET', '/ithemes-security/v1' );
-	$request->set_query_params( [ 'context' => 'help' ] );
-	$site_info = rest_do_request( $request );
-
-	if ( ! $site_info->is_error() ) {
-		wp_add_inline_script( 'itsec-packages-data', sprintf(
-			"wp.data.dispatch( 'ithemes-security/core' ).receiveIndex( %s );",
-			wp_json_encode( $site_info->get_data() )
-		) );
-	}
-
 	remove_action( 'admin_head', 'wp_admin_canonical_url' );
 } );
 
@@ -60,6 +44,7 @@ add_action( 'itsec-page-show', function () {
 	require_once ITSEC_Core::get_core_dir() . 'admin-pages/sidebar-widget.php';
 	require_once ITSEC_Core::get_core_dir() . 'deprecated/module-settings.php';
 	do_action( 'itsec-settings-page-init' );
+	do_action( 'stellarwp/telemetry/optin', 'solid-security' );
 
 	$server_type = ITSEC_Lib::get_server();
 	$onboard     = ITSEC_Modules::get_setting( 'global', 'onboard_complete' );

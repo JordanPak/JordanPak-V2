@@ -136,9 +136,9 @@ class Two_Factor_Totp extends Two_Factor_Provider implements ITSEC_Two_Factor_Pr
 	 * @param WP_User|null $user           The current user being edited.
 	 *
 	 * @return object {
-	 * 		@type bool     $already_active Whether a key already existed
-	 * 		@type string   $key            The TOTP key
-	 * }
+	 * @type bool          $already_active Whether a key already existed
+	 * @type string        $key            The TOTP key
+	 *                                     }
 	 */
 	public function get_key( $user = null ) {
 		if ( $user === null ) {
@@ -451,7 +451,8 @@ class Two_Factor_Totp extends Two_Factor_Provider implements ITSEC_Two_Factor_Pr
 	}
 
 	/**
-	 * Uses the Google Charts API to build a QR Code for use with an otpauth url
+	 * Builds a QR Code for use with an otpauth url. It uses a local library as default (GD extension is required),
+	 * but falls back to remote generation with qr-code.ithemes.com service if local fails.
 	 *
 	 * @param string $name  The name to display in the Authentication app.
 	 * @param string $key   The secret key to share with the Authentication app.
@@ -467,9 +468,12 @@ class Two_Factor_Totp extends Two_Factor_Provider implements ITSEC_Two_Factor_Pr
 			$payload .= urlencode( '&issuer=' . rawurlencode( $title ) );
 		}
 
-		$size = isset( $opts['size'] ) ? absint( $opts['size'] ) : 200;
+		$url = $this->generate_local_qr_code( $payload );
 
-		$url = "https://qr-code.ithemes.com/?size={$size}&data={$payload}";
+		if ( $url === '' ) {
+			$size = isset( $opts['size'] ) ? absint( $opts['size'] ) : 200;
+			$url  = "https://qr-code.ithemes.com/?size={$size}&data={$payload}";
+		}
 
 		/**
 		 * Filter the image URL for the QR code.
@@ -483,6 +487,46 @@ class Two_Factor_Totp extends Two_Factor_Provider implements ITSEC_Two_Factor_Pr
 		$url = apply_filters( 'itsec_two_factor_qr_code_url', $url, $payload, $name, $key, $title, $opts );
 
 		return $url;
+	}
+
+	/**
+	 * Generate a QR code locally using the bundled ITSEC_QRCode library and PHP's GD extension.
+	 *
+	 * @param string $payload The url-encoded otpauth payload.
+	 *
+	 * @return string A `data:image/png;base64,...` URI on success, or an empty string when GD is
+	 *                unavailable or generation fails.
+	 */
+	private function generate_local_qr_code( $payload ): string {
+		if ( ! function_exists( 'imagepng' ) ) {
+			return '';
+		}
+
+		require_once dirname( __DIR__ ) . '/includes/qr-code.php';
+
+		$data     = '';
+		$ob_level = ob_get_level();
+
+		try {
+			$qr    = \iThemesSecurity\TwoFactor\ITSEC_QRCode::getMinimumQRCode( urldecode( $payload ), ITSEC_QR_ERROR_CORRECT_LEVEL_L );
+			$image = $qr->createImage( 4, 0 );
+			if ( $image ) {
+				ob_start();
+				imagepng( $image );
+				$data = (string) ob_get_clean();
+			}
+		} catch ( \Throwable $e ) {
+		}
+
+		while ( ob_get_level() > $ob_level ) {
+			ob_end_clean();
+		}
+
+		if ( $data === '' ) {
+			return '';
+		}
+
+		return sprintf( 'data:image/png;base64,%s', base64_encode( $data ) );
 	}
 
 	/**
@@ -513,7 +557,7 @@ class Two_Factor_Totp extends Two_Factor_Provider implements ITSEC_Two_Factor_Pr
 			if ( user_can( $user, ITSEC_Core::get_required_cap() ) ) {
 				echo '<br><br>';
 				esc_html_e( 'Locked out?', 'better-wp-security' );
-				echo ' <a href="https://help.ithemes.com/hc/en-us/articles/360021124173">';
+				echo ' <a href="https://go.solidwp.com/help-center-diable-features">';
 				esc_html_e( 'Learn how to temporarily disable Two-Factor.', 'better-wp-security' );
 				echo '</a>';
 			}
@@ -634,12 +678,11 @@ class Two_Factor_Totp extends Two_Factor_Provider implements ITSEC_Two_Factor_Pr
 	 */
 	public function get_on_board_config( WP_User $user ) {
 
-		$key  = $this->get_key( $user );
-		$blog = get_bloginfo( 'name', 'display' );
+		$key = $this->get_key( $user );
 
 		return array(
 			'secret' => $key->key,
-			'qr'     => $this->get_google_qr_code( $blog . ':' . $user->user_login, $key->key, $blog, array( 'size' => 300 ) ),
+			'qr'     => $this->generate_qr_code( $user, $key->key ),
 		);
 	}
 
@@ -647,45 +690,66 @@ class Two_Factor_Totp extends Two_Factor_Provider implements ITSEC_Two_Factor_Pr
 	 * @inheritDoc
 	 */
 	public function handle_ajax_on_board( WP_User $user, array $data ) {
-		if ( $data['itsec_method'] !== 'verify-totp-code' ) {
-			return;
+		switch ( $data['itsec_method'] ) {
+			case 'verify-totp-code':
+				if ( ! isset( $data['itsec_totp_secret'], $data['itsec_totp_code'] ) ) {
+					wp_send_json_error( array(
+						'message' => esc_html__( 'Invalid Request Format', 'better-wp-security' ),
+					) );
+				}
+
+				$secret = $data['itsec_totp_secret'];
+
+				if ( ! $this->_is_valid_authcode( $secret, $data['itsec_totp_code'] ) ) {
+					wp_send_json_error( array(
+						'message' => esc_html__( 'The code you supplied is not valid.', 'better-wp-security' ),
+					) );
+				}
+
+				$stored = $this->get_secret( $user );
+
+				if ( $stored->is_success() && $stored->get_data() === $secret ) {
+					wp_send_json_success( array(
+						'message' => esc_html__( 'Success!', 'better-wp-security' ),
+					) );
+				}
+
+				$saved = $this->set_secret( $user, $secret );
+
+				if ( $saved->is_success() ) {
+					wp_send_json_success( array(
+						'message' => esc_html__( 'Success!', 'better-wp-security' ),
+					) );
+				}
+
+				ITSEC_Log::add_error( 'two_factor', 'totp-not-saved', $saved->get_error() );
+
+				wp_send_json_error( array(
+					'message' => esc_html__( 'Unable to save two-factor secret.', 'better-wp-security' ),
+				) );
+			case 'regenerate-totp-secret':
+				$key = $this->generate_key();
+
+				$saved = $this->set_secret( $user, $key );
+
+				if ( $saved->is_success() ) {
+					wp_send_json_success( array(
+						'message' => esc_html__( 'Success!', 'better-wp-security' ),
+						'secret'  => $key,
+						'qr'      => $this->generate_qr_code( $user, $key ),
+					) );
+				}
+
+				wp_send_json_error( array(
+					'message' => esc_html__( 'Unable to generate a new two-factor secret.', 'better-wp-security' ),
+				) );
 		}
+	}
 
-		if ( ! isset( $data['itsec_totp_secret'], $data['itsec_totp_code'] ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'Invalid Request Format', 'better-wp-security' ),
-			) );
-		}
+	private function generate_qr_code( WP_User $user, string $key ): string {
+		$blog = get_bloginfo( 'name', 'display' );
 
-		$secret = $data['itsec_totp_secret'];
-
-		if ( ! $this->_is_valid_authcode( $secret, $data['itsec_totp_code'] ) ) {
-			wp_send_json_error( array(
-				'message' => esc_html__( 'The code you supplied is not valid.', 'better-wp-security' ),
-			) );
-		}
-
-		$stored = $this->get_secret( $user );
-
-		if ( $stored->is_success() && $stored->get_data() === $secret ) {
-			wp_send_json_success( array(
-				'message' => esc_html__( 'Success!', 'better-wp-security' ),
-			) );
-		}
-
-		$saved = $this->set_secret( $user, $secret );
-
-		if ( $saved->is_success() ) {
-			wp_send_json_success( array(
-				'message' => esc_html__( 'Success!', 'better-wp-security' ),
-			) );
-		}
-
-		ITSEC_Log::add_error( 'two_factor', 'totp-not-saved', $saved->get_error() );
-
-		wp_send_json_error( array(
-			'message' => esc_html__( 'Unable to save two-factor secret.', 'better-wp-security' ),
-		) );
+		return $this->get_google_qr_code( $blog . ':' . $user->user_login, $key, $blog, array( 'size' => 300 ) );
 	}
 
 	public function configure_via_cli( WP_User $user, array $args ) {

@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { setLocaleData } from '@wordpress/i18n';
-import { render } from '@wordpress/element';
+import { createRoot } from '@wordpress/element';
 import domReady from '@wordpress/dom-ready';
 
 // Silence warnings until JS i18n is stable.
@@ -18,24 +18,28 @@ const history = createHistory( document.location, { page: 'itsec' } );
 
 domReady( () => {
 	const containerEl = document.getElementById( 'itsec-settings-root' );
+
+	if ( ! containerEl ) {
+		return;
+	}
+
 	const serverType = containerEl.dataset.serverType;
 	const installType = containerEl.dataset.installType;
 	const onboardComplete = containerEl.dataset.onboard === '1';
 
-	return render(
+	createRoot( containerEl ).render(
 		<App
 			history={ history }
 			serverType={ serverType }
 			installType={ installType }
 			onboardComplete={ onboardComplete }
-		/>,
-		containerEl
+		/>
 	);
 } );
 
 export * from './settings/components';
-export { ToolFill } from './settings/pages/tools';
-export { SecureSiteEndFill } from './settings/pages/secure-site';
+export { OnboardSiteTypeBeforeFill } from './settings/pages/site-type/chooser';
+export { OnboardSiteTypeIpDetectionFill } from './settings/pages/site-type/questions/questions/ip-detection';
 export {
 	Page,
 	ChildPages,
@@ -45,8 +49,10 @@ export {
 export {
 	useNavigateTo,
 	useConfigContext,
-	useModuleSchemaValidator,
+	useModuleRequirementsValidator,
+	useSettingsForm,
+	useAllowedSettingsFields,
 } from './settings/utils';
+export { SingleModulePage } from './settings/pages/configure';
 export { STORE_NAME as ONBOARD_STORE_NAME } from './settings/stores/onboard';
-export { STORE_NAME as TOOLS_STORE_NAME } from './settings/stores/tools';
 export { history };

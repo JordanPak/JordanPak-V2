@@ -126,7 +126,7 @@ if ( version_compare( PHP_VERSION, ITSEC_Core::get_next_php_requirement(), '<' )
 
 			public function get_title() {
 				return sprintf(
-					__( 'Your site is running an outdated version of PHP (%1$s). Future versions of iThemes Security will require PHP %2$s or later.', 'better-wp-security' ),
+					__( 'Your site is running an outdated version of PHP (%1$s). Future versions of Kadence Security will require PHP %2$s or later.', 'better-wp-security' ),
 					explode( '-', PHP_VERSION )[0],
 					ITSEC_Core::get_next_php_requirement()
 				);
@@ -225,14 +225,14 @@ ITSEC_Lib_Admin_Notices::register(
 			];
 
 			if ( ITSEC_Lib_Encryption::is_available() ) {
-				$actions['rotate'] = ITSEC_Admin_Notice_Action_Link::for_route(
-					ITSEC_Core::get_tools_route( 'rotate-encryption-key' ),
+				$actions['rotate'] = new ITSEC_Admin_Notice_Action_Link(
+					ITSEC_Core::get_admin_page_url( 'tools' ),
 					__( 'Rotate Key', 'better-wp-security' ),
 					ITSEC_Admin_Notice_Action::S_PRIMARY
 				);
 			} else {
-				$actions['set'] = ITSEC_Admin_Notice_Action_Link::for_route(
-					ITSEC_Core::get_tools_route( 'set-encryption-key' ),
+				$actions['set'] = new ITSEC_Admin_Notice_Action_Link(
+					ITSEC_Core::get_admin_page_url( 'tools' ),
 					__( 'Set New Key', 'better-wp-security' ),
 					ITSEC_Admin_Notice_Action::S_PRIMARY
 				);
@@ -252,7 +252,7 @@ ITSEC_Lib_Admin_Notices::register(
 				}
 
 				public function get_title() {
-					return __( 'iThemes Security can encrypt sensitive values like Two-Factor secrets.', 'better-wp-security' );
+					return __( 'Kadence Security can encrypt sensitive values like Two-Factor secrets.', 'better-wp-security' );
 				}
 
 				public function get_message() {
@@ -275,8 +275,8 @@ ITSEC_Lib_Admin_Notices::register(
 
 				public function get_actions() {
 					return [
-						'setup' => ITSEC_Admin_Notice_Action_Link::for_route(
-							ITSEC_Core::get_tools_route( 'set-encryption-key' ),
+						'setup' => new ITSEC_Admin_Notice_Action_Link(
+							ITSEC_Core::get_admin_page_url( 'tools' ),
 							__( 'Setup Encryption', 'better-wp-security' ),
 							ITSEC_Admin_Notice_Action::S_PRIMARY
 						),

@@ -3,6 +3,7 @@
  */
 import { isString, isEqual, map, isEmpty } from 'lodash';
 import { updatedDiff } from 'deep-object-diff';
+import { JsonPointer } from 'json-ptr';
 
 /**
  * WordPress dependencies
@@ -13,8 +14,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
+import { getAjv, Result, WPError } from '@ithemes/security-utils';
 import { apiFetch, apiFetchBatch, createNotice } from '../controls';
-import { STORE_NAME } from './';
+import { STORE_NAME } from './constant';
 
 export function* editModule( module, edit ) {
 	const current = yield controls.select( STORE_NAME, 'getModule', module );
@@ -119,11 +121,26 @@ export function* activateModule( module ) {
 	try {
 		const response = yield updateModule( module, 'active' );
 		yield receiveModule( response );
+
+		// Always fetch fresh settings after activation to ensure state matches the backend.
+		const settings = yield apiFetch( {
+			path: `/ithemes-security/v1/settings/${ module }`,
+		} );
+
+		yield receiveSettings( module, settings );
+
 		yield { type: FINISH_SAVING_MODULES, modules: [ module ] };
 
 		if ( response.side_effects ) {
 			yield fetchModules();
 		}
+		yield createNotice(
+			'success',
+			__( 'Activated feature', 'better-wp-security' ),
+			{
+				type: 'snackbar',
+			}
+		);
 	} catch ( error ) {
 		yield { type: FAILED_SAVING_MODULES, errors: { [ module ]: error } };
 	}
@@ -138,6 +155,13 @@ export function* deactivateModule( module ) {
 		if ( response.side_effects ) {
 			yield fetchModules();
 		}
+		yield createNotice(
+			'success',
+			__( 'Deactivated feature', 'better-wp-security' ),
+			{
+				type: 'snackbar',
+			}
+		);
 	} catch ( error ) {
 		yield { type: FAILED_SAVING_MODULES, errors: { [ module ]: error } };
 	}
@@ -194,7 +218,16 @@ export function* editSettings( module, settings ) {
 	if ( hasChanges ) {
 		yield { type: EDIT_SETTINGS, module, edit };
 	} else {
-		yield resetSettingEdits( module );
+		// If there's a pending error for this module, keep it dirty so user can retry.
+		// Set edits to current (saved) settings so they're sent to server for re-validation.
+		// Otherwise, reset edits since the form matches saved state.
+		const error = yield controls.select( STORE_NAME, 'getError', module );
+
+		if ( error ) {
+			yield { type: EDIT_SETTINGS, module, edit: settings };
+		} else {
+			yield resetSettingEdits( module );
+		}
 	}
 }
 
@@ -239,10 +272,11 @@ export function* resetSettingEdits( modules = true ) {
 /**
  * Resets the edited settings for a module.
  *
- * @param {boolean|string|Array<string>} modules The modules to save. By default, all dirty modules will be saved.
+ * @param {boolean|string|Array<string>} modules    The modules to save. By default, all dirty modules will be saved.
+ * @param {boolean}                      [validate] Whether to validate a module's settings before saving.
  * @return {Array<Object>} The list of saved settings responses.
  */
-export function* saveSettings( modules = true ) {
+export function* saveSettings( modules = true, validate = false ) {
 	if ( modules === true ) {
 		modules = yield controls.select( STORE_NAME, 'getDirtySettings' );
 	} else if ( isString( modules ) ) {
@@ -254,14 +288,28 @@ export function* saveSettings( modules = true ) {
 	}
 
 	const requests = [];
+	const savingModules = [];
+	const errors = {};
 
 	for ( const module of modules ) {
+		if ( validate ) {
+			const isValid = yield controls.dispatch( STORE_NAME, 'validateSettings', module );
+
+			if ( isValid !== true ) {
+				const error = new WPError( 'local_validation_failed' );
+				isValid.errorText.forEach( ( errorText ) => error.add( 'local_validation_failed', errorText ) );
+				errors[ module ] = error;
+				continue;
+			}
+		}
+
 		const settings = yield controls.select(
 			STORE_NAME,
 			'getSettingEdits',
 			module
 		);
 
+		savingModules.push( module );
 		requests.push( {
 			method: 'PATCH',
 			path: `/ithemes-security/v1/settings/${ module }`,
@@ -282,17 +330,16 @@ export function* saveSettings( modules = true ) {
 	}
 
 	const success = [];
-	const errors = {};
 
 	for ( let i = 0; i < requests.length; i++ ) {
-		const module = modules[ i ];
+		const module = savingModules[ i ];
 		const response = responses[ i ];
 
 		if ( response.status >= 400 ) {
 			errors[ module ] = response.body;
 		} else {
 			success.push( module );
-			yield receiveSettings( module, response.body );
+			yield receiveSettings( module, response.body, Result.fromResponseObject( response ) );
 		}
 	}
 
@@ -333,6 +380,52 @@ export function* updateSettings( module, settings ) {
 	return response;
 }
 
+export const validateSettings = ( moduleId ) => async ( { select, resolveSelect } ) => {
+	const schema = await resolveSelect.getSettingsConditionalSchema( moduleId );
+
+	if ( ! schema ) {
+		return true;
+	}
+
+	const settings = select.getEditedSettings( moduleId );
+	const ajv = getAjv();
+
+	const isValid = ajv.validate( schema, settings );
+
+	if ( isValid ) {
+		return true;
+	}
+
+	return {
+		errors: ajv.errors,
+		errorText: convertSchemaErrorToText( ajv.errors, moduleId, schema ),
+	};
+};
+
+function convertSchemaErrorToText( errors, moduleId, schema ) {
+	const text = [];
+
+	for ( const { message, schemaPath, instancePath } of errors ) {
+		let ptr = JsonPointer.create( schemaPath );
+		let parent = ptr.parent( schema );
+
+		while ( parent && ! parent.title ) {
+			ptr = JsonPointer.create(
+				ptr.path.slice( 0, ptr.path.length - 1 )
+			);
+			parent = ptr.parent( schema );
+		}
+
+		if ( parent?.title ) {
+			text.push( `${ parent.title } ${ message }.` );
+		} else {
+			text.push( `${ moduleId }${ instancePath } ${ message }.` );
+		}
+	}
+
+	return text;
+}
+
 function updateModule( module, status ) {
 	return apiFetch( {
 		method: 'PUT',
@@ -366,11 +459,12 @@ export function receiveModule( module ) {
 	};
 }
 
-export function receiveSettings( module, settings ) {
+export function receiveSettings( module, settings, result = {} ) {
 	return {
 		type: RECEIVE_SETTINGS,
 		module,
 		settings,
+		result,
 	};
 }
 

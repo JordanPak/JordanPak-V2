@@ -20,15 +20,13 @@ class ITSEC_Dashboard_Card_Database_Backup extends ITSEC_Dashboard_Card {
 	 * @inheritDoc
 	 */
 	public function get_size() {
-		$no_data = 1 === ITSEC_Modules::get_setting( 'backup', 'method' ) && 'file' === ITSEC_Modules::get_setting( 'global', 'log_type' );
-
 		return array(
 			'minW'     => 1,
 			'minH'     => 1,
-			'maxW'     => $no_data ? 1 : 2,
-			'maxH'     => $no_data ? 1 : 3,
-			'defaultW' => $no_data ? 1 : 2,
-			'defaultH' => $no_data ? 1 : 2,
+			'maxW'     => 1,
+			'maxH'     => 1,
+			'defaultW' => 1,
+			'defaultH' => 1,
 		);
 	}
 
@@ -91,6 +89,13 @@ class ITSEC_Dashboard_Card_Database_Backup extends ITSEC_Dashboard_Card {
 			'backups' => wp_list_sort( array_slice( $backups, 0, 100 ), 'time', 'DESC' ),
 			'source'  => 'files',
 		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function get_module_id(): ?string {
+		return 'backup';
 	}
 
 	/**

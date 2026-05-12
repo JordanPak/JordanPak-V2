@@ -39,6 +39,7 @@ function genesis_post_date_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_date' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'label' ] );
 
 	if ( 'relative' === $atts['format'] ) {
 		$display  = genesis_human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ), $atts['relative_depth'] ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested -- safe to compare WP to WP timestamps, see https://make.wordpress.org/core/2019/09/23/date-time-improvements-wp-5-3/#comment-37319.
@@ -80,6 +81,7 @@ function genesis_post_time_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_time' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'label' ] );
 
 	$output = sprintf( '<time %s>', genesis_attr( 'entry-time' ) ) . $atts['before'] . $atts['label'] . get_the_time( $atts['format'] ) . $atts['after'] . '</time>';
 
@@ -115,6 +117,7 @@ function genesis_post_modified_date_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_modified_date' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'label' ] );
 
 	if ( 'relative' === $atts['format'] ) {
 		$display  = genesis_human_time_diff( get_the_modified_time( 'U' ), current_time( 'timestamp' ), $atts['relative_depth'] ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested -- safe to compare WP to WP timestamps, see https://make.wordpress.org/core/2019/09/23/date-time-improvements-wp-5-3/#comment-37319.
@@ -171,6 +174,7 @@ function genesis_post_modified_time_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_modified_time' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'label' ] );
 
 	$output = sprintf( '<time %s>', genesis_attr( 'entry-modified-time' ) ) . $atts['before'] . $atts['label'] . get_the_modified_time( $atts['format'] ) . $atts['after'] . '</time>';
 
@@ -227,6 +231,7 @@ function genesis_post_author_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_author' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	$output  = sprintf( '<span %s>', genesis_attr( 'entry-author' ) );
 	$output .= $atts['before'];
@@ -280,6 +285,7 @@ function genesis_post_author_link_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_author_link' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	$output  = sprintf( '<span %s>', genesis_attr( 'entry-author' ) );
 	$output .= $atts['before'];
@@ -326,6 +332,7 @@ function genesis_post_author_posts_link_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_author_posts_link' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after' ] );
 
 	$url = get_author_posts_url( get_the_author_meta( 'ID' ) );
 
@@ -377,6 +384,7 @@ function genesis_post_comments_shortcode( $atts ) {
 		'zero'        => __( 'Leave a Comment', 'genesis' ),
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'post_comments' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'zero', 'one', 'more' ] );
 
 	if ( 'enabled' === $atts['hide_if_off'] && ( ! genesis_get_option( 'comments_posts' ) || ! comments_open() ) ) {
 		return '';
@@ -432,6 +440,7 @@ function genesis_post_tags_shortcode( $atts ) {
 		'sep'    => ', ',
 	];
 	$atts     = shortcode_atts( $defaults, $atts, 'post_tags' );
+	$atts     = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'sep' ] );
 
 	$tags = get_the_tag_list( $atts['before'], trim( $atts['sep'] ) . ' ', $atts['after'] );
 
@@ -476,6 +485,7 @@ function genesis_post_categories_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_categories' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'sep' ] );
 
 	$cats = get_the_category_list( trim( $atts['sep'] ) . ' ' );
 
@@ -528,6 +538,7 @@ function genesis_post_terms_shortcode( $atts ) {
 	$defaults = apply_filters( 'genesis_post_terms_shortcode_defaults', $defaults );
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_terms' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'sep' ] );
 
 	$terms = get_the_term_list( get_the_ID(), $atts['taxonomy'], $atts['before'], trim( $atts['sep'] ) . ' ', $atts['after'] );
 
@@ -574,6 +585,7 @@ function genesis_post_edit_shortcode( $atts ) {
 	];
 
 	$atts = shortcode_atts( $defaults, $atts, 'post_edit' );
+	$atts = genesis_sanitize_shortcode_attributes( $atts, [ 'before', 'after', 'link' ] );
 
 	// Darn you, WordPress!
 	ob_start();

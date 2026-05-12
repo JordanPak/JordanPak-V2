@@ -19,18 +19,14 @@ if ( ! defined( 'W3TC' ) ) {
 	die();
 }
 
+$c      = Dispatcher::config();
+$is_pro = Util_Environment::is_w3tc_pro( $c );
+$usage  = Extension_ImageService_Plugin::get_api()->get_usage();
 ?>
 <div class="wrap" id="w3tc">
-
-<?php
-// Upgrade banner.
-if ( ! Util_Environment::is_w3tc_pro( $c ) ) {
-	require W3TC_INC_DIR . '/options/parts/dashboard_banner.php';
-}
-?>
-
+<?php Util_Ui::print_breadcrumb(); ?>
 <p>
-	Total Cache Image Service is currently
+	Total Cache Image Converter is currently
 <?php
 if ( $c->is_extension_active( 'imageservice' ) ) {
 	?>
@@ -46,9 +42,10 @@ if ( $c->is_extension_active( 'imageservice' ) ) {
 </p>
 
 <form id="w3tc-imageservice-settings" action="upload.php?page=w3tc_extension_page_imageservice" method="post">
+	<?php Util_UI::print_control_bar( 'extension_imageservice_form_control' ); ?>
 <div class="metabox-holder">
 
-	<?php Util_Ui::postbox_header( esc_html__( 'Configuration', 'w3-total-cache' ), '', '' ); ?>
+	<?php Util_Ui::postbox_header( esc_html__( 'Configuration', 'w3-total-cache' ), '', 'configuration' ); ?>
 
 	<table class="form-table" id="w3tc-imageservice-config">
 <?php
@@ -103,14 +100,90 @@ Util_Ui::config_item(
 		'disabled'         => false,
 	)
 );
+
+$settings = $c->get_array( 'imageservice' );
+// Default to true for webp if not set (backward compatibility).
+$webp_enabled = isset( $settings['webp'] ) ? (bool) $settings['webp'] : true;
+// Default to true for avif if not set.  We need to make sure this is true for the Pro version.
+$avif_enabled = isset( $settings['avif'] ) ? (bool) $settings['avif'] : true;
+
+Util_Ui::config_item(
+	array(
+		'key'            => array(
+			'imageservice',
+			'webp',
+		),
+		'label'          => esc_html__( 'Output formats:', 'w3-total-cache' ),
+		'control'        => 'checkbox',
+		'checkbox_label' => esc_html__( 'WebP', 'w3-total-cache' ),
+		'value'          => $webp_enabled,
+		'description'    => esc_html__( 'Convert images to WebP format.', 'w3-total-cache' ),
+		'disabled'       => false,
+	)
+);
+
+Util_Ui::config_item_pro(
+	array(
+		'key'            => array(
+			'imageservice',
+			'avif',
+		),
+		'label'          => ' ',
+		'control'        => 'checkbox',
+		'checkbox_label' => esc_html__( 'AVIF', 'w3-total-cache' ),
+		'value'          => $avif_enabled,
+		'disabled'       => ! $is_pro,
+		'excerpt'        => esc_html__( 'Convert images to AVIF format for even better compression and performance.', 'w3-total-cache' ),
+		'description'    => array(
+			esc_html__( 'AVIF (AV1 Image File Format) is a modern image format that provides superior compression compared to WebP and traditional formats like JPEG and PNG. With AVIF conversion, you can achieve significantly smaller file sizes while maintaining high image quality, resulting in faster page load times and improved user experience.', 'w3-total-cache' ),
+		),
+		'wrap_separate'  => true,
+	)
+);
 ?>
 	</table>
 
 <?php
-Util_Ui::button_config_save( 'extension_imageservice_configuration' );
 Util_Ui::postbox_footer();
 
-Util_Ui::postbox_header( esc_html__( 'Tools', 'w3-total-cache' ), '', '' );
+Util_Ui::postbox_header( esc_html__( 'Tools', 'w3-total-cache' ), '', 'tools' );
+
+if ( ! $is_pro ) {
+	?>
+	<div class="w3tc-gopro-manual-wrap">
+		<?php
+		Util_Ui::pro_wrap_maybe_start();
+		echo wp_kses(
+			sprintf(
+				// translators: 1 opening HTML p tag, 2 free user hourly limit, 3 free user monthly limit, 4 two HTML br tags, 5 pro user hourly limit, 6 closing HTML p tag.
+				__(
+					'%1$sFree license users will have a conversion limit of %2$d per hour and %3$d per month.%4$sPro license users will have conversion queue priority as well as a conversion limit of %5$d per hour and unlimited per month.%6$s',
+					'w3-total-cache'
+				),
+				'<p>',
+				$usage['limit_hourly_unlicensed'],
+				$usage['limit_monthly_unlicensed'],
+				'<br/><br/>',
+				$usage['limit_hourly_licensed'],
+				'</p>'
+			),
+			array(
+				'p'  => array(),
+				'br' => array(),
+			)
+		);
+		Util_Ui::print_score_block(
+			__( 'Potential Google PageSpeed Gain', 'w3-total-cache' ),
+			'+9',
+			__( 'Points', 'w3-total-cache' ),
+			__( 'In one recent test, converting images to modern formats like WebP or AVIF added over 9 points to the Google PageSpeed score!', 'w3-total-cache' ),
+			'https://www.boldgrid.com/support/w3-total-cache/pagespeed-tests/webp/?utm_source=w3tc&utm_medium=webp&utm_campaign=proof'
+		);
+		Util_Ui::pro_wrap_maybe_end( 'imageservice_settings', false );
+		?>
+	</div>
+	<?php
+}
 ?>
 
 	<table class="form-table" id="w3tc-imageservice-tools">
@@ -146,14 +219,14 @@ Util_Ui::postbox_footer();
 Util_Ui::postbox_header(
 	esc_html__( 'Statistics', 'w3-total-cache' ),
 	'',
-	'w3tc-imageservice-statistics'
+	'statistics'
 );
 
 ?>
 
 	<table class="form-table" id="w3tc-imageservice-stats">
 		<tr>
-			<th><?php esc_html_e( 'Counts and filesizes by status:', 'w3-total-cache' ); ?></th>
+			<th><?php esc_html_e( 'Counts and file sizes by status:', 'w3-total-cache' ); ?></th>
 			<td>
 				<table id="w3tc-imageservice-counts">
 					<tr>
@@ -194,7 +267,7 @@ Util_Ui::postbox_header(
 			</td>
 		</tr>
 		<tr>
-			<th><?php esc_html_e( 'Image Service API usage:', 'w3-total-cache' ); ?></th>
+			<th><?php esc_html_e( 'Image Converter API usage:', 'w3-total-cache' ); ?></th>
 			<td>
 				<table id="w3tc-imageservice-usage">
 					<tr>
@@ -226,5 +299,3 @@ Util_Ui::postbox_header(
 
 </div>
 </form>
-
-</div>

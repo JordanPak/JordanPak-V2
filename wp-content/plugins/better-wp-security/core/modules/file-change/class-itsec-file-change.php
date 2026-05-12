@@ -70,7 +70,7 @@ class ITSEC_File_Change {
 	}
 
 	/**
-	 * When iThemes Security writes to a file, store the file's hash so the change is not seen as unexpected.
+	 * When Kadence Security writes to a file, store the file's hash so the change is not seen as unexpected.
 	 *
 	 * @param string $file
 	 */

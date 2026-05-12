@@ -32,16 +32,16 @@ class ITSEC_Two_Factor_On_Board extends ITSEC_Login_Interstitial {
 	 */
 	public function show_to_user( WP_User $user, $requested ) {
 
-		if ( $this->two_factor->is_user_excluded( $user ) ) {
-			return false;
-		}
-
 		if ( ! $this->get_available_providers( $user ) ) {
 			return false;
 		}
 
 		if ( $requested ) {
 			return true;
+		}
+
+		if ( $this->two_factor->is_user_excluded( $user ) ) {
+			return false;
 		}
 
 		if ( $this->two_factor->get_available_providers_for_user( $user, false ) ) {
@@ -196,7 +196,7 @@ class ITSEC_Two_Factor_On_Board extends ITSEC_Login_Interstitial {
 		$session->save();
 
 		return array(
-			'message' => esc_html__( 'Email confirmed. Please continue setting up Two-Factor in your original browser window.', 'better-wp-security' ),
+			'message' => esc_html__( 'Email confirmed. Please continue setting up Two-Factor in your original browser tab/window.', 'better-wp-security' ),
 		);
 	}
 
@@ -233,8 +233,8 @@ class ITSEC_Two_Factor_On_Board extends ITSEC_Login_Interstitial {
 		$summary = __( "Two-Factor is all setup and ready to go. The next time you login, you'll be asked to enter an Authentication Code from your %l.", 'better-wp-security' );
 		$summary = apply_filters( 'itsec_two_factor_on_board_summary', $summary, $user );
 
-		wp_enqueue_style( 'itsec-2fa-on-board', plugin_dir_url( __FILE__ ) . 'css/on-board.css', array( 'dashicons' ) );
-		wp_enqueue_script( 'itsec-2fa-on-board', plugin_dir_url( __FILE__ ) . 'js/on-board.js', array( 'jquery', 'wp-backbone', 'underscore', 'wp-a11y' ), 5 );
+		wp_enqueue_style( 'itsec-2fa-on-board', plugin_dir_url( __FILE__ ) . 'css/on-board.css', array( 'dashicons' ), 2 );
+		wp_enqueue_script( 'itsec-2fa-on-board', plugin_dir_url( __FILE__ ) . 'js/on-board.js', array( 'jquery', 'wp-backbone', 'underscore', 'wp-a11y' ), 6 );
 		wp_localize_script( 'itsec-2fa-on-board', 'ITSEC2FAOnBoard', array(
 			'user'          => $user->ID,
 			'list'          => $list,
@@ -297,6 +297,19 @@ class ITSEC_Two_Factor_On_Board extends ITSEC_Login_Interstitial {
 		<?php
 
 		require_once( dirname( __FILE__ ) . '/includes/template.php' );
+	}
+
+	/**
+	 * If an async action is performed in the same browser, we usually allow continuing.
+	 * But for an onboarding process we verify email only. The user should come back to the original window
+	 * to verify settings and complete an onboarding process.
+	 *
+	 * @param $action
+	 *
+	 * @return bool
+	 */
+	public function allows_continuing_async_action( $action ) {
+		return $action !== '2fa-verify-email';
 	}
 
 	/**

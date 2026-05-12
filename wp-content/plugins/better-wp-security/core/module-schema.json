@@ -61,6 +61,14 @@
         "custom"
       ]
     },
+    "load": {
+      "type": "string",
+      "enum": [
+        "early",
+        "normal"
+      ],
+      "default": "normal"
+    },
     "order": {
       "type": "integer",
       "minimum": 0
@@ -270,7 +278,22 @@
         ],
         "properties": {
           "schedule": {
-            "type": "string"
+            "type": [
+              "object",
+              "string"
+            ],
+            "required": [
+              "free",
+              "pro"
+            ],
+            "properties": {
+              "free": {
+                "type": "string"
+              },
+              "pro": {
+                "type": "string"
+              }
+            }
           },
           "type": {
             "type": "string",
@@ -436,6 +459,21 @@
         "type": "string"
       }
     },
+    "telemetry-settings": {
+      "description": "List of settings to include in telemetry.",
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "boolean"
+        ],
+        "enum": [
+          true,
+          "count",
+          "not-empty"
+        ]
+      }
+    },
     "import-export": {
       "type": "object",
       "additionalProperties": false,
@@ -545,6 +583,29 @@
               }
             }
           ]
+        },
+        "load": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/definitions/requirement"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "normal",
+                    "early"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "ip": {
+          "$ref": "#/definitions/requirement"
         }
       },
       "additionalProperties": false

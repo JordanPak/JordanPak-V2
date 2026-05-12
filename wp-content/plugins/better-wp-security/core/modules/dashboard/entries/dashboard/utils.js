@@ -48,7 +48,6 @@ export function useCanWrite() {
 }
 
 export const BREAKPOINT_ORDER = Object.freeze( [
-	'huge',
 	'wide',
 	'large',
 	'medium',
@@ -56,22 +55,34 @@ export const BREAKPOINT_ORDER = Object.freeze( [
 ] );
 
 export const GRID_COLUMNS = Object.freeze( {
-	huge: 8,
-	wide: 6,
-	large: 4,
+	wide: 4,
+	large: 3,
 	medium: 2,
 	mobile: 1,
 } );
+
+export const CARD_WIDTH = 400;
+export const CARD_MARGIN = 20;
 
 export const BREAKPOINTS = Object.freeze(
 	BREAKPOINT_ORDER.reduce(
 		( acc, bp ) => ( {
 			...acc,
-			[ bp ]: ( 250 * GRID_COLUMNS[ bp ] ) + ( 20 * ( GRID_COLUMNS[ bp ] - 1 ) ),
+			[ bp ]: ( CARD_WIDTH * GRID_COLUMNS[ bp ] ) + ( CARD_MARGIN * ( GRID_COLUMNS[ bp ] - 1 ) ),
 		} ),
 		{}
 	)
 );
+
+export function getMaxWidthForGrid( width ) {
+	const breakpoint = BREAKPOINT_ORDER.find(
+		( match ) => ( BREAKPOINTS[ match ] + CARD_MARGIN ) <= width
+	);
+
+	const columns = GRID_COLUMNS[ breakpoint ];
+
+	return columns * ( CARD_WIDTH + CARD_MARGIN );
+}
 
 const OPTIONAL_LAYOUT_KEYS = [ 'minW', 'minH', 'maxW', 'maxH' ];
 
@@ -510,6 +521,10 @@ function _sortCardsToMatchApiLayout( cards, layout ) {
 			return -1;
 		}
 
+		if ( ! keyedLayout[ aId ].position.mobile && ! keyedLayout[ bId ].position.mobile ) {
+			return 0;
+		}
+
 		const aY = keyedLayout[ aId ].position.mobile.y,
 			bY = keyedLayout[ bId ].position.mobile.y,
 			aX = keyedLayout[ aId ].position.mobile.x,
@@ -573,6 +588,38 @@ export function getCardTitle( card, config ) {
 		card,
 		config
 	);
+}
+
+/**
+ * Gets the module route for a given module.
+ *
+ * This is a port from ithemes-security-pro/core/core.php::get_settings_module_route()
+ *
+ * @param {Object} module The module object from MODULES_STORE.
+ * @return {string|undefined} The module route, or undefined if not available.
+ */
+export function getModuleRoute( module ) {
+	if ( ! module ) {
+		return undefined;
+	}
+
+	if ( module.id === 'global' ) {
+		return '/settings/global';
+	}
+
+	if ( module.type === 'custom' || module.type === 'tool' || module.type === 'recommended' ) {
+		return undefined;
+	}
+
+	if ( module.type === 'advanced' ) {
+		return `/settings/advanced#${ module.id }`;
+	}
+
+	if ( module.status?.default === 'always-active' && ! module.settings?.show_ui ) {
+		return undefined;
+	}
+
+	return `/settings/configure/${ module.type }#${ module.id }`;
 }
 
 export function debugChange( prevProps, prevState, thisProps, thisState ) {

@@ -35,7 +35,7 @@ final class ITSEC_Security_Check_Pro {
 	}
 
 	public function add_security_check_proxy_type( $proxy_types ) {
-		return ITSEC_Lib::array_insert_before( 'automatic', $proxy_types, 'security-check', esc_html__( 'Security Check Scan (Recommended)', 'better-wp-security' ) );
+		return ITSEC_Lib::array_insert_after( 'automatic', $proxy_types, 'security-check', esc_html__( 'Security Check Scan (Recommended)', 'better-wp-security' ) );
 	}
 
 	/**
@@ -49,8 +49,8 @@ final class ITSEC_Security_Check_Pro {
 	public function build_detector( $configured, ITSEC_IP_Detector $detector ) {
 		$ip_header = ITSEC_Modules::get_setting( 'security-check-pro', 'ip_header' );
 
-		if ( $ip_header['name'] ) {
-			$detector->add_header( $ip_header['name'], $ip_header['position_from_end'], ITSEC_IP_Detector::FROM_RIGHT );
+		if ( $ip_header['name'] ?? false ) {
+			$detector->add_header( $ip_header['name'], $ip_header['position_from_end'] ?? -1, ITSEC_IP_Detector::FROM_RIGHT );
 
 			return true;
 		}
