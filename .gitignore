@@ -22,6 +22,10 @@ sitemap.xml.gz
 wp-content/cache/
 wp-content/backups/
 
+# Server Configs #
+##################
+nginx.conf
+
 # Packages #
 ############
 *.7z
