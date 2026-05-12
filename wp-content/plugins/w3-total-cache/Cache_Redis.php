@@ -96,9 +96,9 @@ class Cache_Redis extends Cache_Base {
 		$this->_verify_tls_certificates = ( isset( $config['verify_tls_certificates'] ) && $config['verify_tls_certificates'] );
 		$this->_password                = $config['password'];
 		$this->_dbid                    = $config['dbid'];
-		$this->_timeout                 = $config['timeout'];
-		$this->_retry_interval          = $config['retry_interval'];
-		$this->_read_timeout            = $config['read_timeout'];
+		$this->_timeout                 = $config['timeout'] ?? 3600000;
+		$this->_retry_interval          = $config['retry_interval'] ?? 3600000;
+		$this->_read_timeout            = $config['read_timeout'] ?? 60.0;
 
 		/**
 		 * When disabled - no extra requests are made to obtain key version,
@@ -113,13 +113,13 @@ class Cache_Redis extends Cache_Base {
 	 * Adds data.
 	 *
 	 * @param string  $key    Key.
-	 * @param mixed   $var    Var.
+	 * @param mixed   $value  Var.
 	 * @param integer $expire Expire.
 	 * @param string  $group  Used to differentiate between groups of cache values.
 	 * @return bool
 	 */
-	public function add( $key, &$var, $expire = 0, $group = '' ) {
-		return $this->set( $key, $var, $expire, $group );
+	public function add( $key, &$value, $expire = 0, $group = '' ) {
+		return $this->set( $key, $value, $expire, $group );
 	}
 
 	/**
@@ -132,7 +132,9 @@ class Cache_Redis extends Cache_Base {
 	 * @return bool
 	 */
 	public function set( $key, $value, $expire = 0, $group = '' ) {
-		$value['key_version'] = $this->_get_key_version( $group );
+		if ( ! isset( $value['key_version'] ) ) {
+			$value['key_version'] = $this->_get_key_version( $group );
+		}
 
 		$storage_key = $this->get_item_key( $key );
 		$accessor    = $this->_get_accessor( $storage_key );
@@ -178,7 +180,9 @@ class Cache_Redis extends Cache_Base {
 		}
 
 		if ( $v['key_version'] > $key_version ) {
-			$this->_set_key_version( $v['key_version'], $group );
+			if ( ! empty( $v['key_version_at_creation'] ) && $v['key_version_at_creation'] !== $key_version ) {
+				$this->_set_key_version( $v['key_version'], $group );
+			}
 			return array( $v, $has_old_data );
 		}
 
@@ -271,11 +275,42 @@ class Cache_Redis extends Cache_Base {
 	public function flush( $group = '' ) {
 		$this->_get_key_version( $group );   // Initialize $this->_key_version.
 		if ( isset( $this->_key_version[ $group ] ) ) {
-			$this->_key_version[ $group ]++;
+			++$this->_key_version[ $group ];
 			$this->_set_key_version( $this->_key_version[ $group ], $group );
 		}
 
 		return true;
+	}
+
+	/**
+	 * Gets a key extension for "ahead generation" mode.
+	 * Used by AlwaysCached functionality to regenerate content
+	 *
+	 * @param string $group Used to differentiate between groups of cache values.
+	 *
+	 * @return array
+	 */
+	public function get_ahead_generation_extension( $group ) {
+		$v = $this->_get_key_version( $group );
+		return array(
+			'key_version'             => $v + 1,
+			'key_version_at_creation' => $v,
+		);
+	}
+
+	/**
+	 * Flushes group with before condition
+	 *
+	 * @param string $group Used to differentiate between groups of cache values.
+	 * @param array  $extension Used to set a condition what version to flush.
+	 *
+	 * @return void
+	 */
+	public function flush_group_after_ahead_generation( $group, $extension ) {
+		$v = $this->_get_key_version( $group );
+		if ( $extension['key_version'] > $v ) {
+			$this->_set_key_version( $extension['key_version'], $group );
+		}
 	}
 
 	/**
@@ -389,7 +424,132 @@ class Cache_Redis extends Cache_Base {
 	}
 
 	/**
-	 * Use key as a counter and add integet value to it.
+	 * Retrieves multiple cached values in a single request.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param array  $keys  Cache keys.
+	 * @param string $group Cache group.
+	 *
+	 * @return array Map of cache key => raw cached payload (serialized array or null).
+	 */
+	public function get_multi( array $keys, $group = '' ) {
+		if ( empty( $keys ) ) {
+			return array();
+		}
+
+		$results        = array();
+		$server_buckets = array();
+		$servers_count  = count( $this->_servers );
+
+		foreach ( $keys as $key ) {
+			$storage_key = $this->get_item_key( $key );
+			$index       = ( $servers_count <= 1 ) ? 0 : crc32( $storage_key ) % $servers_count;
+
+			$server_buckets[ $index ]['storage_keys'][] = $storage_key;
+			$server_buckets[ $index ]['orig_keys'][]    = $key;
+		}
+
+		foreach ( $server_buckets as $index => $bucket ) {
+			$storage_keys = $bucket['storage_keys'];
+			$orig_keys    = $bucket['orig_keys'];
+
+			$accessor = $this->_get_accessor( $storage_keys[0] );
+			if ( is_null( $accessor ) ) {
+				foreach ( $orig_keys as $orig_key ) {
+					$results[ $orig_key ] = null;
+				}
+				continue;
+			}
+
+			$values = $accessor->mget( $storage_keys );
+
+			foreach ( $orig_keys as $i => $orig_key ) {
+				if ( isset( $values[ $i ] ) && false !== $values[ $i ] ) {
+					$results[ $orig_key ] = @unserialize( $values[ $i ] );
+				} else {
+					$results[ $orig_key ] = null;
+				}
+			}
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Stores multiple values in a single request.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param array  $items  Map of cache key => payload.
+	 * @param string $group  Cache group.
+	 * @param int    $expire Expiration.
+	 *
+	 * @return array Map of cache key => success boolean.
+	 */
+	public function set_multi( array $items, $group = '', $expire = 0 ) {
+		if ( empty( $items ) ) {
+			return array();
+		}
+
+		$key_version    = $this->_get_key_version( $group );
+		$results        = array();
+		$server_buckets = array();
+		$servers_count  = count( $this->_servers );
+
+		foreach ( $items as $key => $value ) {
+			if ( ! isset( $value['key_version'] ) ) {
+				$value['key_version'] = $key_version;
+			}
+
+			$storage_key = $this->get_item_key( $key );
+			$index       = ( $servers_count <= 1 ) ? 0 : crc32( $storage_key ) % $servers_count;
+
+			$server_buckets[ $index ]['storage'][ $storage_key ] = serialize( $value );
+			$server_buckets[ $index ]['orig_keys'][]             = $key;
+		}
+
+		foreach ( $server_buckets as $index => $bucket ) {
+			$storage_map = $bucket['storage'];
+			$orig_keys   = $bucket['orig_keys'];
+
+			$first_storage_key = function_exists( 'array_key_first' )
+				? array_key_first( $storage_map )
+				: reset( array_keys( $storage_map ) );
+
+			$accessor = $this->_get_accessor( $first_storage_key );
+			if ( is_null( $accessor ) ) {
+				foreach ( $orig_keys as $orig_key ) {
+					$results[ $orig_key ] = false;
+				}
+				continue;
+			}
+
+			if ( ! $expire ) {
+				$ok = $accessor->mset( $storage_map );
+				foreach ( $orig_keys as $orig_key ) {
+					$results[ $orig_key ] = (bool) $ok;
+				}
+			} else {
+				$pipe = $accessor->multi( \Redis::PIPELINE );
+
+				foreach ( $storage_map as $storage_key => $payload ) {
+					$pipe->setex( $storage_key, $expire, $payload );
+				}
+
+				$exec_results = $pipe->exec();
+
+				foreach ( $orig_keys as $idx => $orig_key ) {
+					$results[ $orig_key ] = (bool) ( $exec_results[ $idx ] ?? false );
+				}
+			}
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Use key as a counter and add integer value to it.
 	 *
 	 * @param string $key   Key.
 	 * @param int    $value Value.
@@ -406,7 +566,7 @@ class Cache_Redis extends Cache_Base {
 			return false;
 		}
 
-		$r = $accessor->incrBy( $storage_key, $value );
+		$r = $accessor->incrBy( $storage_key, (int) $value );
 
 		if ( ! $r ) { // It doesn't initialize counter by itself.
 			$this->counter_set( $key, 0 );
@@ -460,9 +620,9 @@ class Cache_Redis extends Cache_Base {
 
 		if ( substr( $server, 0, 5 ) === 'unix:' ) {
 			$connect_args[] = trim( substr( $server, 5 ) );
-			$connect_args[] = null; // port.
+			$connect_args[] = 0; // Port (int).  For no port, use integer 0.
 		} else {
-			list( $ip, $port ) = Util_Content::endpoint_to_host_port( $server, null );
+			list( $ip, $port ) = Util_Content::endpoint_to_host_port( $server, 0 ); // Port (int).  For no port, use integer 0.
 			$connect_args[]    = $ip;
 			$connect_args[]    = $port;
 		}
@@ -531,7 +691,7 @@ class Cache_Redis extends Cache_Base {
 
 				$accessor->select( $this->_dbid );
 			} catch ( \Exception $e ) {
-				error_log( $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				error_log( __METHOD__ . ': ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 				$accessor = null;
 			}
 

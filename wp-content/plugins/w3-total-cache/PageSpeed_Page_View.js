@@ -48,6 +48,43 @@ jQuery(document).ready(function ($) {
 				$('.w3tcps_buttons').removeClass('w3tc_none');
 				$('#' + page_post_id).html(data.w3tcps_content).fadeIn('slow');
 				$('.w3tcps_item_desciption a').attr('target', '_blank');
+
+				if (window.w3tc_ga) {
+					w3tc_ga(
+						'event',
+						'pagespeed',
+						{
+							'event_category': 'Performance Metrics',
+							'event_action': data.w3tcps_domain,
+							'mobile_score': data.w3tcps_score.mobile,
+							'desktop_score': data.w3tcps_score.desktop,
+							'mobile_first_contentful_paint_score': data.w3tcps_first_contentful_paint.mobile.score,
+							'mobile_first_contentful_paint_display_value': data.w3tcps_first_contentful_paint.mobile.displayValue,
+							'mobile_largest_contentful_paint_score': data.w3tcps_largest_contentful_paint.mobile.score,
+							'mobile_largest_contentful_paint_display_value': data.w3tcps_largest_contentful_paint.mobile.displayValue,
+							'mobile_interactive_score': data.w3tcps_interactive.mobile.score,
+							'mobile_interactive_display_value': data.w3tcps_interactive.mobile.displayValue,
+							'mobile_cumulative_layout_shift_score': data.w3tcps_cumulative_layout_shift.mobile.score,
+							'mobile_cumulative_layout_shift_display_value': data.w3tcps_cumulative_layout_shift.mobile.displayValue,
+							'mobile_total_blocking_time_score': data.w3tcps_total_blocking_time.mobile.score,
+							'mobile_total_blocking_time_display_value': data.w3tcps_total_blocking_time.mobile.displayValue,
+							'mobile_speed_index_score': data.w3tcps_speed_index.mobile.score,
+							'mobile_speed_index_display_value': data.w3tcps_speed_index.mobile.displayValue,
+							'desktop_first_contentful_paint_score': data.w3tcps_first_contentful_paint.desktop.score,
+							'desktop_first_contentful_paint_display_value': data.w3tcps_first_contentful_paint.desktop.displayValue,
+							'desktop_largest_contentful_paint_score': data.w3tcps_largest_contentful_paint.desktop.score,
+							'desktop_largest_contentful_paint_display_value': data.w3tcps_largest_contentful_paint.desktop.displayValue,
+							'desktop_interactive_score': data.w3tcps_interactive.desktop.score,
+							'desktop_interactive_display_value': data.w3tcps_interactive.desktop.displayValue,
+							'desktop_cumulative_layout_shift_score': data.w3tcps_cumulative_layout_shift.desktop.score,
+							'desktop_cumulative_layout_shift_display_value': data.w3tcps_cumulative_layout_shift.desktop.displayValue,
+							'desktop_total_blocking_time_score': data.w3tcps_total_blocking_time.desktop.score,
+							'desktop_total_blocking_time_display_value': data.w3tcps_total_blocking_time.desktop.displayValue,
+							'desktop_speed_index_score': data.w3tcps_speed_index.desktop.score,
+							'desktop_speed_index_display_value': data.w3tcps_speed_index.desktop.displayValue,
+						}
+					);
+				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				$('.w3tcps_analyze').prop('disabled', false);
@@ -69,14 +106,11 @@ jQuery(document).ready(function ($) {
 	function w3tcps_breakdown_items_toggle() {
 		if (window.w3tc_ga) {
 			w3tc_ga(
-				'send',
 				'event',
+				'metric',
 				{
 					eventCategory: 'w3tc_pagespeed',
-					eventAction: 'metric',
-					eventLabel: $(this).attr('gatitle'),
-					eventValue: 0,
-					transport: 'beacon'
+					eventLabel: $(this).attr('gatitle')
 				}
 			);
 		}
@@ -95,14 +129,11 @@ jQuery(document).ready(function ($) {
 	function w3tcps_mobile_toggle() {
 		if (window.w3tc_ga) {
 			w3tc_ga(
-				'send',
 				'event',
+				'mobile_tab',
 				{
 					eventCategory: 'w3tc_pagespeed',
-					eventAction: 'mobile_tab',
-					eventLabel: $('#w3tcps_control_mobile').text(),
-					eventValue: 0,
-					transport: 'beacon'
+					eventLabel: $('#w3tcps_control_mobile').text()
 				}
 			);
 		}
@@ -123,14 +154,11 @@ jQuery(document).ready(function ($) {
 	function w3tcps_desktop_toggle() {
 		if (window.w3tc_ga) {
 			w3tc_ga(
-				'send',
 				'event',
+				'desktop_tab',
 				{
 					eventCategory: 'w3tc_pagespeed',
-					eventAction: 'desktop_tab',
-					eventLabel: $('#w3tcps_control_desktop').text(),
-					eventValue: 0,
-					transport: 'beacon'
+					eventLabel: $('#w3tcps_control_desktop').text()
 				}
 			);
 		}
@@ -153,14 +181,11 @@ jQuery(document).ready(function ($) {
 
 		if (window.w3tc_ga) {
 			w3tc_ga(
-				'send',
 				'event',
+				'filter_tab',
 				{
 					eventCategory: 'w3tc_pagespeed',
-					eventAction: 'filter_tab',
-					eventLabel: $(this).text(),
-					eventValue: 0,
-					transport: 'beacon'
+					eventLabel: $(this).text()
 				}
 			);
 		}
@@ -247,14 +272,11 @@ jQuery(document).ready(function ($) {
 	$('.w3tcps_content').on('click', '.w3tcps_analyze', function () {
 		if (window.w3tc_ga) {
 			w3tc_ga(
-				'send',
 				'event',
+				're_analyze',
 				{
 					eventCategory: 'w3tc_pagespeed',
-					eventAction: 're_analyze',
-					eventLabel: $(this).closest('.page_post').find('.w3tcps_buttons').attr('page_post_url'),
-					eventValue: 0,
-					transport: 'beacon'
+					eventLabel: $(this).closest('.page_post').find('.w3tcps_buttons').attr('page_post_url')
 				}
 			);
 		}

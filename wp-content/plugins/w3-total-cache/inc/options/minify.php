@@ -1,4 +1,10 @@
 <?php
+/**
+ * File: minify.php
+ *
+ * @package W3TC
+ */
+
 namespace W3TC;
 
 if ( ! defined( 'W3TC' ) ) {
@@ -6,6 +12,52 @@ if ( ! defined( 'W3TC' ) ) {
 }
 ?>
 <?php require W3TC_INC_DIR . '/options/common/header.php'; ?>
+
+<?php
+$minify_doc_url             = 'https://www.boldgrid.com/support/w3-total-cache/minify-cache/';
+$minify_learn_more_link     = static function ( $anchor, $setting_label ) use ( $minify_doc_url ) {
+	if ( empty( $anchor ) || empty( $setting_label ) ) {
+		return '';
+	}
+
+	$title = sprintf(
+		/* translators: %s: Minify setting name. */
+		__( 'Learn more about %s', 'w3-total-cache' ),
+		$setting_label
+	);
+
+	return ' <a target="_blank" href="' . esc_url( $minify_doc_url . '#' . $anchor ) . '" title="' . esc_attr( $title ) . '">' . esc_html__( 'Learn more', 'w3-total-cache' ) . '<span class="dashicons dashicons-external"></span></a>';
+};
+$minify_config_label_text   = static function ( $config_key ) {
+	$label = Util_Ui::config_label( $config_key );
+
+	return $label ? wp_strip_all_tags( $label ) : '';
+};
+$minify_anchor_allowed_tags = array(
+	'a'    => array(
+		'class'  => array(),
+		'href'   => array(),
+		'title'  => array(),
+		'target' => array(),
+	),
+	'span' => array(
+		'class' => array(),
+	),
+);
+$minify_learn_more_output   = static function ( $anchor, $config_key = '', $custom_label = '' ) use ( $minify_learn_more_link, $minify_config_label_text, $minify_anchor_allowed_tags ) {
+	$label = $custom_label;
+
+	if ( ! $label && $config_key ) {
+		$label = $minify_config_label_text( $config_key );
+	}
+
+	if ( empty( $label ) ) {
+		return '';
+	}
+
+	return $minify_learn_more_link( $anchor, $label );
+};
+?>
 
 <script type="text/javascript">/*<![CDATA[*/
 	var minify_templates = {};
@@ -39,27 +91,6 @@ if ( ! defined( 'W3TC' ) ) {
 		?>
 	</p>
 	<p>
-		<?php
-		echo wp_kses(
-			sprintf(
-				// translators: 1 HTML submit button to rebuild minify cache.
-				__(
-					'To rebuild the minify cache use the %1$s operation.',
-					'w3-total-cache'
-				),
-				Util_Ui::nonce_field( 'w3tc' ) . '<input type="submit" name="w3tc_flush_minify" value="' . esc_attr__( 'empty cache', 'w3-total-cache' ) . '"' . disabled( $minify_enabled, false, false ) . ' class="button" />'
-			),
-			array(
-				'input' => array(
-					'type'     => array(),
-					'name'     => array(),
-					'value'    => array(),
-					'disabled' => array(),
-					'class'    => array(),
-				),
-			)
-		);
-		?>
 		<?php if ( ! $auto ) : ?>
 			<?php esc_html_e( 'Get minify hints using the', 'w3-total-cache' ); ?>
 			<input type="button" class="button button-minify-recommendations {nonce: '<?php echo esc_attr( wp_create_nonce( 'w3tc' ) ); ?>'}" value="<?php esc_attr_e( 'help', 'w3-total-cache' ); ?>" />
@@ -87,9 +118,9 @@ if ( ! defined( 'W3TC' ) ) {
 		);
 		?>
 	</p>
-</form>
 
 <form id="minify_form" action="admin.php?page=<?php echo esc_attr( $this->_page ); ?>" method="post">
+	<?php Util_UI::print_control_bar( 'minify_form_control' ); ?>
 	<div class="metabox-holder">
 		<?php Util_Ui::postbox_header( esc_html__( 'General', 'w3-total-cache' ), '', 'general' ); ?>
 		<table class="form-table">
@@ -127,13 +158,17 @@ if ( ! defined( 'W3TC' ) ) {
 							)
 						);
 						?>
+						<?php echo wp_kses( $minify_learn_more_output( 'rewrite-url-structure', 'minify.rewrite' ), $minify_anchor_allowed_tags ); ?>
 					</p>
 				</th>
 			</tr>
 			<tr>
 				<th colspan="2">
 					<?php $this->checkbox( 'minify.reject.logged' ); ?> <?php Util_Ui::e_config_label( 'minify.reject.logged' ); ?></label>
-					<p class="description"><?php esc_html_e( 'Authenticated users will not receive minified pages if this option is enabled.', 'w3-total-cache' ); ?></p>
+					<p class="description">
+						<?php esc_html_e( 'Authenticated users will not receive minified pages if this option is enabled.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'disable-minify-for-logged-in-users', 'minify.reject.logged' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</th>
 			</tr>
 			<?php
@@ -147,13 +182,12 @@ if ( ! defined( 'W3TC' ) ) {
 						'email'       => esc_html__( 'Email Notification', 'w3-total-cache' ),
 						'admin,email' => esc_html__( 'Both Admin &amp; Email Notification', 'w3-total-cache' ),
 					),
-					'description'      => esc_html__( 'Notify when minify cache creation errors occur.', 'w3-total-cache' ),
+					'description'      => esc_html__( 'Notify when minify cache creation errors occur.', 'w3-total-cache' ) . $minify_learn_more_output( 'minify-error-notification', 'minify.error.notification' ),
 				)
 			);
 			?>
 		</table>
 
-		<?php Util_Ui::button_config_save( 'minify_general' ); ?>
 		<?php Util_Ui::postbox_footer(); ?>
 
 		<?php
@@ -222,6 +256,10 @@ if ( ! defined( 'W3TC' ) ) {
 						include $html_engine_file;
 					}
 					?>
+					<p class="description">
+						<?php esc_html_e( 'Enable HTML minification and optionally remove whitespace from inline CSS, JS, and feeds.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'html-minify-settings', 'minify.html.enable' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<tr>
@@ -230,7 +268,10 @@ if ( ! defined( 'W3TC' ) ) {
 					<textarea id="minify_html_comments_ignore"
 						<?php Util_Ui::sealing_disabled( 'minify.' ); ?>
 						name="minify__html__comments__ignore" class="html_enabled" cols="40" rows="5"><?php echo esc_textarea( implode( "\r\n", $this->_config->get_array( 'minify.html.comments.ignore' ) ) ); ?></textarea>
-					<p class="description"><?php esc_html_e( 'Do not remove comments that contain these terms.', 'w3-total-cache' ); ?></p>
+					<p class="description">
+						<?php esc_html_e( 'Do not remove comments that contain these terms.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'ignored-comment-stems', 'minify.html.comments.ignore' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<?php
@@ -249,7 +290,6 @@ if ( ! defined( 'W3TC' ) ) {
 			?>
 		</table>
 
-		<?php Util_Ui::button_config_save( 'minify_html_xml' ); ?>
 		<?php Util_Ui::postbox_footer(); ?>
 
 		<?php
@@ -283,6 +323,7 @@ if ( ! defined( 'W3TC' ) ) {
 					),
 					'control'        => 'checkbox',
 					'checkbox_label' => esc_html__( 'Enable', 'w3-total-cache' ),
+					'description'    => esc_html__( 'Minify enqueued and inline JavaScript files according to the settings below.', 'w3-total-cache' ) . $minify_learn_more_output( 'js-minify-settings', 'minify.js.enable' ),
 				)
 			);
 			?>
@@ -291,7 +332,7 @@ if ( ! defined( 'W3TC' ) ) {
 				Util_Ui::config_item(
 					array(
 						'key'              => 'minify.js.method',
-						'label'            => esc_html__( 'Minify method:', 'w3-total-cache' ),
+						'label'            => Util_Ui::config_label( 'minify.js.method' ),
 						'control'          => 'selectbox',
 						'selectbox_values' => array(
 							'both'    => array(
@@ -304,12 +345,15 @@ if ( ! defined( 'W3TC' ) ) {
 								'label' => esc_html__( 'Combine only', 'w3-total-cache' ),
 							),
 						),
+						'description'      => esc_html__( 'Choose how JavaScript files should be combined or minified when using automatic mode.', 'w3-total-cache' ) . $minify_learn_more_output( 'minify-method', 'minify.js.method' ),
 					)
 				);
 			endif;
 			?>
 			<tr>
-				<th><?php esc_html_e( 'Minify engine settings:', 'w3-total-cache' ); ?></th>
+				<th>
+					<?php esc_html_e( 'Minify engine settings:', 'w3-total-cache' ); ?>
+				</th>
 				<td>
 					<fieldset><legend><?php esc_html_e( 'Operations in areas:', 'w3-total-cache' ); ?></legend>
 						<table id="minify_table">
@@ -412,6 +456,11 @@ if ( ! defined( 'W3TC' ) ) {
 						include $js_engine_file;
 					}
 					?>
+
+					<p class="description">
+						<?php esc_html_e( 'Control where scripts are placed and whether they stay blocking or load asynchronously for each template area.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'minify-engine-settings', 'minify.js.header.embed_type' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<?php
@@ -481,7 +530,7 @@ if ( ! defined( 'W3TC' ) ) {
 									foreach ( (array) $js_locations as $js_location => $js_config ) :
 										if ( ! empty( $js_config['files'] ) ) :
 											foreach ( (array) $js_config['files'] as $js_file ) :
-												$index++;
+												++$index;
 												?>
 												<li>
 													<table>
@@ -559,7 +608,7 @@ if ( ! defined( 'W3TC' ) ) {
 			Util_Ui::config_item(
 				array(
 					'key'            => 'minify.js.http2push',
-					'label'          => '<acronym title="Hypertext Markup Language">HTTP</acronym>/2 push',
+					'label'          => Util_Ui::config_label( 'minify.js.http2push' ),
 					'control'        => 'checkbox',
 					'checkbox_label' => esc_html__( 'Enable', 'w3-total-cache' ),
 					'description'    => wp_kses(
@@ -595,13 +644,12 @@ if ( ! defined( 'W3TC' ) ) {
 								'b'  => array(),
 							)
 						)
-					),
+					) . $minify_learn_more_output( 'http2-push', 'minify.js.http2push' ),
 				)
 			);
 			?>
 		</table>
 
-		<?php Util_Ui::button_config_save( 'minify_js' ); ?>
 		<?php Util_Ui::postbox_footer(); ?>
 
 		<?php
@@ -642,6 +690,7 @@ if ( ! defined( 'W3TC' ) ) {
 					),
 					'control'        => 'checkbox',
 					'checkbox_label' => esc_html__( 'Enable', 'w3-total-cache' ),
+					'description'    => esc_html__( 'Minify stylesheets and inline CSS snippets declared in the queues below.', 'w3-total-cache' ) . $minify_learn_more_output( 'css-minify-settings', 'minify.css.enable' ),
 				)
 			);
 			?>
@@ -649,7 +698,7 @@ if ( ! defined( 'W3TC' ) ) {
 			Util_Ui::config_item(
 				array(
 					'key'              => 'minify.css.method',
-					'label'            => __( 'Minify method:', 'w3-total-cache' ),
+					'label'            => Util_Ui::config_label( 'minify.css.method' ),
 					'control'          => 'selectbox',
 					'selectbox_values' => array(
 						'both'    => array(
@@ -662,11 +711,14 @@ if ( ! defined( 'W3TC' ) ) {
 							'label' => esc_html__( 'Combine only', 'w3-total-cache' ),
 						),
 					),
+					'description'      => esc_html__( 'Choose how stylesheets should be combined or minified when using automatic mode.', 'w3-total-cache' ) . $minify_learn_more_output( 'minify-method', 'minify.css.method' ),
 				)
 			);
 			?>
 			<tr>
-				<th><?php esc_html_e( 'Minify engine settings:', 'w3-total-cache' ); ?></th>
+				<th>
+					<?php esc_html_e( 'Minify engine settings:', 'w3-total-cache' ); ?>
+				</th>
 				<td>
 					<?php
 					$css_engine_file = '';
@@ -683,6 +735,10 @@ if ( ! defined( 'W3TC' ) ) {
 						include $css_engine_file;
 					}
 					?>
+					<p class="description">
+						<?php esc_html_e( 'Decide where CSS is placed and whether it should load synchronously or asynchronously for each template area.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'minify-engine-settings', 'minify.css.engine' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<tr>
@@ -696,6 +752,10 @@ if ( ! defined( 'W3TC' ) ) {
 							</option>
 						<?php endforeach; ?>
 					</select>
+					<p class="description">
+						<?php esc_html_e( 'Control how @import rules are handled when combining and minifying stylesheets.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'import-handling', 'minify.css.imports' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<?php
@@ -764,7 +824,7 @@ if ( ! defined( 'W3TC' ) ) {
 										foreach ( (array) $css_locations as $css_location => $css_config ) :
 											if ( ! empty( $css_config['files'] ) ) :
 												foreach ( (array) $css_config['files'] as $css_file ) :
-													$index++;
+													++$index;
 													?>
 													<li>
 														<table>
@@ -834,7 +894,7 @@ if ( ! defined( 'W3TC' ) ) {
 			Util_Ui::config_item(
 				array(
 					'key'            => 'minify.css.http2push',
-					'label'          => '<acronym title="Hypertext Markup Language">HTTP</acronym>/2 push',
+					'label'          => Util_Ui::config_label( 'minify.css.http2push' ),
 					'control'        => 'checkbox',
 					'checkbox_label' => esc_html__( 'Enable', 'w3-total-cache' ),
 					'description'    => wp_kses(
@@ -871,13 +931,12 @@ if ( ! defined( 'W3TC' ) ) {
 								'b'  => array(),
 							)
 						)
-					),
+					) . $minify_learn_more_output( 'http2-push', 'minify.css.http2push' ),
 				)
 			);
 			?>
 		</table>
 
-		<?php Util_Ui::button_config_save( 'minify_css' ); ?>
 		<?php Util_Ui::postbox_footer(); ?>
 
 		<?php Util_Ui::postbox_header( esc_html__( 'Advanced', 'w3-total-cache' ), '', 'advanced' ); ?>
@@ -897,7 +956,10 @@ if ( ! defined( 'W3TC' ) ) {
 					<input id="minify_lifetime" type="text" name="minify__lifetime"
 						<?php Util_Ui::sealing_disabled( 'minify.' ); ?>
 						value="<?php echo esc_attr( $this->_config->get_integer( 'minify.lifetime' ) ); ?>" size="8" /> <?php esc_html_e( 'seconds', 'w3-total-cache' ); ?>
-					<p class="description"><?php esc_html_e( 'Specify the interval between download and update of external files in the minify cache. Hint: 6 hours is 21600 seconds. 12 hours is 43200 seconds. 24 hours is 86400 seconds.', 'w3-total-cache' ); ?></p>
+					<p class="description">
+						<?php esc_html_e( 'Specify the interval between download and update of external files in the minify cache. Hint: 6 hours is 21600 seconds. 12 hours is 43200 seconds. 24 hours is 86400 seconds.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'update-external-files-every', 'minify.lifetime' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<tr>
@@ -912,7 +974,25 @@ if ( ! defined( 'W3TC' ) ) {
 						}
 						?>
 						/> <?php esc_html_e( 'seconds', 'w3-total-cache' ); ?>
-					<p class="description"><?php esc_html_e( 'If caching to disk, specify how frequently expired cache data is removed. For busy sites, a lower value is best.', 'w3-total-cache' ); ?></p>
+					<p class="description">
+						<?php esc_html_e( 'If caching to disk, specify how frequently expired cache data is removed. For busy sites, a lower value is best.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'garbage-collection-interval', 'minify.file.gc' ), $minify_anchor_allowed_tags ); ?>
+					</p>
+					<p class="description">
+						<?php
+						echo esc_html(
+							sprintf(
+								// translators: 1 W3TC_CACHE_FILE_EXPIRE_MAX constant name, 2 W3TC_CACHE_FILE_EXPIRE_MAX value.
+								__(
+									'Max interval is limited by the %1$s constant (%2$s seconds) which can be overridden in wp-config.php.',
+									'w3-total-cache'
+								),
+								'W3TC_CACHE_FILE_EXPIRE_MAX',
+								W3TC_CACHE_FILE_EXPIRE_MAX
+							)
+						);
+						?>
+					</p>
 				</td>
 			</tr>
 			<tr>
@@ -920,7 +1000,10 @@ if ( ! defined( 'W3TC' ) ) {
 				<td>
 					<textarea id="minify_reject_uri" name="minify__reject__uri"
 						<?php Util_Ui::sealing_disabled( 'minify.' ); ?> cols="40" rows="5"><?php echo esc_textarea( implode( "\r\n", $this->_config->get_array( 'minify.reject.uri' ) ) ); ?></textarea>
-					<p class="description"><?php esc_html_e( 'Always ignore the specified pages / directories. Use relative paths. Omit: protocol, hostname, leading forward slash and query strings.', 'w3-total-cache' ); ?></p>
+					<p class="description">
+						<?php esc_html_e( 'Always ignore the specified pages / directories. Use relative paths. Omit: protocol, hostname, leading forward slash and query strings.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'never-minify-the-following-files', 'minify.reject.uri' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<tr>
@@ -947,6 +1030,7 @@ if ( ! defined( 'W3TC' ) ) {
 							)
 						);
 						?>
+						<?php echo wp_kses( $minify_learn_more_output( 'never-minify-the-following-files', 'minify.reject.files.js' ), $minify_anchor_allowed_tags ); ?>
 					</p>
 				</td>
 			</tr>
@@ -974,6 +1058,7 @@ if ( ! defined( 'W3TC' ) ) {
 							)
 						);
 						?>
+						<?php echo wp_kses( $minify_learn_more_output( 'never-minify-the-following-files', 'minify.reject.files.css' ), $minify_anchor_allowed_tags ); ?>
 					</p>
 				</td>
 			</tr>
@@ -983,7 +1068,10 @@ if ( ! defined( 'W3TC' ) ) {
 					<textarea id="minify_reject_ua" name="minify__reject__ua"
 						<?php Util_Ui::sealing_disabled( 'minify.' ); ?>
 						cols="40" rows="5"><?php echo esc_textarea( implode( "\r\n", $this->_config->get_array( 'minify.reject.ua' ) ) ); ?></textarea>
-					<p class="description"><?php esc_html_e( 'Specify user agents that will never receive minified content.', 'w3-total-cache' ); ?></p>
+					<p class="description">
+						<?php esc_html_e( 'Specify user agents that will never receive minified content.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'rejected-user-agents', 'minify.reject.ua' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<?php if ( $auto ) : ?>
@@ -991,20 +1079,117 @@ if ( ! defined( 'W3TC' ) ) {
 				<th><label for="minify_cache_files"><?php Util_Ui::e_config_label( 'minify.cache.files' ); ?></label></th>
 				<td>
 					<textarea id="minify_cache_files" name="minify__cache__files"<?php Util_Ui::sealing_disabled( 'minify.' ); ?> cols="40" rows="5"><?php echo esc_textarea( implode( "\r\n", $this->_config->get_array( 'minify.cache.files' ) ) ); ?></textarea>
-					<p class="description"><?php esc_html_e( 'Specify external files/libraries that should be combined.', 'w3-total-cache' ); ?></p>
+					<p class="description">
+						<?php esc_html_e( 'Specify external files/libraries that should be combined.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'include-external-fileslibraries', 'minify.cache.files' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</td>
 			</tr>
 			<tr>
 				<th colspan="2">
 					<?php $this->checkbox( 'minify.cache.files_regexp', false, '', true, null ); ?>
-					<?php esc_html_e( 'Use Regular Expressions for file name matching', 'w3-total-cache' ); ?>
-					<p class="description"><?php esc_html_e( 'If external script file names vary, use regular expressions in the "Include external files/libraries" field to simplify matching.', 'w3-total-cache' ); ?></p>
+					<?php Util_Ui::e_config_label( 'minify.cache.files_regexp' ); ?></label>
+					<p class="description">
+						<?php esc_html_e( 'If external script file names vary, use regular expressions in the "Include external files/libraries" field to simplify matching.', 'w3-total-cache' ); ?>
+						<?php echo wp_kses( $minify_learn_more_output( 'use-regular-expressions-for-file-name-matching-if-file-names-vary', 'minify.cache.files_regexp' ), $minify_anchor_allowed_tags ); ?>
+					</p>
 				</th>
 			</tr>
 			<?php endif; ?>
 		</table>
 
-		<?php Util_Ui::button_config_save( 'minify_advanced' ); ?>
+		<?php Util_Ui::postbox_footer(); ?>
+
+		<?php Util_Ui::postbox_header( esc_html__( 'Purge via WP Cron', 'w3-total-cache' ), '', 'minify_wp_cron' ); ?>
+		<table class="form-table">
+			<p>
+				<?php
+				esc_html_e(
+					'Enabling this will schedule a WP-Cron event that will flush the Minify Cache. If you prefer to use a system cron job instead of WP-Cron, you can schedule the following command to run at your desired interval: "wp w3tc flush minify".',
+					'w3-total-cache'
+				);
+				?>
+				<a target="_blank" href="<?php echo esc_url( 'https://www.boldgrid.com/support/w3-total-cache/schedule-cache-purges/' ); ?>" title="<?php esc_attr_e( 'Scheduling Page Cache purges', 'w3-total-cache' ); ?>">
+					<?php esc_html_e( 'Learn more', 'w3-total-cache' ); ?>
+					<span class="dashicons dashicons-external"></span>
+				</a>
+			</p>
+			<?php
+			$c           = Dispatcher::config();
+			$disabled    = ! $c->get_boolean( 'minify.enabled' );
+			$wp_disabled = ! $c->get_boolean( 'minify.wp_cron' );
+
+			if ( $disabled ) {
+				echo wp_kses(
+					sprintf(
+						// Translators: 1 opening HTML div tag followed by opening HTML p tag, 2 opening HTML a tag,
+						// Translators: 3 closing HTML a tag, 4 closing HTML p tag followed by closing HTML div tag.
+						__( '%1$sMinify is disabled! Enable it %2$shere%3$s to enable this feature.%4$s', 'w3-total-cache' ),
+						'<div class="notice notice-error inline"><p>',
+						'<a href="' . esc_url( admin_url( 'admin.php?page=w3tc_general#minify' ) ) . '">',
+						'</a>',
+						'</p></div>'
+					),
+					array(
+						'div' => array(
+							'class' => array(),
+						),
+						'p'   => array(),
+						'a'   => array(
+							'href' => array(),
+						),
+					)
+				);
+			}
+
+			Util_Ui::config_item(
+				array(
+					'key'            => 'minify.wp_cron',
+					'label'          => Util_Ui::config_label( 'minify.wp_cron' ),
+					'checkbox_label' => esc_html__( 'Enable', 'w3-total-cache' ),
+					'control'        => 'checkbox',
+					'disabled'       => $disabled,
+				)
+			);
+
+			$time_options = array();
+			for ( $hour = 0; $hour < 24; $hour++ ) {
+				foreach ( array( '00', '30' ) as $minute ) {
+					$time_value                  = $hour * 60 + intval( $minute );
+					$scheduled_time              = new \DateTime( "{$hour}:{$minute}", wp_timezone() );
+					$time_label                  = $scheduled_time->format( 'g:i a' );
+					$time_options[ $time_value ] = $time_label;
+				}
+			}
+
+			Util_Ui::config_item(
+				array(
+					'key'              => 'minify.wp_cron_time',
+					'label'            => Util_Ui::config_label( 'minify.wp_cron_time' ),
+					'control'          => 'selectbox',
+					'selectbox_values' => $time_options,
+					'description'      => esc_html__( 'This setting controls the initial start time of the cron job. If the selected time has already passed, it will schedule the job for the following day at the selected time.', 'w3-total-cache' ),
+					'disabled'         => $disabled || $wp_disabled,
+				)
+			);
+
+			Util_Ui::config_item(
+				array(
+					'key'              => 'minify.wp_cron_interval',
+					'label'            => Util_Ui::config_label( 'minify.wp_cron_interval' ),
+					'control'          => 'selectbox',
+					'selectbox_values' => array(
+						'hourly'     => esc_html__( 'Hourly', 'w3-total-cache' ),
+						'twicedaily' => esc_html__( 'Twice Daily', 'w3-total-cache' ),
+						'daily'      => esc_html__( 'Daily', 'w3-total-cache' ),
+						'weekly'     => esc_html__( 'Weekly', 'w3-total-cache' ),
+					),
+					'description'      => esc_html__( 'This setting controls the interval that the cron job should occur.', 'w3-total-cache' ),
+					'disabled'         => $disabled || $wp_disabled,
+				)
+			);
+			?>
+		</table>
 		<?php Util_Ui::postbox_footer(); ?>
 
 		<?php Util_Ui::postbox_header( esc_html__( 'Note(s):', 'w3-total-cache' ), '', 'notes' ); ?>
@@ -1071,5 +1256,3 @@ if ( ! defined( 'W3TC' ) ) {
 		<?php Util_Ui::postbox_footer(); ?>
 	</div>
 </form>
-
-<?php require W3TC_INC_DIR . '/options/common/footer.php'; ?>

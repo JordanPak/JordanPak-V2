@@ -25,6 +25,11 @@ class Minify_HTML {
 	protected $_jsCleanComments = true;
 
 	/**
+	 * @var string
+	 */
+	protected $_html = '';
+
+	/**
 	 * "Minify" an HTML page
 	 *
 	 * @param string $html
@@ -301,7 +306,7 @@ class Minify_HTML {
 			? $this->_jsMinifier
 			: 'trim';
 
-		if (in_array($type, array('text/template', 'text/x-handlebars-template'))) {
+		if (in_array($type, array('text/template', 'text/x-handlebars-template', 'importmap', 'application/json'))) {
 			$minifier = '';
 		}
 
